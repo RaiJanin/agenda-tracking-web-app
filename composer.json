@@ -12,21 +12,14 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
-<<<<<<< HEAD
         "laravel/breeze": "^2.3",
-=======
->>>>>>> f4df3c487e9bfd7a44331a13946d6ab092dee692
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-<<<<<<< HEAD
         "pestphp/pest": "^3.8",
         "pestphp/pest-plugin-laravel": "^3.2"
-=======
-        "phpunit/phpunit": "^11.5.3"
->>>>>>> f4df3c487e9bfd7a44331a13946d6ab092dee692
     },
     "autoload": {
         "psr-4": {
