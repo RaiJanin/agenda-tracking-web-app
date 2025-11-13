@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
             button.addEventListener('click', function (e) {
                 e.preventDefault();
                 const agendaId = this.getAttribute('data-agenda-id');
-                window.location.href = "#";
+                window.location.href = "/app/edit-agenda/"+agendaId;
             });
         });
 
