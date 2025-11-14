@@ -78,7 +78,10 @@
                         <div class="col-span-2">
                             <label class="block text-gray-700 font-medium mb-2">Replace File (Optional)</label>
                             <input type="file" name="file_path"
-                                class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 
+                                class="w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer 
+                                focus:outline-none 
+                                file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-400 file:text-slate-700
+                                hover:file:bg-gray-300 transition-all duration-400"
                                 {{ !$isCreator ? 'bg-gray-100 cursor-not-allowed' : '' }}"
                                 {{ !$isCreator ? 'disabled' : '' }}>
                             @if($agenda->file_path)
@@ -96,14 +99,14 @@
                     {{-- Action Buttons --}}
                     <div class="flex justify-end gap-4 mt-6">
                         <button type="button" onclick="window.location.href=`{{ route('agenda.view', $agenda->agenda_id) }}`"
-                            class="bg-gray-300 text-gray-800 px-5 py-2 rounded-lg hover:bg-gray-400 transition">
+                            class="px-3 py-1.5 text-red-500 font-medium rounded-lg shadow-sm border border-gray-400 hover:text-red-400 hover:shadow-md hover:border-red-500 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 transition-all duration-300">
                             Cancel
                         </button>
 
                         @if($isCreator || $isAdmin)
                             <button type="submit"
-                                class="bg-amber-500 text-black px-6 py-2 rounded-lg hover:bg-amber-600 transition">
-                                Update Agenda
+                                class="px-3 py-1.5 text-teal-800 font-medium rounded-lg shadow-sm border border-gray-400 hover:text-teal-600 hover:shadow-md hover:border-teal-500 focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 transition-all duration-300">
+                                Save Agenda
                             </button>
                         @endif
                     </div>

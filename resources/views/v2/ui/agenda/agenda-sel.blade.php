@@ -54,13 +54,18 @@
                         <div class="flex items-center p-3 mt-3 justify-between">
                             <div></div>
                             <div class="text-base font-medium rounded-lg border border-gray-400">
-                                <form action="{{ route('agendas.destroy', $agenda->agenda_id) }}" method="POST"
-                                    onsubmit="return confirm('Are you sure you want to archive this agenda?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" onclick="window.location.href=`{{ route('agenda.edit-prev', $agenda->agenda_id) }}`" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">Edit</button>
-                                    <button type="submit" class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500">Archive</button>
-                                </form>
+                                <button onclick="window.location.href=`{{ route('agenda.edit-prev', $agenda->agenda_id) }}`" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">Edit</button>
+                                <button 
+                                    onclick="isConfirm({{ $agenda->agenda_id }})" 
+                                    class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500">
+                                        Archive
+                                </button>
+                                <script>
+                                    function isConfirm(agendaId) {
+                                        if(!confirm('Are you sure you want to archive this agenda?')) return;
+                                        archivedAgenda(agendaId);
+                                    }
+                                </script>
                             </div>
                         </div>
                     @endif
