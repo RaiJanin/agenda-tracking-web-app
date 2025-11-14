@@ -13,4 +13,5 @@
 
 @section('scripts')
     <script src="{{ asset('js/modules/agendaLoad.js') }}"></script>
+    <script src="{{ asset('js/rest-api/archiveAgenda.js') }}"></script>
 @endsection

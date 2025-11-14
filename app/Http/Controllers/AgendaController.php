@@ -29,6 +29,13 @@ class AgendaController extends Controller
         return view('v2.pages.agenda.view-all', compact('agenda'));
     }
 
+    public function previewEditAgenda(Request $request)
+    {
+        $agenda_id = $request->route('agenda_id');
+        $agenda = Agenda::find($agenda_id);
+        return view('v2.pages.agenda.edit', compact('agenda'));
+    }
+
     public function show(Agenda $agenda)
     {
         return view('agendas.show', compact('agenda'));
@@ -166,6 +173,16 @@ if (auth()->id() !== $agenda->user_id && auth()->user()->role !== 'IT') {
     return redirect()
         ->route('agendas.index')
         ->with('success', 'Agenda archived successfully!');
+
+//----------Logic sugestion-----------
+//          For more organized data archiving
+//------Keywords:
+//        -Before the data deletion, insert into archives table
+//        -Send response via json:  example
+//        -     return response()->json([
+//                'success' => true,
+//                'message' => 'Agenda archived successfully'
+//                ], 200); //200 as http "okay" response
 }
 
 

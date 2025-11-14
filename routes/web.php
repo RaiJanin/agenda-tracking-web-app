@@ -9,6 +9,8 @@ use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ConcernController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Models\Agenda;
+
 /*
 |--------------------------------------------------------------------------
 | Agenda Module Routes
@@ -48,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/create-agenda', function () { return view('v2.pages.agenda.create'); })->name('agenda.create');
         Route::get('/view-agenda', function () { return view('v2.pages.agenda.view-all'); })->name('agenda.view-all');
         Route::get('/view-agenda/{agenda_id}', [AgendaController::class, 'clickedAgenda'])->name('agenda.view');
+        Route::get('/edit-agenda/{agenda_id}', [AgendaController::class, 'previewEditAgenda'])->name('agenda.edit-prev');
 
         Route::get('/concerns', function () { return view('v2.pages.concerns.all-concerns'); })->name('concerns.all-concerns');
         Route::get('/concerns/me', function () { return view('v2.pages.concerns.my-concerns'); })->name('concerns.my-concerns');

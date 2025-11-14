@@ -58,7 +58,7 @@
                                     onsubmit="return confirm('Are you sure you want to archive this agenda?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" onclick="window.location.href=`{{ route('agendas.edit', $agenda->agenda_id) }}`" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">Edit</button>
+                                    <button type="button" onclick="window.location.href=`{{ route('agenda.edit-prev', $agenda->agenda_id) }}`" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">Edit</button>
                                     <button type="submit" class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500">Archive</button>
                                 </form>
                             </div>
