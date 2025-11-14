@@ -23,9 +23,12 @@
                             <p class="mb-2"><strong>Date:</strong> {{ \Carbon\Carbon::parse($agenda->date)->toFormattedDateString() }}</p>
                             <p class="mb-2"><strong>Status:</strong>
                                 <span class="px-2 py-1 rounded text-sm
-                                    @if($agenda->status === 'active') bg-green-100 text-green-700
-                                    @elseif($agenda->status === 'archived') bg-gray-200 text-gray-700
-                                    @else bg-yellow-100 text-yellow-700 @endif">
+                                    @if($agenda->status === 'resolved') px-4 py-2 text-sm bg-green-500 text-white rounded-lg
+                                    @elseif($agenda->status === 'ongoing') px-4 py-2 text-sm bg-blue-500 text-white rounded-lg
+                                    @elseif($agenda->status === 'closed') px-4 py-2 text-sm bg-slate-500 text-white rounded-lg
+                                    @elseif($agenda->status === 'completed') px-4 py-2 text-sm bg-gray-500 text-white rounded-lg
+                                    @else px-4 py-2 text-sm bg-amber-500 text-white rounded-lg
+                                    @endif">
                                     {{ ucfirst($agenda->status) }}
                                 </span>
                             </p>

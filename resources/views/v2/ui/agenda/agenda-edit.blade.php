@@ -3,8 +3,8 @@
     @section('content-head-text', 'Agenda Edit Mode')
 
     @section('content-head-buttons')
-        <button onclick="window.location.href=`{{ route('agenda.create') }}`" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
-            <i data-feather="plus" class="mr-2"></i> New Agenda
+        <button onclick="window.history.back()" class="flex items-center justify-between gap-3 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
+            <i class="fa-solid fa-arrow-left"></i><p>Back</p>
         </button>
     @endsection
 
@@ -17,6 +17,12 @@
                     $isCreator = $agenda->created_by === $user->id;
                     $isUser = !$isAdmin && !$isCreator;
                 @endphp
+
+                @if(session('success'))
+                    <div class="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
+                        <p>{{ session('success') }}</p><span class="underline hover:text-green-500"><i class="fa-solid fa-arrow-left text-xs ml-5"></i><a href="{{ route('agenda.view-all') }}">Back to list</a></span>
+                    </div>
+                @endif
 
                 <form action="{{ route('agendas.update', $agenda->agenda_id) }}" method="POST" enctype="multipart/form-data"
                     class="bg-white shadow rounded-2xl p-6">
@@ -112,11 +118,6 @@
                     </div>
                 </form>
 
-                @if(session('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
             </div>
         </div>
     @endsection

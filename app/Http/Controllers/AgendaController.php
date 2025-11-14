@@ -153,7 +153,7 @@ public function update(Request $request, $id)
     $agenda->update($validatedData);
 
     return redirect()
-        ->route('agendas.show', $agenda->agenda_id)
+        ->back()
         ->with('success', 'Agenda updated successfully!');
 }
 
