@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attachments', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->morphs('attachable'); // can attach to agendas, concerns, comments
-            $table->string('file_path');
+            $table->foreignId('agenda_id')->constrained('agendas');
+            $table->string('file_path'); // PDF/Excel
+            $table->foreignId('generated_by')->constrained('users');
             $table->timestamps();
         });
         
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('reports');
     }
 };
