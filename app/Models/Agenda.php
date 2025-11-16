@@ -4,11 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+<<<<<<< HEAD
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Agenda extends Model
 {
     use HasFactory, SoftDeletes;
+=======
+// use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Agenda extends Model
+{
+    use HasFactory;
+>>>>>>> 969e263 (Your commit message)
 
     protected $table = 'agendas';
     protected $primaryKey = 'agenda_id';

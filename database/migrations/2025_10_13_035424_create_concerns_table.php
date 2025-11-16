@@ -14,12 +14,21 @@ return new class extends Migration
           // CONCERNS TABLE
     
           Schema::create('concerns', function (Blueprint $table) {
-            $table->id('concern_id'); // BIGINT AUTO_INCREMENT PRIMARY KEY
-            $table->foreignId('agenda_id')->constrained('agendas')->onDelete('cascade');
-            $table->foreignId('responsible_person_id')->constrained('users')->onDelete('cascade');
+         $table->id('concern_id');
+
+    $table->foreignId('agenda_id')
+          ->constrained('agendas', 'agenda_id')
+          ->onDelete('cascade');
+
+    $table->foreignId('responsible_person_id')
+          ->constrained('users')
+          ->onDelete('cascade');
+
             $table->text('description');
             $table->enum('status', ['pending', 'ongoing', 'resolved', 'closed', 'completed'])->default('pending');
             $table->date('due_date')->nullable();
+            $table->timestamp('archived_at')->nullable(); // NEW: mark archived
+            $table->softDeletes(); // NEW: enable soft deletes
             $table->timestamps();
         });
         

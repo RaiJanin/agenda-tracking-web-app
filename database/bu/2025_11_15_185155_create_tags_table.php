@@ -11,15 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->id();
-   $table->foreignId('agenda_id')
-          ->constrained('agendas', 'agenda_id')
-          ->onDelete('cascade');
-            $table->string('file_path'); // PDF/Excel
-            $table->foreignId('generated_by')->constrained('users');
+            $table->string('name');
             $table->timestamps();
         });
+        
+ Schema::create('taggables', function (Blueprint $table) {
+    $table->foreignId('tag_id')
+          ->constrained()
+          ->cascadeOnDelete();   
+          
+
+    $table->morphs('taggable');
+    $table->primary(['tag_id', 'taggable_id', 'taggable_type']);
+});
+
         
     }
 
@@ -28,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reports');
+        Schema::dropIfExists('tags');
     }
 };

@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reports', function (Blueprint $table) {
-            $table->id();
-   $table->foreignId('agenda_id')
-          ->constrained('agendas', 'agenda_id')
+        Schema::create('archived_concerns', function (Blueprint $table) {
+            $table->id('archived_concerns_id'); // PK for this table
+           $table->foreignId('concern_id')
+          ->constrained('concerns', 'concern_id') 
           ->onDelete('cascade');
-            $table->string('file_path'); // PDF/Excel
-            $table->foreignId('generated_by')->constrained('users');
             $table->timestamps();
         });
+        
         
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reports');
+        Schema::dropIfExists('archived_concerns');
     }
 };
