@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class archived_concerns extends Model
+class Attachments extends Model
 {
-    /** @use HasFactory<\Database\Factories\ArchivedConcernsFactory> */
+    /** @use HasFactory<\Database\Factories\AttachmentsFactory> */
     use HasFactory;
 }
