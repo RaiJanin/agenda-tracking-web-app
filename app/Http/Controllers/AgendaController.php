@@ -15,16 +15,12 @@ class AgendaController extends Controller
     }
     public function loadAgendas()
     {
-        $agendas = Agenda::whereNull('archived_at')  // hide archived
-                         ->orderBy('date', 'desc')
-                         ->get();
-    
+        $agendas = Agenda::orderBy('date', 'desc')->get();
         return response()->json([
             'success' => true,
-            'agendas' => $agendas
-        ]);
+            'agendas' => $agendas]
+        );
     }
-    
 
     public function clickedAgenda(Request $request)
     {
@@ -64,25 +60,21 @@ class AgendaController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'notes' => 'nullable|string',
-            'file_path' => 'nullable|file|max:2048',
+            'file_path' => 'nullable|file|max:5120',
         ]);
     
-        // Create agenda first
         $agenda = Agenda::create([
             'title' => $request->title,
             'date' => now()->toDateString(),
-            'created_by' => Auth::id(),
+            'created_by' => auth()->id(),
             'notes' => $request->notes,
             'status' => 'pending',
         ]);
     
-        // If a file is uploaded → save to attachments table
+        // Handle attachment
         if ($request->hasFile('file_path')) {
             $path = $request->file('file_path')->store('uploads/agendas', 'public');
-    
-            $agenda->attachments()->create([
-                'file_path' => $path
-            ]);
+            $agenda->attachments()->create(['file_path' => $path]);
         }
     
         return redirect()->back()->with('success', 'Agenda saved successfully!');
@@ -95,6 +87,10 @@ class AgendaController extends Controller
     
         $isCreator = $agenda->created_by === $user->id;
         $isAdmin = $user->role === 'admin';
+    
+        if (!$isAdmin && !$isCreator) {
+            abort(403, 'Unauthorized action.');
+        }
     
         $rules = [
             'notes' => 'nullable|string',
@@ -111,30 +107,33 @@ class AgendaController extends Controller
     
         $validated = $request->validate($rules);
     
-        // Upload new attachment (creator only)
-        if ($isCreator && $request->hasFile('file_path')) {
+        // Remove file_path from agenda update
+        $validated = $request->except('file_path');
     
-            // delete old attachment
-            if ($agenda->attachments()->exists()) {
-                $old = $agenda->attachments()->first();
-                Storage::disk('public')->delete($old->file_path);
-                $old->delete();
+        // Handle attachments (creator only)
+        if ($isCreator && $request->hasFile('file_path')) {
+            // Delete old attachment if exists
+            $oldAttachment = $agenda->attachments()->first();
+            if ($oldAttachment) {
+                Storage::disk('public')->delete($oldAttachment->file_path);
+                $oldAttachment->delete();
             }
     
-            // Save new attachment
             $path = $request->file('file_path')->store('uploads/agendas', 'public');
             $agenda->attachments()->create(['file_path' => $path]);
         }
     
+        // Admin-only update
         if ($isAdmin && !$isCreator) {
             $validated = ['status' => $validated['status']];
         }
     
         $agenda->update($validated);
     
-        return back()->with('success', 'Agenda updated successfully!');
+        return redirect()->back()->with('success', 'Agenda updated successfully!');
     }
     
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -157,28 +156,21 @@ public function edit($id)
 
 
 
+
 // 🗑️ DESTROY (ARCHIVE) AGENDA
 public function destroy($id)
 {
     $agenda = Agenda::findOrFail($id);
 
-    if (auth()->id() !== $agenda->created_by && auth()->user()->role !== 'IT') {
-        return response()->json([
-            'success' => false,
-            'message' => 'Unauthorized action.'
-        ], 403);
-    }
-
-    // Proper archive
-    $agenda->update([
-        'archived_at' => now()
-    ]);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Agenda archived successfully!'
-    ]);
+    // Instead of deleting, mark as archived
+    $agenda->update(['status' => 'archived']);
+if (auth()->id() !== $agenda->user_id && auth()->user()->role !== 'IT') {
+    abort(403, 'Unauthorized action.');
 }
+
+    return redirect()
+        ->route('agendas.index')
+        ->with('success', 'Agenda archived successfully!');
 
 //----------Logic sugestion-----------
 //          For more organized data archiving
@@ -189,6 +181,8 @@ public function destroy($id)
 //                'success' => true,
 //                'message' => 'Agenda archived successfully'
 //                ], 200); //200 as http "okay" response
+}
+
 
 // 📦 SHOW ARCHIVED AGENDAS
 public function archived()

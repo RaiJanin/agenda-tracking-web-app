@@ -90,15 +90,17 @@
                                 hover:file:bg-gray-300 transition-all duration-400"
                                 {{ !$isCreator ? 'bg-gray-100 cursor-not-allowed' : '' }}"
                                 {{ !$isCreator ? 'disabled' : '' }}>
-                            @if($agenda->file_path)
+                                @if($agenda->attachments()->exists())
+                                @php $attachment = $agenda->attachments()->first(); @endphp
                                 <p class="text-sm text-gray-600 mt-2">
                                     Current file:
-                                    <a href="{{ asset('storage/' . $agenda->file_path) }}" target="_blank"
+                                    <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank"
                                         class="text-blue-600 hover:text-blue-800 underline">
-                                        {{ basename($agenda->file_path) }}
+                                        {{ basename($attachment->file_path) }}
                                     </a>
                                 </p>
                             @endif
+                            
                         </div>
                     </div>
 
