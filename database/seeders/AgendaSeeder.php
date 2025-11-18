@@ -20,7 +20,7 @@ class AgendaSeeder extends Seeder
                 'date' => Carbon::now()->subDays(5),
                 'created_by' => $admin ? $admin->id : 1,
                 'notes' => 'Discussed upcoming network upgrades and project timelines.',
-                'file_path' => null,
+                
                 'status' => 'completed',
             ],
             [
@@ -28,7 +28,7 @@ class AgendaSeeder extends Seeder
                 'date' => Carbon::now()->subDays(2),
                 'created_by' => $admin ? $admin->id : 1,
                 'notes' => 'Evaluated performance of the Mineral system and identified bottlenecks.',
-                'file_path' => null,
+                
                 'status' => 'ongoing',
             ],
             [
@@ -36,7 +36,7 @@ class AgendaSeeder extends Seeder
                 'date' => Carbon::now(),
                 'created_by' => $admin ? $admin->id : 1,
                 'notes' => 'Planned updates for inventory and reporting features.',
-                'file_path' => null,
+                
                 'status' => 'pending',
             ],
         ];

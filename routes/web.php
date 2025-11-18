@@ -10,6 +10,7 @@ use App\Http\Controllers\ConcernController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Models\Agenda;
+use Symfony\Component\HttpFoundation\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/history', function () { return view('v2.pages.archives.history'); })->name('archives.history');
         Route::get('/reports', function () { return view('v2.pages.archives.reports'); })->name('archives.reports');
+        Route::get('/archive-agenda', function () { return view('v2.pages.archives.agendas-arc'); })->name('archives.agendas');
 
         Route::get('/users', function () { return view('v2.pages.people'); })->name('people');
 
@@ -66,6 +68,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/security', function () { return view('v2.pages.settings.security'); })->name('settings.security');
         
     });
+    //----debugging
+    Route::get('/check-role', [AgendaController::class, 'checkRole']);
 
     //----------for api routes
     Route::get('/agendas/archived', [AgendaController::class, 'archived'])->name('agendas.archived');

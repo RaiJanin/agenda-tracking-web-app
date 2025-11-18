@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attachments', function (Blueprint $table) {
-            $table->id();
-            $table->morphs('attachable'); // can attach to agendas, concerns, comments
-            $table->string('file_path');
+        Schema::create('archived_concerns', function (Blueprint $table) {
+            $table->id('archived_concerns_id'); // PK for this table
+           $table->foreignId('concern_id')
+          ->constrained('concerns', 'concern_id') 
+          ->onDelete('cascade');
             $table->timestamps();
         });
+        
         
     }
 
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('archived_concerns');
     }
 };

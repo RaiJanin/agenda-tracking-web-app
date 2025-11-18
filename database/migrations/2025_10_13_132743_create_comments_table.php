@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->morphs('commentable'); // supports polymorphic relation: agendas, concerns, etc.
+            $table->text('content');
             $table->timestamps();
         });
+        
     }
 
     /**

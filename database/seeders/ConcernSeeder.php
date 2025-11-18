@@ -36,8 +36,7 @@ class ConcernSeeder extends Seeder
                     'responsible_person_id' => $user->id,
                     'status' => ['pending', 'ongoing', 'completed'][array_rand(['pending', 'ongoing', 'completed'])],
                     'due_date' => Carbon::now()->addDays(rand(1, 15)),
-                    'comments' => 'Initial comment or note for tracking progress.',
-                    'file_path' => null,
+                    
                 ]);
             }
         }

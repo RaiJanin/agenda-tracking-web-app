@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attachments', function (Blueprint $table) {
+        Schema::create('change_logs', function (Blueprint $table) {
             $table->id();
-            $table->morphs('attachable'); // can attach to agendas, concerns, comments
-            $table->string('file_path');
+            $table->foreignId('user_id')->constrained('users');
+            $table->morphs('loggable'); // Polymorphic: agenda, concern, comment
+            $table->json('old_data');
+            $table->json('new_data');
             $table->timestamps();
         });
         
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('change_logs');
     }
 };

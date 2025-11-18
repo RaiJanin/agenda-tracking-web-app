@@ -2,7 +2,7 @@ async function archivedAgenda (agendaId) { //loaded from resources/views/v2/page
 
     try {
         const response = await fetch(`/agendas/${agendaId}`, {
-            method: 'DELETE',
+            method: 'PUT',
             headers: {
                 'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 'Accept' : 'application/json'

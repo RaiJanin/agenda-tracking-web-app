@@ -15,11 +15,12 @@ class Agenda extends Model
 
     protected $fillable = [
         'title',
-        'date',
-        'created_by',
-        'notes',
-        'file_path',
-        'status',
+    'date',
+    'created_by',
+    'notes',
+    'file_path',
+    'status',
+    'archived_at'
     ];
 
     // Relationships
@@ -35,8 +36,9 @@ class Agenda extends Model
 
     public function attachments()
     {
-        return $this->hasMany(Attachment::class, 'agenda_id');
+        return $this->morphMany(Attachment::class, 'attachable');
     }
+    
 
     public function user()
 {

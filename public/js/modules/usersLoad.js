@@ -22,28 +22,28 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'user':
                             userRole = `
                                 <div class="bg-emerald-200 text-emerald-500 py-5 px-6 rounded-full border border-emerald-500">
-                                    <i class="fa-solid fa-user-tie text-5xl"></i>
+                                    <i class="fa-solid fa-user-tie text-4xl"></i>
                                 </div>
                             `;
                             break;
                         case 'member':
                             userRole = `
                                 <div class="bg-white text-green-500 py-5 px-6 rounded-full border border-green-500">
-                                    <i class="fa-solid fa-user-tie text-5xl"></i>
+                                    <i class="fa-solid fa-user-tie text-4xl"></i>
                                 </div>
                             `;
                             break;
                         case 'secretary':
                             userRole = `
                                 <div class="bg-amber-200 text-amber-500 py-5 px-6 rounded-full border border-amber-500">
-                                    <i class="fa-solid fa-user-tie text-5xl"></i>
+                                    <i class="fa-solid fa-user-tie text-4xl"></i>
                                 </div>
                             `;
                             break;
                         default:
                             userRole = `
                                 <div class="bg-blue-200 text-blue-500 py-5 px-6 rounded-full border border-blue-500">
-                                    <i class="fa-solid fa-user-tie text-5xl"></i>
+                                    <i class="fa-solid fa-user-tie text-4xl"></i>
                                 </div>
                             `;
                             break;

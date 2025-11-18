@@ -75,7 +75,7 @@
                             <div class="flex items-center space-x-3">
                                 <i data-feather="archive"></i>
                                 <span class="sidebar-text">Archives</span>
-                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Arhcives</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archives</span>
                             </div>
                             <i data-feather="chevron-down" class="accordion-arrow transform transition-transform duration-200"></i>
                         </button>
@@ -83,12 +83,17 @@
                             <a href="{{ route('archives.reports') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('archives.reports') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
                                 <i data-feather="file-text"></i>
                                 <span class="sidebar-text">Reports</span>
-                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Reports</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archive/Reports</span>
                             </a>
                             <a href="{{ route('archives.history') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('archives.history') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
                                 <i data-feather="clock"></i>
                                 <span class="sidebar-text">History</span>
-                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">History</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archives/History</span>
+                            </a>
+                            <a href="{{ route('archives.agendas') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('archives.agendas') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
+                                <i data-feather="clock"></i>
+                                <span class="sidebar-text">Agendas</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archives/Agendas</span>
                             </a>
                         </div>
                     </div>
@@ -117,12 +122,12 @@
                             <a href="{{ route('settings.profile') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('settings.profile') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
                                 <i data-feather="user"></i>
                                 <span class="sidebar-text">Profile</span>
-                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Profile</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Settings/Profile</span>
                             </a>
                             <a href="{{ route('settings.security') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('settings.security') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
                                 <i data-feather="lock"></i>
                                 <span class="sidebar-text">Security</span>
-                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Security</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Settings/Security</span>
                             </a>
                         </div>
                     </div>

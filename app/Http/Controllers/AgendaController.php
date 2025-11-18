@@ -15,7 +15,12 @@ class AgendaController extends Controller
     }
     public function loadAgendas()
     {
-        $agendas = Agenda::orderBy('date', 'desc')->get();
+        //$agendas = Agenda::where('status', '!=', 'archived')
+        //    ->orderBy('date', 'desc')
+        //    ->get();
+
+            $agendas = Agenda::orderBy('date', 'desc')
+            ->get();
         return response()->json([
             'success' => true,
             'agendas' => $agendas]
@@ -55,36 +60,84 @@ class AgendaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-  public function store(Request $request)
+    public function store(Request $request)
     {
-        // Validate form data
         $request->validate([
             'title' => 'required|string|max:255',
             'notes' => 'nullable|string',
-            'file_path' => 'nullable|file|max:2048',
+            'file_path' => 'nullable|file|max:5120',
         ]);
-
-        // Handle file upload (optional)
-        $filePath = null;
-        if ($request->hasFile('file_path')) {
-            $file = $request->file('file_path');
-            $filePath = $file->store('uploads/agendas', 'public');
-        }
-
-        // Create new agenda
-        Agenda::create([
+    
+        $agenda = Agenda::create([
             'title' => $request->title,
-            // 👇 Automatically insert today's date (even if user didn’t input)
             'date' => now()->toDateString(),
-            'created_by' => Auth::id(), // or manually set an ID if not using auth
+            'created_by' => auth()->id(),
             'notes' => $request->notes,
-            'file_path' => $filePath,
-            'status' => 'pending', // Default value, you can change it
+            'status' => 'pending',
         ]);
-
+    
+        // Handle attachment
+        if ($request->hasFile('file_path')) {
+            $path = $request->file('file_path')->store('uploads/agendas', 'public');
+            $agenda->attachments()->create(['file_path' => $path]);
+        }
+    
         return redirect()->back()->with('success', 'Agenda saved successfully!');
     }
-
+    
+    public function update(Request $request, $id)
+    {
+        $agenda = Agenda::findOrFail($id);
+        $user = auth()->user();
+    
+        $isCreator = $agenda->created_by === $user->id;
+        $isAdmin = $user->role === 'admin';
+    
+        if (!$isAdmin && !$isCreator) {
+            abort(403, 'Unauthorized action.');
+        }
+    
+        $rules = [
+            'notes' => 'nullable|string',
+            'file_path' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,txt,jpg,png|max:5120',
+        ];
+    
+        if ($isCreator) {
+            $rules['title'] = 'required|string|max:255';
+        }
+    
+        if ($isAdmin) {
+            $rules['status'] = 'required|in:pending,ongoing,resolved,closed';
+        }
+    
+        $validated = $request->validate($rules);
+    
+        // Remove file_path from agenda update
+        $validated = $request->except('file_path');
+    
+        // Handle attachments (creator only)
+        if ($isCreator && $request->hasFile('file_path')) {
+            // Delete old attachment if exists
+            $oldAttachment = $agenda->attachments()->first();
+            if ($oldAttachment) {
+                Storage::disk('public')->delete($oldAttachment->file_path);
+                $oldAttachment->delete();
+            }
+    
+            $path = $request->file('file_path')->store('uploads/agendas', 'public');
+            $agenda->attachments()->create(['file_path' => $path]);
+        }
+    
+        // Admin-only update
+        if ($isAdmin && !$isCreator) {
+            $validated = ['status' => $validated['status']];
+        }
+    
+        $agenda->update($validated);
+    
+        return redirect()->back()->with('success', 'Agenda updated successfully!');
+    }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -105,70 +158,25 @@ public function edit($id)
     /**
      * Update the specified resource in storage.
      */
-public function update(Request $request, $id)
-{
-    $agenda = Agenda::findOrFail($id);
-    $user = auth()->user();
 
-    // --- Permission Check ---
-    $isCreator = $agenda->created_by === $user->id;
-    $isAdmin = $user->role === 'admin';
-
-    // Only admin or creator can update (but with limited scope)
-    if (!$isAdmin && !$isCreator) {
-        abort(403, 'Unauthorized action.');
+    public function checkRole(Request $request) {
+        dd($request->user()->role);
     }
-
-    // Base validation
-    $rules = [
-        'notes' => 'nullable|string',
-        'file_path' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,txt,jpg,png|max:5120',
-    ];
-
-    // Creator can edit title, notes, and file
-    if ($isCreator) {
-        $rules['title'] = 'required|string|max:255';
-    }
-
-    // Admin can edit only status
-    if ($isAdmin) {
-        $rules['status'] = 'required|in:pending,ongoing,resolved,closed';
-    }
-
-    $validatedData = $request->validate($rules);
-
-    // Handle file upload (creator only)
-    if ($isCreator && $request->hasFile('file_path')) {
-        if ($agenda->file_path && Storage::disk('public')->exists($agenda->file_path)) {
-            Storage::disk('public')->delete($agenda->file_path);
-        }
-        $validatedData['file_path'] = $request->file('file_path')->store('agendas', 'public');
-    }
-
-    // Prevent admins from changing non-status fields
-    if ($isAdmin && !$isCreator) {
-        $validatedData = array_intersect_key($validatedData, ['status' => '']);
-    }
-
-    $agenda->update($validatedData);
-
-    return redirect()
-        ->back()
-        ->with('success', 'Agenda updated successfully!');
-}
-
 
 
 // 🗑️ DESTROY (ARCHIVE) AGENDA
-public function destroy($id)
+public function destroy($id, Request $request)
 {
     $agenda = Agenda::findOrFail($id);
 
     // Instead of deleting, mark as archived
     $agenda->update(['status' => 'archived']);
-if (auth()->id() !== $agenda->user_id && auth()->user()->role !== 'IT') {
-    abort(403, 'Unauthorized action.');
-}
+
+    $allowedRoles = $request->user()->role;
+
+    if(!in_array($allowedRoles, ['admin', 'IT'])) {
+        abort(403, 'Unauthorized action.');
+    }
 
     return redirect()
         ->route('agendas.index')
