@@ -67,6 +67,7 @@
                                     function isConfirm(agendaId) {
                                         if(!confirm('Are you sure you want to archive this agenda?')) return;
                                         archivedAgenda(agendaId);
+                                        window.location.href = `/app/view-agenda`;
                                     }
                                 </script>
                             </div>

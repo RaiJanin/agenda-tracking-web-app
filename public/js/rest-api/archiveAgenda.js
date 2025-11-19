@@ -2,7 +2,7 @@ async function archivedAgenda (agendaId) { //loaded from resources/views/v2/page
 
     try {
         const response = await fetch(`/agendas/${agendaId}`, {
-            method: 'PUT',
+            method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 'Accept' : 'application/json'
@@ -18,7 +18,6 @@ async function archivedAgenda (agendaId) { //loaded from resources/views/v2/page
         }
 
         alert('Agenda archived successfully.');
-        indexR(); ///reload agendas container
 
         console.log(result);
     } catch (err) {

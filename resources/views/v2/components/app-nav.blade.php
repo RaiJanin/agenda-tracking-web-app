@@ -91,7 +91,7 @@
                                 <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archives/History</span>
                             </a>
                             <a href="{{ route('archives.agendas') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('archives.agendas') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
-                                <i data-feather="clock"></i>
+                                <i data-feather="book-open"></i>
                                 <span class="sidebar-text">Agendas</span>
                                 <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archives/Agendas</span>
                             </a>

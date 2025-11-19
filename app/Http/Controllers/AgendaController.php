@@ -15,12 +15,10 @@ class AgendaController extends Controller
     }
     public function loadAgendas()
     {
-        //$agendas = Agenda::where('status', '!=', 'archived')
-        //    ->orderBy('date', 'desc')
-        //    ->get();
+        $agendas = Agenda::where('status', '!=', 'archived')
+           ->orderBy('date', 'desc')
+           ->get();
 
-            $agendas = Agenda::orderBy('date', 'desc')
-            ->get();
         return response()->json([
             'success' => true,
             'agendas' => $agendas]
@@ -165,33 +163,27 @@ public function edit($id)
 
 
 // 🗑️ DESTROY (ARCHIVE) AGENDA
-public function destroy($id, Request $request)
-{
-    $agenda = Agenda::findOrFail($id);
+    public function destroy($id, Request $request)
+    {
+        $allowedRoles = $request->user()->role;
 
-    // Instead of deleting, mark as archived
-    $agenda->update(['status' => 'archived']);
+        if(!in_array($allowedRoles, ['admin', 'IT'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized action'
+            ], 403);
+        }
 
-    $allowedRoles = $request->user()->role;
+        $agenda = Agenda::findOrFail($id);
 
-    if(!in_array($allowedRoles, ['admin', 'IT'])) {
-        abort(403, 'Unauthorized action.');
+        // Instead of deleting, mark as archived
+        $agenda->update(['status' => 'archived']);
+
+        return response()->json([
+                'success' => true,
+                'message' => 'Agenda archived successfully'
+                ], 200);
     }
-
-    return redirect()
-        ->route('agendas.index')
-        ->with('success', 'Agenda archived successfully!');
-
-//----------Logic sugestion-----------
-//          For more organized data archiving
-//------Keywords:
-//        -Before the data deletion, insert into archives table
-//        -Send response via json:  example
-//        -     return response()->json([
-//                'success' => true,
-//                'message' => 'Agenda archived successfully'
-//                ], 200); //200 as http "okay" response
-}
 
 
 // 📦 SHOW ARCHIVED AGENDAS

@@ -113,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 if(!confirm('Are you sure you want to archive this agenda?')) return;
                 archivedAgenda(agendaId); //location: public/js/rest-api/archiveAgenda.js
+                indexR(); ///reload agendas container
                 
              });
         });
