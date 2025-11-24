@@ -1,28 +1,49 @@
             <div class="flex-1 overflow-y-auto">
-                <div class="p-8 max-w-5xl mx-auto">
+                <div class="p-2 max-w-5xl mx-auto">
 
                     <div class="flex items-center justify-between mb-6">
-                        <div>
+                        <div class="flex gap-4 flex-col">
                             <h1 class="text-3xl font-bold text-gray-900">{{ $agenda->title }}</h1>
-                            <p class="text-gray-600 text-sm mt-1">
-                                Date: <span class="font-medium">{{ \Carbon\Carbon::parse($agenda->date)->format('F d, Y') }}</span> <br>
-                                Created by: <span class="font-medium">{{ $agenda->user->name ?? 'N/A' }}</span>
+                            <p class="flex flex-col gap-2 mt-1">
+                                <p class="text-gray-600">Date: <span class="font-medium">{{ \Carbon\Carbon::parse($agenda->date)->format('F d, Y') }}</span></p>
+                                <p class="text-gray-600">Created by: <span class="font-medium">{{ $agenda->user->name ?? 'N/A' }}</span></p>
                             </p>
                         </div>
 
                         <a href="{{ route('agenda.view-all') }}"
-                            class="bg-amber-500 text-black px-4 py-2 rounded-lg hover:bg-amber-600 transition">
+                            class="text-sm bg-amber-500 text-black px-4 py-2 rounded-lg hover:bg-amber-600 transition">
                             ← Back to List
                         </a>
                     </div>
 
                     <div class="bg-white rounded-2xl shadow p-6 mb-6">
-                        <h2 class="text-xl font-semibold mb-3 text-gray-800">Agenda Details</h2>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                            <h2 class="text-xl font-semibold mb-3 text-gray-800">Agenda Details</h2>
+                            @if(auth()->id() === $agenda->created_by)
+                                <div class="flex items-center p-3 justify-between">
+                                    <div></div>
+                                    <div class="text-base font-medium rounded-lg border border-gray-400">
+                                        <button type="button" onclick="window.location.href=`{{ route('agenda.edit-prev', $agenda->agenda_id) }}`" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">Edit</button>
+                                        <button 
+                                            onclick="isConfirm({{ $agenda->agenda_id }})" 
+                                            class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500">
+                                                Archive
+                                        </button>
+                                        <script>
+                                            function isConfirm(agendaId) {
+                                                if(!confirm('Are you sure you want to archive this agenda?')) return;
+                                                archivedAgenda(agendaId);
+                                                window.location.href = `/app/view-agenda`;
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        
                         <div class="border-t border-gray-200 mt-2 pt-3 text-gray-700">
-                            <p class="mb-2"><strong>Title:</strong> {{ $agenda->title }}</p>
-                            <p class="mb-2"><strong>Date:</strong> {{ \Carbon\Carbon::parse($agenda->date)->toFormattedDateString() }}</p>
-                            <p class="mb-2"><strong>Status:</strong>
-                                <span class="px-2 py-1 rounded text-sm
+                            <p class="mt-2 mb-2"><strong>Status:</strong>
+                                <span class="px-2 py-1 rounded text-sm ml-4
                                     @if($agenda->status === 'resolved') px-4 py-2 text-sm bg-green-500 text-white rounded-lg
                                     @elseif($agenda->status === 'ongoing') px-4 py-2 text-sm bg-blue-500 text-white rounded-lg
                                     @elseif($agenda->status === 'closed') px-4 py-2 text-sm bg-slate-500 text-white rounded-lg
@@ -32,19 +53,40 @@
                                     {{ ucfirst($agenda->status) }}
                                 </span>
                             </p>
-                            <p class="mb-4"><strong>Notes:</strong></p>
-                            <p class="bg-gray-50 p-3 rounded-lg border border-gray-200 whitespace-pre-line">
-                                {{ $agenda->notes ?: 'No notes available.' }}
-                            </p>
+                            <div class="flex flex-col gap-4 bg-gray-50 p-3 rounded-lg border border-gray-200 mt-8">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <span class="mr-2 border-b-[0.25px] border-gray-300 mt-1 w-10"></span>
+                                        Notes
+                                    <span class="ml-2 border-b-[0.25px] border-gray-300 mt-1 w-full"></span>
+                                </div>
+                                <span class="text-base text-gray-700">{{ $agenda->notes ?: 'No notes available.' }}</span>
+                            </div>
                         </div>
                     </div>
 
-                    @if($agenda->file_path)
+                    @if($attachment)
                         <div class="bg-white rounded-2xl shadow p-6 mb-6">
                             <h2 class="text-xl font-semibold mb-3 text-gray-800">File Attachment</h2>
-                            <div class="flex items-center justify-between border-t border-gray-200 pt-3">
-                                <p class="text-gray-700">{{ basename($agenda->file_path) }}</p>
-                                <a href="{{ asset('storage/' . $agenda->file_path) }}"
+                            <div class="flex flex-col gap-4 border-t border-gray-200 pt-3">
+                                <p class="text-gray-700 break-all w-64">{{ basename($attachment->file_path) }}</p>
+                                @php
+                                    $fileUrl = asset('storage/' . $attachment->file_path);
+                                    $extension = pathinfo($attachment->file_path, PATHINFO_EXTENSION);
+                                @endphp
+
+                                @if (in_array(strtolower($extension), ['jpg','jpeg','png','gif']))
+                                    <!-- Image preview -->
+                                    <img src="{{ $fileUrl }}" alt="Preview" class="w-64 h-64 rounded-lg shadow">
+                                @elseif (strtolower($extension) === 'pdf')
+                                    <!-- PDF preview -->
+                                    <iframe src="{{ $fileUrl }}" class="w-full h-64 sm:h-96 border rounded-lg"></iframe>
+                                @else
+                                    <!-- Other files: show download link -->
+                                    <a href="{{ $fileUrl }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                                        View / Download
+                                    </a>
+                                @endif
+                                <a href="{{ asset('storage/' . $attachment->file_path) }}"
                                     target="_blank"
                                     class="text-blue-600 hover:text-blue-800 font-medium">
                                     View / Download
@@ -53,25 +95,34 @@
                         </div>
                     @endif
 
-                    @if(auth()->id() === $agenda->created_by)
-                        <div class="flex items-center p-3 mt-3 justify-between">
-                            <div></div>
-                            <div class="text-base font-medium rounded-lg border border-gray-400">
-                                <button type="button" onclick="window.location.href=`{{ route('agenda.edit-prev', $agenda->agenda_id) }}`" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">Edit</button>
-                                <button 
-                                    onclick="isConfirm({{ $agenda->agenda_id }})" 
-                                    class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500">
-                                        Archive
-                                </button>
-                                <script>
-                                    function isConfirm(agendaId) {
-                                        if(!confirm('Are you sure you want to archive this agenda?')) return;
-                                        archivedAgenda(agendaId);
-                                        window.location.href = `/app/view-agenda`;
-                                    }
-                                </script>
+                    <div class="bg-white rounded-2xl p-3 border border-gray-200 shadow-md">
+                        <h2 class="p-2 mt-2 ml-2 mb-3 text-xl font-semibold">Concerns</h2>
+                        <div class="px-5 border-b border-gray-300 mb-3 w-full"></div>
+                        @if($agenda->concerns->isNotEmpty())
+                            @foreach($agenda->concerns as $concern)
+                                <div class="concern-item bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm mb-2">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-800">{{ $concern->description }}</h3>
+                                            <p class="text-gray-600 mt-1">Due date: {{ $concern->due_date ? \Carbon\Carbon::parse($concern->due_date)->format('M d, Y') : '-' }}</p>
+                                            <p class="text-sm text-gray-500 mt-1">Raised by: {{ $concern->responsible_person }}</p>
+                                            <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">{{ ucfirst($concern->status) }}</span>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="toggle-status bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Mark Done</button>
+                                            <button class="edit-item bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Edit</button>
+                                            <button class="delete-item bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">No Concerns Under this Agenda</h3>
+                                </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 </div>
             </div>

@@ -9,6 +9,11 @@
     @section('contents')
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 overflow-y-auto">
             <div class="p-3 col-span-2">
+                @if(session('success'))
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <form action="{{ route('agendas.store') }}" method="POST" enctype="multipart/form-data" 
                     class="max-w-5xl mx-auto bg-white shadow-md rounded-2xl p-6 border border-gray-200">
                     @csrf
@@ -58,11 +63,6 @@
                     </div>
                 </form>
 
-                @if(session('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
             </div>
         </div>
     @endsection

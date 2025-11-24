@@ -29,7 +29,8 @@ class AgendaController extends Controller
     {
         $agenda_id = $request->route('agenda_id');
         $agenda = Agenda::find($agenda_id);
-        return view('v2.pages.agenda.view-all', compact('agenda'));
+        $attachment = $agenda->attachments->first();
+        return view('v2.pages.agenda.view-all', compact('agenda', 'attachment'));
     }
 
     public function previewEditAgenda(Request $request)
