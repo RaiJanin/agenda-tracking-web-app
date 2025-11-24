@@ -14,6 +14,9 @@
                         {{ session('success') }}
                     </div>
                 @endif
+                @if ($errors->any())
+                    @include('v2.components.error-all')
+                @endif
                 <form action="{{ route('agendas.store') }}" method="POST" enctype="multipart/form-data" 
                     class="max-w-5xl mx-auto bg-white shadow-md rounded-2xl p-6 border border-gray-200">
                     @csrf

@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Concern;
 use App\Models\Agenda;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ConcernController extends Controller
 {
     public function index($agenda_id)
     {
         $agenda = Agenda::findOrFail($agenda_id);
-        $concerns = Concern::where('agenda_id', $agenda_id)->get();
+        $concerns = Concern::where('agenda_id', $agenda_id)
+                    ->with('responsible')
+                    ->get();
         return view('concerns.index', compact('agenda', 'concerns'));
     }
 
@@ -32,20 +35,30 @@ public function store(Request $request)
         'file' => 'nullable|file|max:2048',
     ]);
 
-    $filePath = null;
-    if ($request->hasFile('file')) {
-        $filePath = $request->file('file')->store('concerns', 'public');
-    }
-
-    Concern::create([
+    $newConcern = Concern::create([
         'agenda_id' => $request->agenda_id,
         'description' => $request->description,
         'responsible_person_id' => auth()->id(), // ✅ link user via ID
         'status' => $request->status,
-        'due_date' => $request->due_date,
-        'comments' => $request->comments,
-        'file_path' => $filePath,
+        'due_date' => $request->due_date
     ]);
+
+    $filePath = null;
+    if ($request->hasFile('file')) {
+        $filePath = $request->file('file')->store('uploads/concerns', 'public');
+        $newConcern->attachments()->create([
+            'file_path' => $filePath
+        ]);
+    }
+
+    $comments = null;
+    if ($request->filled('comments')) {
+        $comments = $request->comments;
+        $newConcern->commentList()->create([
+            'user_id' => auth()->id(),
+            'content' => $comments
+        ]);
+    }
 
     return redirect()
         ->route('concerns.index', $request->agenda_id)

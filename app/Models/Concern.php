@@ -19,8 +19,6 @@ class Concern extends Model
         'responsible_person_id',
         'status',
         'due_date',
-        'comments',
-        'file_path',
     ];
 
     // ✅ Each concern belongs to an agenda
@@ -43,6 +41,6 @@ class Concern extends Model
 
     public function commentList()
     {
-        return $this->hasMany(Comment::class, 'concern_id');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

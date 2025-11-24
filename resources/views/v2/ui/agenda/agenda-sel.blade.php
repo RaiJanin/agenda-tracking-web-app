@@ -11,7 +11,7 @@
                         </div>
 
                         <a href="{{ route('agenda.view-all') }}"
-                            class="text-sm bg-amber-500 text-black px-4 py-2 rounded-lg hover:bg-amber-600 transition">
+                            class="text-sm bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition">
                             ← Back to List
                         </a>
                     </div>
@@ -96,7 +96,16 @@
                     @endif
 
                     <div class="bg-white rounded-2xl p-3 border border-gray-200 shadow-md">
-                        <h2 class="p-2 mt-2 ml-2 mb-3 text-xl font-semibold">Concerns</h2>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                            <h2 class="p-2 mt-2 ml-2 mb-3 text-xl font-semibold">Concerns</h2>
+                            {{-- ✅ Only Admin or Member can add new concerns --}}
+                            @if(in_array(auth()->user()->role, ['admin', 'member']))
+                                <a href="{{ route('concerns.create', $agenda->agenda_id) }}"
+                                    class="text-sm bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition">
+                                    + Add Concern
+                                </a>
+                            @endif
+                        </div>
                         <div class="px-5 border-b border-gray-300 mb-3 w-full"></div>
                         @if($agenda->concerns->isNotEmpty())
                             @foreach($agenda->concerns as $concern)
@@ -105,7 +114,7 @@
                                         <div>
                                             <h3 class="text-lg font-semibold text-gray-800">{{ $concern->description }}</h3>
                                             <p class="text-gray-600 mt-1">Due date: {{ $concern->due_date ? \Carbon\Carbon::parse($concern->due_date)->format('M d, Y') : '-' }}</p>
-                                            <p class="text-sm text-gray-500 mt-1">Raised by: {{ $concern->responsible_person }}</p>
+                                            <p class="text-sm text-gray-500 mt-1">Raised by: {{ $concern->responsible->name }}</p>
                                             <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">{{ ucfirst($concern->status) }}</span>
                                         </div>
                                         <div class="flex space-x-2">

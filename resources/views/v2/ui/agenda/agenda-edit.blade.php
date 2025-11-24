@@ -23,6 +23,9 @@
                         <p>{{ session('success') }}</p><span class="underline hover:text-green-500"><i class="fa-solid fa-arrow-left text-xs ml-5"></i><a href="{{ route('agenda.view-all') }}">Back to list</a></span>
                     </div>
                 @endif
+                @if ($errors->any())
+                    @include('v2.components.error-all')
+                @endif
 
                 <form action="{{ route('agendas.update', $agenda->agenda_id) }}" method="POST" enctype="multipart/form-data"
                     class="bg-white shadow rounded-2xl p-6">
