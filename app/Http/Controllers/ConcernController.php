@@ -24,53 +24,57 @@ class ConcernController extends Controller
         return view('concerns.create', compact('agenda'));
     }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'agenda_id' => 'required',
-        'description' => 'required|string',
-        'status' => 'required|string',
-        'due_date' => 'nullable|date',
-        'comments' => 'nullable|string',
-        'file' => 'nullable|file|max:2048',
-    ]);
-
-    $newConcern = Concern::create([
-        'agenda_id' => $request->agenda_id,
-        'description' => $request->description,
-        'responsible_person_id' => auth()->id(), // ✅ link user via ID
-        'status' => $request->status,
-        'due_date' => $request->due_date
-    ]);
-
-    $filePath = null;
-    if ($request->hasFile('file')) {
-        $filePath = $request->file('file')->store('uploads/concerns', 'public');
-        $newConcern->attachments()->create([
-            'file_path' => $filePath
-        ]);
+    public function raiseConcern($agenda_id)
+    {
+        $agenda = Agenda::findOrFail($agenda_id);
+        return view('v2.pages.concerns.create', compact('agenda'));
     }
 
-    $comments = null;
-    if ($request->filled('comments')) {
-        $comments = $request->comments;
-        $newConcern->commentList()->create([
-            'user_id' => auth()->id(),
-            'content' => $comments
+    public function store(Request $request)
+    {
+        $request->validate([
+            'agenda_id' => 'required',
+            'description' => 'required|string',
+            'status' => 'required|string',
+            'due_date' => 'nullable|date',
+            'comments' => 'nullable|string',
+            'file' => 'nullable|file|max:2048',
         ]);
+
+        $newConcern = Concern::create([
+            'agenda_id' => $request->agenda_id,
+            'description' => $request->description,
+            'responsible_person_id' => auth()->id(), // ✅ link user via ID
+            'status' => $request->status,
+            'due_date' => $request->due_date
+        ]);
+
+        $filePath = null;
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('uploads/concerns', 'public');
+            $newConcern->attachments()->create([
+                'file_path' => $filePath
+            ]);
+        }
+
+        $comments = null;
+        if ($request->filled('comments')) {
+            $comments = $request->comments;
+            $newConcern->commentList()->create([
+                'user_id' => auth()->id(),
+                'content' => $comments
+            ]);
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', 'Concern added successfully.');
     }
-
-    return redirect()
-        ->route('concerns.index', $request->agenda_id)
-        ->with('success', 'Concern added successfully.');
-}
-
-
 
     public function edit($id)
     {
         $concern = Concern::findOrFail($id);
-        return view('concerns.edit', compact('concern'));
+        return view('v2.pages.concerns.all-concerns', compact('concern'));
     }
 
     public function update(Request $request, $id)
@@ -93,7 +97,7 @@ public function store(Request $request)
             'comments'
         ]));
 
-        return redirect()->route('concerns.index', $concern->agenda_id)->with('success', 'Concern updated successfully.');
+        return redirect()->back()->with('success', 'Concern updated successfully.');
     }
 
     public function destroy($id)

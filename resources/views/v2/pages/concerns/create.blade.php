@@ -1,14 +1,14 @@
 @extends('v2.layout.app')
 
 
-@section('title', 'Agenda WEB | All Concerns')
+@section('title', 'Agenda WEB | Raise Concern')
 
 @section('styles')
     
 @endsection
 
 @section('main-content')
-    @include('v2.ui.concerns.all-concerns')
+    @include('v2.ui.concerns.create-concern')
 @endsection
 
 @section('scripts')

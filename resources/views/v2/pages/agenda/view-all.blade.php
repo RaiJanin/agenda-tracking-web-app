@@ -1,7 +1,7 @@
 @extends('v2.layout.app')
 
 
-@section('title', 'All Agendas')
+@section('title', 'Agenda WEB | All Agendas')
 
 @section('styles')
     

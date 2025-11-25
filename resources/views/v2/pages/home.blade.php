@@ -1,7 +1,7 @@
 @extends('v2.layout.app')
 
 
-@section('title', 'Dashboard')
+@section('title', 'Agenda WEB | Dashboard')
 
 @section('styles')
     

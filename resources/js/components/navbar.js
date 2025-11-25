@@ -95,36 +95,3 @@ function toggleSidebar(isCollapsed) {
 window.toggleSidebar = toggleSidebar;
 
 feather.replace();
-
-        
-
-// console.log("Current path returned value: "+currentPath);
-
-// switch (currentPath) {
-//   case '/app/dashboard':
-//     document.querySelector('.nav-link-dash').classList.add('active');
-//     break;
-//   case '/app/calendar':
-//     document.querySelector('.nav-link-cale').classList.add('active');
-//     break;
-//   case '/app/settings':
-//     document.querySelector('.nav-link-sett').classList.add('active');
-//     break;
-//   default:
-//     document.querySelector('.nav-link-home').classList.add('active');
-//     break;
-// }
-//console.log("New URL Method: "+new URL(link.getAttribute('href')).pathname);
-
-// navLinksItems.forEach(link => {
-//     link.addEventListener('click', function() {
-//         navLinksItems.forEach(item => item.classList.remove('active'));
-//         this.classList.add('active');
-//     });
-    
-    
-    
-//     if (currentPath === new URL(link.href, window.location.origin).pathname) {
-//         link.classList.add('active');
-//     }
-// });

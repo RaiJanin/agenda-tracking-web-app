@@ -1,7 +1,7 @@
 @extends('v2.layout.app')
 
 
-@section('title', 'Users Management')
+@section('title', 'Agenda WEB | Users Management')
 
 @section('styles')
     

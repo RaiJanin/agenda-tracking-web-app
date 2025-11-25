@@ -1,7 +1,7 @@
 @extends('v2.layout.app')
 
 
-@section('title', 'Security Settings')
+@section('title', 'Agenda WEB | Security Settings')
 
 @section('styles')
     

@@ -1,7 +1,7 @@
 @extends('v2.layout.login-layout')
 
 
-@section('title', 'Login to continue')
+@section('title', 'Agenda WEB | Login to continue')
 
 @section('styles')
 

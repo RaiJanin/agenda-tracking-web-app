@@ -1,7 +1,7 @@
 @extends('v2.layout.app')
 
 
-@section('title', 'History')
+@section('title', 'Agenda WEB | History')
 
 @section('styles')
     

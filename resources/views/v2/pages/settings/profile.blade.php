@@ -1,7 +1,7 @@
 @extends('v2.layout.app')
 
 
-@section('title', 'Profile Settings')
+@section('title', 'Agenda WEB | Profile Settings')
 
 @section('styles')
     
