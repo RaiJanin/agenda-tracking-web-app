@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/concerns', function () { return view('v2.pages.concerns.all-concerns'); })->name('concerns.all-concerns');
         Route::get('/agenda/{agenda_id}/raise-concern', [ConcernController::class, 'raiseConcern'])->name('concerns.create-preview');
+        Route::get('/concerns/{concern_id}/edit', [ConcernController::class, 'editPreview'])->name('concerns.edit-preview');
         Route::get('/concerns/me', function () { return view('v2.pages.concerns.my-concerns'); })->name('concerns.my-concerns');
 
         Route::get('/calendar', function () { return view('v2.pages.calendar'); })->name('calendar');

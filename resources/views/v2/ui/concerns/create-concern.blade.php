@@ -10,8 +10,8 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 overflow-y-auto">
             <div class="p-3 col-span-2">
                 @if(session('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
-                        {{ session('success') }}
+                    <div class="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
+                        {{ session('success') }}<span class="underline hover:text-green-500"><i class="fa-solid fa-arrow-left text-xs ml-5"></i><a href="{{ route('agenda.view', $agenda->agenda_id) }}">Back to list</a></span>
                     </div>
                 @endif
                 @if ($errors->any())

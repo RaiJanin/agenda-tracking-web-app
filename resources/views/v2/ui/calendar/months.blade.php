@@ -27,7 +27,7 @@
                         <i data-feather="chevron-down" class="mt-1"></i>
                     </button>
                     <div id="year-dropdown" class="absolute hidden bg-white border border-gray-300 shadow-lg rounded-lg mt-2 w-28 z-50 max-h-60 overflow-y-auto">
-                        @for ($y = now()->year - 5; $y <= now()->year + 5; $y++)
+                        @for ($y = now()->year - 5; $y <= now()->year + 15; $y++)
                             <button class="w-full text-left px-4 py-2 hover:bg-blue-100 text-gray-700" data-year="{{ $y }}">
                                 {{ $y }}
                             </button>

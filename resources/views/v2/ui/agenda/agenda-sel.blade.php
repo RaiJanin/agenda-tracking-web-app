@@ -97,17 +97,35 @@
                         @if($agenda->concerns->isNotEmpty())
                             @foreach($agenda->concerns as $concern)
                                 <div class="concern-item bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm mb-2">
-                                    <div class="flex justify-between items-start mb-4">
+                                    <div class="flex flex-col gap-5 p-2">
                                         <div>
                                             <h3 class="text-lg font-semibold text-gray-800">{{ $concern->description }}</h3>
                                             <p class="text-gray-600 mt-1">Due date: {{ $concern->due_date ? \Carbon\Carbon::parse($concern->due_date)->format('M d, Y') : '-' }}</p>
-                                            <p class="text-sm text-gray-500 mt-1">Raised by: {{ $concern->responsible->name }}</p>
-                                            <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">{{ ucfirst($concern->status) }}</span>
+                                            <p class="text-sm text-gray-500 mt-1">Responsible Person: {{ $concern->responsible->name }}</p>
+                                            @if($concern->status === 'pending')
+                                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-amber-500 text-white rounded">{{ ucfirst($concern->status) }}</span>
+                                            @elseif ($concern->status === 'ongoing')
+                                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-blue-500 text-white rounded">{{ ucfirst($concern->status) }}</span>
+                                            @elseif ($concern->status === 'completed')
+                                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-gray-500 text-white rounded">{{ ucfirst($concern->status) }}</span>
+                                            @endif
                                         </div>
                                         <div class="flex space-x-2">
-                                            <button class="toggle-status bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Mark Done</button>
-                                            <button class="edit-item bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Edit</button>
-                                            <button class="delete-item bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">Delete</button>
+                                            <button onclick="window.location.href=`{{ route('concerns.show', $concern->concern_id) }}`" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">View</button>
+                                            @if(in_array(auth()->user()->role, ['admin']) || $concern->responsible_person_id === auth()->user()->id)
+                                                <button onclick="window.location.href=`{{ route('concerns.edit-preview', $concern->concern_id) }}`" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Edit</button>
+                                            @endif
+                                            @if(auth()->user()->role === 'admin' || $concern->responsible_person_id === auth()->user()->id)
+                                                <form action="{{ route('concerns.destroy', $concern->concern_id) }}"
+                                                        method="POST" class="inline">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit"
+                                                            class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
+                                                            onclick="return confirm('Delete this concern?')">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

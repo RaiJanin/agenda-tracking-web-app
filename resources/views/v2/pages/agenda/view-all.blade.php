@@ -12,6 +12,8 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/modules/agendaLoad.js') }}"></script>
-    <script src="{{ asset('js/rest-api/archiveAgenda.js') }}"></script>
+    @if(!request()->route('agenda_id'))
+        <script src="{{ asset('js/modules/agendaLoad.js') }}"></script>
+        <script src="{{ asset('js/rest-api/archiveAgenda.js') }}"></script>
+    @endif
 @endsection

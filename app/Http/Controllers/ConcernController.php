@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Concern;
 use App\Models\Agenda;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -74,7 +75,15 @@ class ConcernController extends Controller
     public function edit($id)
     {
         $concern = Concern::findOrFail($id);
-        return view('v2.pages.concerns.all-concerns', compact('concern'));
+        return view('concerns.edit', compact('concern'));
+    }
+
+    public function editPreview($id)
+    {
+        $concern = Concern::findOrFail($id);
+        $agenda = $concern->agenda->only(['agenda_id', 'title']);
+        $res_pers = User::pluck('name', 'id');
+        return view('v2.pages.concerns.edit-preview', compact('concern', 'agenda', 'res_pers'));
     }
 
     public function update(Request $request, $id)
@@ -83,15 +92,15 @@ class ConcernController extends Controller
 
         $request->validate([
             'description' => 'required|string',
-            'responsible_person' => 'required|string',
-            'status' => 'required|string',
+            'responsible_person_id' => 'required|exists:users,id',
+            'status' => 'required|in:pending,ongoing,completed',
             'due_date' => 'nullable|date',
             'comments' => 'nullable|string',
         ]);
 
         $concern->update($request->only([
             'description',
-            'responsible_person',
+            'responsible_person_id',
             'status',
             'due_date',
             'comments'

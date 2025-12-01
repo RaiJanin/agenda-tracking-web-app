@@ -39,10 +39,9 @@ class Agenda extends Model
         return $this->morphMany(Attachment::class, 'attachable');
     }
     
-
     public function user()
-{
-    return $this->belongsTo(User::class, 'created_by');
-}
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
 }

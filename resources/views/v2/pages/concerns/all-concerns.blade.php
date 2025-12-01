@@ -12,5 +12,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/modules/concernLoad.js') }}"></script>
+    @if(!request()->route('agenda_id'))
+        <script src="{{ asset('js/modules/concernLoad.js') }}"></script>
+    @endif
 @endsection
