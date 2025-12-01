@@ -8,7 +8,11 @@
 @endsection
 
 @section('main-content')
-    @include('v2.ui.archives.agendas-arc')
+    @if(auth()->user()->role === 'admin')
+        @include('v2.ui.archives.agendas-arc')
+    @else
+        @include('v2.components.warnings.unauthorized')
+    @endif
 @endsection
 
 @section('scripts')

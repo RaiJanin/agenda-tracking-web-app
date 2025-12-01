@@ -11,11 +11,11 @@
             <div class="p-3 col-span-2">
                 @if(session('success'))
                     <div class="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
-                        {{ session('success') }}<span class="underline hover:text-green-500"><i class="fa-solid fa-arrow-left text-xs ml-5"></i><a href="{{ route('agenda.view', $agenda->agenda_id) }}">Back to list</a></span>
+                        {{ session('success') }}<span class="underline hover:text-green-500"><i class="fa-solid fa-arrow-left text-xs ml-5"></i><a href="{{ route('agenda.view', $agenda->agenda_id) }}">Exit</a></span>
                     </div>
                 @endif
                 @if ($errors->any())
-                    @include('v2.components.error-all')
+                    @include('v2.components.warnings.error-all')
                 @endif
                 <div class="max-w-3xl mx-auto bg-white shadow rounded-lg p-6">
                     <h2 class="text-xl font-bold mb-4">Add Concern/Issue for {{ $agenda->title }}</h2>
@@ -35,8 +35,17 @@
                                 {{-- Responsible person (auto-filled and locked) --}}
                                 <div>
                                     <label class="block text-gray-700">Responsible Person</label>
-                                    <input type="text" name="responsible_person" value="{{ Auth::user()->name }}" 
+                                    @if(auth()->user()->role != 'admin')
+                                        <input type="text" name="responsible_person" value="{{ Auth::user()->name }}" 
                                             class="w-full border rounded-md p-2 bg-gray-100 text-gray-700" readonly>
+                                    @else
+                                        <select name="responsible_person_id" class="w-full border rounded-md p-2" required>
+                                            <option value="">-- Select Responsible Person --</option>
+                                            @foreach($res_pers as $id => $responsible)
+                                                <option value="{{ $id }}">{{ $responsible }}</option>
+                                            @endforeach
+                                    @endif
+                                </select>
                                 </div>
 
                                 {{-- Status control --}}

@@ -43,6 +43,7 @@
                                             class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500">
                                                 Archive
                                         </button>
+                                        <script src="{{ asset('js/rest-api/archiveAgenda.js') }}"></script>
                                         <script>
                                             function isConfirm(agendaId) {
                                                 if(!confirm('Are you sure you want to archive this agenda?')) return;
@@ -110,22 +111,24 @@
                                                 <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-gray-500 text-white rounded">{{ ucfirst($concern->status) }}</span>
                                             @endif
                                         </div>
-                                        <div class="flex space-x-2">
-                                            <button onclick="window.location.href=`{{ route('concerns.show', $concern->concern_id) }}`" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">View</button>
-                                            @if(in_array(auth()->user()->role, ['admin']) || $concern->responsible_person_id === auth()->user()->id)
-                                                <button onclick="window.location.href=`{{ route('concerns.edit-preview', $concern->concern_id) }}`" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Edit</button>
-                                            @endif
-                                            @if(auth()->user()->role === 'admin' || $concern->responsible_person_id === auth()->user()->id)
-                                                <form action="{{ route('concerns.destroy', $concern->concern_id) }}"
-                                                        method="POST" class="inline">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit"
-                                                            class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
-                                                            onclick="return confirm('Delete this concern?')">
-                                                        Delete
-                                                    </button>
-                                                </form>
-                                            @endif
+                                        <div class="flex items-center justify-start">
+                                            <div class="text-base font-medium rounded-lg border border-gray-400">
+                                                <button type="button" onclick="window.location.href=`{{ route('concerns.show', $concern->concern_id) }}`" class="text-sm border-r text-slate-500 border-gray-400 px-2 py-1 rounded-l-lg hover:text-slate-400">View</button>
+                                                @if(in_array(auth()->user()->role, ['admin']) || $concern->responsible_person_id === auth()->user()->id)
+                                                    <button onclick="window.location.href=`{{ route('concerns.edit-preview', $concern->concern_id) }}`" class="text-sm px-2 text-teal-600 py-1 rounded-r-lg hover:text-teal-500">Edit</button>
+                                                @endif
+                                                @if(auth()->user()->role === 'admin' || $concern->responsible_person_id === auth()->user()->id)
+                                                    <form action="{{ route('concerns.destroy', $concern->concern_id) }}"
+                                                            method="POST" class="inline">
+                                                        @csrf @method('DELETE')
+                                                        <button type="submit"
+                                                                class="bg-red-500 text-white px-2 py-1 rounded-r-md text-sm hover:bg-red-600"
+                                                                onclick="return confirm('Delete this concern?')">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

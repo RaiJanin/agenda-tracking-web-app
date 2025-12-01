@@ -8,7 +8,11 @@
 @endsection
 
 @section('main-content')
-    @include('v2.ui.agenda.create-agenda')
+    @if(auth()->user()->role === 'admin')
+        @include('v2.ui.agenda.create-agenda')
+    @else
+        @include('v2.components.warnings.unauthorized')
+    @endif
 @endsection
 
 @section('scripts')

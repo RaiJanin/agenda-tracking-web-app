@@ -28,7 +28,8 @@ class ConcernController extends Controller
     public function raiseConcern($agenda_id)
     {
         $agenda = Agenda::findOrFail($agenda_id);
-        return view('v2.pages.concerns.create', compact('agenda'));
+        $res_pers = User::pluck('name', 'id');
+        return view('v2.pages.concerns.create', compact('agenda', 'res_pers'));
     }
 
     public function store(Request $request)

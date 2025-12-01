@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 agendaContainer.innerHTML = data.agendas.map(agenda => {
                     let agendaStatus = '';
+                    let actionBtns = '';
 
                     switch(agenda.status) {
                         case 'resolved':
@@ -49,6 +50,23 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
                     }
 
+                    if(adminAccess) {
+                        actionBtns = `
+                            <div class="rounded-lg border border-gray-400">
+                                <button id="view-ag-btn" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400" data-agenda-id="${agenda.agenda_id}">View</button>
+                                <button id="edit-ag-btn" class="border-r text-teal-600 border-gray-400 px-3 py-2 hover:text-teal-500" data-agenda-id="${agenda.agenda_id}">Edit</button>
+                                <button id="archive-ag-btn" class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500" data-agenda-id="${agenda.agenda_id}">Archive</button>
+                            </div>
+                        `;
+                    } else {
+                        actionBtns = `
+                            <div class="rounded-lg border border-gray-400">
+                                <button id="view-ag-btn" class="text-slate-500 px-3 py-2 hover:text-slate-400" data-agenda-id="${agenda.agenda_id}">View</button>
+                            </div>
+                        `;
+                    }
+                    
+
                     return `
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <div class="h-64 max-h-96 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center">
@@ -69,13 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center p-3 mt-3 justify-between">
-                                <div></div>
-                                <div class="rounded-lg border border-gray-400">
-                                    <button id="view-ag-btn" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400" data-agenda-id="${agenda.agenda_id}">View</button>
-                                    <button id="edit-ag-btn" class="border-r text-teal-600 border-gray-400 px-3 py-2 hover:text-teal-500" data-agenda-id="${agenda.agenda_id}">Edit</button>
-                                    <button id="archive-ag-btn" class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500" data-agenda-id="${agenda.agenda_id}">Archive</button>
-                                </div>
+                            <div class="flex items-center p-3 mt-3 justify-start">
+                                ${actionBtns}
                             </div>
                         </div>
                     `

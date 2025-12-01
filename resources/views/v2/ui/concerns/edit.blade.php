@@ -15,7 +15,7 @@
                     </div>
                 @endif
                 @if ($errors->any())
-                    @include('v2.components.error-all')
+                    @include('v2.components.warnings.error-all')
                 @endif
                 <div class="max-w-3xl mx-auto bg-white shadow rounded-lg p-6">
                     <h4 class="text-xl font-bold mb-4">{{ $agenda['title'] }}</h4>

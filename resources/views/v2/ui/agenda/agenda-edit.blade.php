@@ -24,7 +24,7 @@
                     </div>
                 @endif
                 @if ($errors->any())
-                    @include('v2.components.error-all')
+                    @include('v2.components.warnings.error-all')
                 @endif
 
                 <form action="{{ route('agendas.update', $agenda->agenda_id) }}" method="POST" enctype="multipart/form-data"

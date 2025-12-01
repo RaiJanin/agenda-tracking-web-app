@@ -12,6 +12,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="flex h-screen overflow-hidden">
+    
         @include('v2.components.app-nav')
 
         <div class="overlay" id="overlay"></div>
@@ -22,7 +23,6 @@
                 @yield('main-content')
             </main>
         </div>
-        
     </div>
     @include('v2.includes.script-assets')
     @yield('scripts')
