@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    function indexR() {
+    indexR();
+    function indexR(page = 1) {
         const concernContainer = document.getElementById('concern-container');
         concernContainer.innerHTML = '<p>Loading concerns...</p>';
 
-        fetch('/concerns/all', {
+        fetch(`/concerns/all?page=${page}`, {
             method: 'GET',
             headers: { "Accept": "application/json" }
         })
@@ -18,7 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                concernContainer.innerHTML = json.concerns.map(concern => {
+                handlePagination(json.concerns, 'indexR', true);
+
+                concernContainer.innerHTML = json.concerns.data.map(concern => {
                     let concernStatus = '';
                     switch (concern.status) {
                         case 'resolved':
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
             button.addEventListener('click', e => {
                 e.preventDefault();
                 const concernId = button.getAttribute('data-concern-id');
-                window.location.href = `/concerns/edit/${concernId}`;
+                window.location.href = `/app/concerns/${concernId}/edit`;
             });
         });
 
@@ -110,5 +113,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.indexR = indexR;
-    indexR();
+    
 });

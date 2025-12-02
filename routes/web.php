@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// One shared agendas resource for all roles
+//------protected routes
 Route::middleware(['auth'])->group(function () {
 
     //----------for page viewing
@@ -79,22 +79,24 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('agendas', AgendaController::class);
 
     //----Json api
-    Route::get('/agenda-load', [AgendaController::class, 'loadAgendas'])->name('agendas.load');
-  
-    Route::prefix('concerns')->group(function () {
-        // Specific routes FIRST
-        Route::get('/your', [ConcernController::class, 'yourConcerns'])->name('concerns.your');
-        Route::get('/all', [ConcernController::class, 'allConcerns'])->name('concerns.all');
+        Route::get('/agenda-load', [AgendaController::class, 'loadAgendas'])->name('agendas.load');
+        //-----Display concerns by agenda
+        Route::get('/{agenda_id}/concernBAg', [ConcernController::class, 'loadConcernAg']);
 
-        // Then the dynamic routes
-        Route::get('/{agenda_id}', [ConcernController::class, 'index'])->name('concerns.index');
-        Route::get('/{agenda_id}/create', [ConcernController::class, 'create'])->name('concerns.create');
-        Route::post('/', [ConcernController::class, 'store'])->name('concerns.store');
-        Route::get('/edit/{id}', [ConcernController::class, 'edit'])->name('concerns.edit');
-        Route::put('/{id}', [ConcernController::class, 'update'])->name('concerns.update');
-        Route::delete('/{id}', [ConcernController::class, 'destroy'])->name('concerns.destroy');
-        Route::get('/show/{id}', [ConcernController::class, 'show'])->name('concerns.show');
-    });
+        Route::prefix('concerns')->group(function () {
+            // Json concern api
+            Route::get('/your', [ConcernController::class, 'yourConcerns'])->name('concerns.your');
+            Route::get('/all', [ConcernController::class, 'allConcerns'])->name('concerns.all');
+
+            // dynamic routes
+            Route::get('/{agenda_id}', [ConcernController::class, 'index'])->name('concerns.index');
+            Route::get('/{agenda_id}/create', [ConcernController::class, 'create'])->name('concerns.create');
+            Route::post('/', [ConcernController::class, 'store'])->name('concerns.store');
+            Route::get('/edit/{id}', [ConcernController::class, 'edit'])->name('concerns.edit');
+            Route::put('/{id}', [ConcernController::class, 'update'])->name('concerns.update');
+            Route::delete('/{id}', [ConcernController::class, 'destroy'])->name('concerns.destroy');
+            Route::get('/show/{id}', [ConcernController::class, 'show'])->name('concerns.show');
+        });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 

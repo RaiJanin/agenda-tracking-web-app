@@ -33,7 +33,7 @@
                                 </div>
                                 <span class="text-base text-gray-700">{{ $agenda->notes ?: 'No notes available.' }}</span>
                             </div>
-                            @if(auth()->id() === $agenda->created_by || auth()->user()->role === 'admin')
+                            @if(auth()->id() === $agenda->created_by)
                                 <div class="flex items-center p-3 justify-between mt-3">
                                     <div></div>
                                     <div class="text-base font-medium rounded-lg border border-gray-400">
@@ -95,12 +95,51 @@
                             @endif
                         </div>
                         <div class="px-5 border-b border-gray-300 mb-3 mt-3 w-full"></div>
-                        <div class="hidden" id="agenda-id-data" data-agenda-id="{{ $agenda->agenda_id }}"></div>
-                        <div id="concerns-container"></div>
-                        <div class="mt-5 text-xxs sm:text-sm px-4">
-                            <nav id="pagination" aria-label="Pagination Navigation" class="inline-flex items-center space-x-2 text-sm font-semibold"></nav>
-                            <div id="pagination-meta" class="mt-2"></div>
-                        </div>
+                        @if($agenda->concerns->isNotEmpty())
+                            @foreach($agenda->concerns as $concern)
+                                <div class="concern-item bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm mb-2">
+                                    <div class="flex flex-col gap-5 p-2">
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-800">{{ $concern->description }}</h3>
+                                            <p class="text-gray-600 mt-1">Due date: {{ $concern->due_date ? \Carbon\Carbon::parse($concern->due_date)->format('M d, Y') : '-' }}</p>
+                                            <p class="text-sm text-gray-500 mt-1">Responsible Person: {{ $concern->responsible->name }}</p>
+                                            @if($concern->status === 'pending')
+                                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-amber-500 text-white rounded">{{ ucfirst($concern->status) }}</span>
+                                            @elseif ($concern->status === 'ongoing')
+                                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-blue-500 text-white rounded">{{ ucfirst($concern->status) }}</span>
+                                            @elseif ($concern->status === 'completed')
+                                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-gray-500 text-white rounded">{{ ucfirst($concern->status) }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="flex items-center justify-start">
+                                            <div class="text-base font-medium rounded-lg border border-gray-400">
+                                                <button type="button" onclick="window.location.href=`{{ route('concerns.show', $concern->concern_id) }}`" class="text-sm border-r text-slate-500 border-gray-400 px-2 py-1 rounded-l-lg hover:text-slate-400">View</button>
+                                                @if(in_array(auth()->user()->role, ['admin']) || $concern->responsible_person_id === auth()->user()->id)
+                                                    <button onclick="window.location.href=`{{ route('concerns.edit-preview', $concern->concern_id) }}`" class="text-sm px-2 text-teal-600 py-1 rounded-r-lg hover:text-teal-500">Edit</button>
+                                                @endif
+                                                @if(auth()->user()->role === 'admin' || $concern->responsible_person_id === auth()->user()->id)
+                                                    <form action="{{ route('concerns.destroy', $concern->concern_id) }}"
+                                                            method="POST" class="inline">
+                                                        @csrf @method('DELETE')
+                                                        <button type="submit"
+                                                                class="bg-red-500 text-white px-2 py-1 rounded-r-md text-sm hover:bg-red-600"
+                                                                onclick="return confirm('Delete this concern?')">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">No Concerns Under this Agenda</h3>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

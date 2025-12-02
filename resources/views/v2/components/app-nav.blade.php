@@ -57,7 +57,7 @@
                         <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">View All Agenda</span>
                     </a>
                     @endif
-                    @if($adminAccess)
+                    @if(in_array(auth()->user()->role, ['admin', 'member']))
                     <div class="accordion-group">
                         <button class="w-full flex items-center justify-between p-2 rounded-lg {{ request()->routeIs('concerns.*') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative transition-all duration:300 ease-in-out">
                             <div class="flex items-center space-x-3">
@@ -81,10 +81,10 @@
                         </div>
                     </div>
                     @else
-                    <a href="{{ route('concerns.my-concerns') }}" class="flex items-center space-x-3 px-2 py-2 rounded-lg {{ request()->routeIs('concerns.my-concerns') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative transition-all duration:300 ease-in-out">
-                        <i data-feather="user-minus"></i>
-                        <span class="sidebar-text">My Concerns</span>
-                        <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">My Assigned Concerns</span>
+                    <a href="{{ route('concerns.all-concerns') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('concerns.all-concerns') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative transition-all duration:300 ease-in-out">
+                        <i data-feather="trello"></i>
+                        <span class="sidebar-text">Concerns</span>
+                        <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">View All Concerns</span>
                     </a>
                     @endif
                     @if($adminAccess)

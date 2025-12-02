@@ -13,16 +13,18 @@ return new class extends Migration
     {
           // CONCERNS TABLE
     
-          Schema::create('concerns', function (Blueprint $table) {
-         $table->id('concern_id');
+        Schema::create('concerns', function (Blueprint $table) {
+            $table->id('concern_id');
 
-    $table->foreignId('agenda_id')
-          ->constrained('agendas', 'agenda_id')
-          ->onDelete('cascade');
+            $table->foreignId('agenda_id')
+                ->constrained('agendas', 'agenda_id')
+                ->onDelete('cascade');
 
-    $table->foreignId('responsible_person_id')
-          ->constrained('users')
-          ->onDelete('cascade');
+            $table->uuid('responsible_person_id');
+            $table->foreign('responsible_person_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
 
             $table->text('description');
             $table->enum('status', ['pending', 'ongoing', 'resolved', 'closed', 'completed'])->default('pending');
@@ -32,8 +34,6 @@ return new class extends Migration
             $table->timestamps();
         });
         
-        
-
     }
 
     /**

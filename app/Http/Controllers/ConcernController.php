@@ -19,6 +19,18 @@ class ConcernController extends Controller
         return view('concerns.index', compact('agenda', 'concerns'));
     }
 
+    public function loadConcernAg($agenda_id)
+    {
+        $concerns = Concern::where('agenda_id', $agenda_id)
+                    ->with('responsible')
+                    ->paginate(8);
+
+        return response()->json([
+            'success' => true,
+            'concerns' => $concerns
+        ]);
+    }
+
     public function create($agenda_id)
     {
         $agenda = Agenda::findOrFail($agenda_id);
@@ -28,7 +40,7 @@ class ConcernController extends Controller
     public function raiseConcern($agenda_id)
     {
         $agenda = Agenda::findOrFail($agenda_id);
-        $res_pers = User::pluck('name', 'id');
+        $res_pers = User::whereIn('role', ['admin', 'member'])->pluck('name', 'id');
         return view('v2.pages.concerns.create', compact('agenda', 'res_pers'));
     }
 
@@ -83,7 +95,7 @@ class ConcernController extends Controller
     {
         $concern = Concern::findOrFail($id);
         $agenda = $concern->agenda->only(['agenda_id', 'title']);
-        $res_pers = User::pluck('name', 'id');
+        $res_pers = User::whereIn('role', ['admin', 'member'])->pluck('name', 'id');
         return view('v2.pages.concerns.edit-preview', compact('concern', 'agenda', 'res_pers'));
     }
 
@@ -130,18 +142,18 @@ class ConcernController extends Controller
 }
 public function allConcerns()
 {
-    $user = auth()->user();
+    // $user = auth()->user();
 
-    if ($user->role !== 'admin') {
-        return response()->json([
-            'success' => false,
-            'message' => 'Unauthorized access.'
-        ], 403);
-    }
+    // if ($user->role !== 'admin') {
+    //     return response()->json([
+    //         'success' => false,
+    //         'message' => 'Unauthorized access.'
+    //     ], 403);
+    // }
 
     $concerns = Concern::with(['agenda', 'responsible'])
         ->latest()
-        ->get();
+        ->paginate(8);
 
     return response()->json([
         'success' => true,
@@ -156,7 +168,7 @@ public function yourConcerns()
     $concerns = Concern::with(['agenda', 'responsible'])
         ->where('responsible_person_id', $user->id)
         ->latest()
-        ->get();
+        ->paginate(8);
 
     return response()->json([
         'success' => true,

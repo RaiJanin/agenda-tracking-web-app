@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    function indexR() {
+    indexR();
+    function indexR(page = 1) {
+        
         const agendaContainer = document.getElementById('agenda-container');
 
         agendaContainer.innerHTML = '';
 
-        fetch('/agenda-load', {
+        fetch(`/agenda-load?page=${page}`, {
             method: 'GET',
             headers: {"Accept" : "application/json"}
         })
@@ -18,7 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                agendaContainer.innerHTML = data.agendas.map(agenda => {
+                handlePagination(data.agendas, 'indexR', true);
+
+                agendaContainer.innerHTML = data.agendas.data.map(agenda => {
                     let agendaStatus = '';
                     let actionBtns = '';
 
@@ -61,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     } else {
                         actionBtns = `
                             <div class="rounded-lg border border-gray-400">
-                                <button id="view-ag-btn" class="text-slate-500 px-3 py-2 hover:text-slate-400" data-agenda-id="${agenda.agenda_id}">View</button>
+                                <button id="view-ag-btn" class="text-slate-500 px-4 py-2 hover:text-slate-400" data-agenda-id="${agenda.agenda_id}">View</button>
                             </div>
                         `;
                     }
@@ -141,6 +145,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.indexR = indexR;
-    indexR();
     
 });

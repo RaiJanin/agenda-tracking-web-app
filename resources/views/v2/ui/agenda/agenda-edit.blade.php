@@ -44,16 +44,16 @@
                             <label class="block text-gray-700 font-medium mb-2">Title</label>
                             <input type="text" name="title" value="{{ old('title', $agenda->title) }}"
                                 class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500 
-                                {{ !$isCreator ? 'bg-gray-100 cursor-not-allowed' : '' }}"
-                                {{ !$isCreator ? 'disabled' : 'required' }}>
+                                {{ !$isAdmin ? 'bg-gray-100 cursor-not-allowed' : '' }}"
+                                {{ !$isAdmin ? 'disabled' : 'required' }}>
                         </div>
 
                         {{-- Date --}}
                         <div>
                             <label class="block text-gray-700 font-medium mb-2">Date</label>
-                            <input type="text" value="{{ \Carbon\Carbon::parse($agenda->date)->format('F d, Y') }}"
-                                class="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-100 text-gray-600 cursor-not-allowed"
-                                readonly>
+                            <input type="date" name="date" value="{{ \Carbon\Carbon::parse($agenda->date)->format('Y-m-d') }}"
+                                class="w-full border border-gray-300 rounded-lg p-2.5 bg-white text-gray-600"
+                                >
                         </div>
 
                         {{-- Status --}}
@@ -79,8 +79,8 @@
                             <label class="block text-gray-700 font-medium mb-2">Notes</label>
                             <textarea name="notes" rows="4"
                                 class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500
-                                {{ !$isCreator ? 'bg-gray-100 cursor-not-allowed' : '' }}"
-                                {{ !$isCreator ? 'disabled' : '' }}>{{ old('notes', $agenda->notes) }}</textarea>
+                                {{ !$isAdmin ? 'bg-gray-100 cursor-not-allowed' : '' }}"
+                                {{ !$isAdmin ? 'disabled' : '' }}>{{ old('notes', $agenda->notes) }}</textarea>
                         </div>
 
                         {{-- File --}}
@@ -91,8 +91,8 @@
                                 focus:outline-none 
                                 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-400 file:text-slate-700
                                 hover:file:bg-gray-300 transition-all duration-400"
-                                {{ !$isCreator ? 'bg-gray-100 cursor-not-allowed' : '' }}"
-                                {{ !$isCreator ? 'disabled' : '' }}>
+                                {{ !$isAdmin ? 'bg-gray-100 cursor-not-allowed' : '' }}"
+                                {{ !$isAdmin ? 'disabled' : '' }}>
                                 @if($agenda->attachments()->exists())
                                 @php $attachment = $agenda->attachments()->first(); @endphp
                                 <p class="text-sm text-gray-600 mt-2">

@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    function loadYourConcerns() {
+    loadYourConcerns();
+    function loadYourConcerns(page = 1) {
         const container = document.getElementById('myconcern-container');
         container.innerHTML = '<p>Loading concerns...</p>';
 
-        fetch('/concerns/your', {
+        fetch(`/concerns/your?page=${page}`, {
             headers: { "Accept": "application/json" }
         })
         .then(async response => {
@@ -15,7 +16,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('Something went wrong while loading concerns.');
             }
 
-            container.innerHTML = json.concerns.map(concern => {
+            handlePagination(json.concerns, 'loadYourConcerns', true);
+
+            container.innerHTML = json.concerns.data.map(concern => {
                 let statusBadge = '';
                 switch (concern.status) {
                     case 'resolved':
@@ -113,5 +116,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.loadYourConcerns = loadYourConcerns;
-    loadYourConcerns();
 });

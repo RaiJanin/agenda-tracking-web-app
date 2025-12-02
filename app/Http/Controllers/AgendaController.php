@@ -18,7 +18,7 @@ class AgendaController extends Controller
     {
         $agendas = Agenda::where('status', '!=', 'archived')
            ->orderBy('date', 'desc')
-           ->get();
+           ->paginate(8);
 
         return response()->json([
             'success' => true,

@@ -16,12 +16,17 @@ return new class extends Migration
             $table->id('agenda_id');
             $table->string('title');
             $table->date('date');
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->uuid('created_by');
             $table->text('notes')->nullable();
             $table->enum('status', ['pending', 'ongoing', 'resolved', 'closed', 'completed', 'archived'])->default('pending');
-              $table->timestamp('archived_at')->nullable(); // NEW: mark archived
+            $table->timestamp('archived_at')->nullable(); // NEW: mark archived
             $table->softDeletes(); // NEW: enable soft deletes
             $table->timestamps();
+
+            $table->foreign('created_by')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
         
     }

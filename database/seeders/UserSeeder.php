@@ -29,28 +29,42 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'User',
+            'name' => 'RAI Tech',
+            'email' => 'rai.technical@gmail.com',
+            'password' => Hash::make('1qwertyu'),
+            'role' => 'member'
+        ]);
+
+        User::create([
+            'name' => 'RAI Official',
+            'email' => 'rightapps.official@gmail.com',
+            'password' => Hash::make('1qwertyu'),
+            'role' => 'admin'
+        ]);
+
+        User::create([
+            'name' => 'User 2',
             'email' => 'user@gmail.com',
             'password' => Hash::make('1qwertyu'),
             'role' => 'user'
         ]);
 
         User::create([
-            'name' => 'Ly',
+            'name' => 'Johnny Brader',
             'email' => 'johnnybrader08@gmail.com',
             'password' => Hash::make('1qwertyu'),
             'role' => 'user'
         ]);
 
         User::create([
-            'name' => 'User',
+            'name' => 'User 3',
             'email' => 'u@gmail.com',
             'password' => Hash::make('1qwertyu'),
-            'role' => 'admin'
+            'role' => 'user'
         ]);
 
         User::create([
-            'name' => 'member',
+            'name' => 'Member 2',
             'email' => 'm@gmail.com',
             'password' => Hash::make('1qwertyu'),
             'role' => 'member'

@@ -25,5 +25,9 @@
             <div id="agenda-container" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 <!-- all agenda loaded here-->
             </div>
+            <div class="mt-5 text-xxs sm:text-sm px-4">
+                <nav id="pagination" aria-label="Pagination Navigation" class="inline-flex items-center space-x-2 text-sm font-semibold"></nav>
+                <div id="pagination-meta" class="mt-2"></div>
+            </div>
         @endif
     @endsection
