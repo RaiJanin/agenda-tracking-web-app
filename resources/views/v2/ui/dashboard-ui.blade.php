@@ -4,8 +4,8 @@
     
     @section('content-head-buttons')
         @if(auth()->user()->role === 'admin')
-            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
-                <i data-feather="plus" class="mr-2"></i> New Report
+            <button onclick="window.location.href=`#`" class="flex items-center bg-blue-600 text-white px-2 py-2 rounded-lg hover:bg-opacity-90 transition">
+                <i data-feather="plus" class="mr-2"></i><span>New Report</span>
             </button>
         @endif
     @endsection

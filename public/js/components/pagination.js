@@ -3,13 +3,17 @@ const paginationMeta = document.getElementById('pagination-meta');
 
 function handlePagination(meta, fname, enable) {
 
+    pagination.innerHTML = '';
+    paginationMeta.innerHTML = '';
+    
     if(!enable) {
-        pagination.innerHTML = '';
-        paginationMeta.innerHTML = '';
+        return;
+    }
+
+    if(meta == null || fname == null) {
         return;
     }
     
-    pagination.innerHTML ='';
     pagination.innerHTML += `
             <button onclick="${fname}(${meta.current_page - 1})" id="prevBtn" aria-label="Previous page" disabled class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md text-gray-600 disabled:cursor-not-allowed disabled:text-gray-400 hover:bg-indigo-100 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
@@ -33,7 +37,7 @@ function handlePagination(meta, fname, enable) {
     }
 
     pagination.innerHTML += `
-            <button id="currentPage" aria-label="Current page" disabled class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md text-gray-600 disabled:text-gray-500 hover:bg-indigo-100 transition">
+            <button id="currentPage" aria-label="Current page" disabled class="flex items-center justify-center p-0 w-10 max-w-15 h-10 rounded-full bg-white shadow-md text-gray-600 disabled:text-gray-500 hover:bg-indigo-100 transition">
                 ${meta.current_page}/${meta.last_page}
             </button>
     `;

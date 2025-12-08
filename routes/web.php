@@ -66,7 +66,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/users', function () { return view('v2.pages.people'); })->name('people');
 
-        Route::get('/profile', function () { return view('v2.pages.settings.profile'); })->name('settings.profile');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('settings.profile');
+
         Route::get('/security', function () { return view('v2.pages.settings.security'); })->name('settings.security');
         
     });

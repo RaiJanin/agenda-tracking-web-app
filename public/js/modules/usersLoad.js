@@ -1,21 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    function indexR() {
+    indexR();
+    function indexR(page = 1) {
         const usersContainer = document.getElementById('user-container');
 
         usersContainer.innerHTML = '';
 
-        fetch('/profiles', {
+        handlePagination(null, null, false);
+
+        fetch(`/profiles?page=${page}`, {
             method: 'GET',
             headers: {"Accept" : "application/json"}
         })
         .then(async response => {
             
             try {
-                const data = await response.json();
-                console.log(data);
+                const users = await response.json();
+                console.log(users);
 
-                usersContainer.innerHTML = data.map(user => {
+                handlePagination(users, 'indexR', true);
+
+                usersContainer.innerHTML = users.data.map(user => {
                     let userRole = '';
 
                     switch(user.role) {
@@ -77,5 +82,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.indexR = indexR;
-    indexR();
+    
 });

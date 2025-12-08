@@ -89,8 +89,8 @@
                             {{-- ✅ Only Admin or Member can add new concerns --}}
                             @if(in_array(auth()->user()->role, ['admin', 'member']))
                                 <button type="button" onclick="window.location.href=`{{ route('concerns.create-preview', $agenda->agenda_id) }}`"
-                                    class="text-sm bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition ml-3">
-                                    + Add Concern
+                                    class="flex items-center gap-2 text-sm bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition ml-3">
+                                    <i class="fa-solid fa-plus text-xs"></i><span>Add Concern</span>
                                 </button>
                             @endif
                         </div>

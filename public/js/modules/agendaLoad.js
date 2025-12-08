@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
         
         const agendaContainer = document.getElementById('agenda-container');
 
-        agendaContainer.innerHTML = '';
+        agendaContainer.innerHTML = '<p>Loading data...</p>';
+        handlePagination(null, null, false);
 
         fetch(`/agenda-load?page=${page}`, {
             method: 'GET',

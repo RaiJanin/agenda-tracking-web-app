@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     loadYourConcerns();
     function loadYourConcerns(page = 1) {
         const container = document.getElementById('myconcern-container');
-        container.innerHTML = '<p>Loading concerns...</p>';
+        container.innerHTML = '<p>Loading data...</p>';
+
+        handlePagination(null, null, false);
 
         fetch(`/concerns/your?page=${page}`, {
             headers: { "Accept": "application/json" }

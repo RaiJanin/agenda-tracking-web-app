@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function indexR(page = 1) {
 
         concernContainer.innerHTML = '<p class="text-md p-4 ml-7 text-gray-400">Loading...</p>';
+        handlePagination(null, null, false);
 
         fetch(`/${agendaIdData}/concernBAg?page=${page}`, {
             method: 'GET',

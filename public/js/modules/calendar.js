@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
         editable: true,
         events: [],
         headerToolbar: false,
+        dateClick: function(info) {
+            console.log("You clicked: "+info.dateStr);
+        },
 
         datesSet: async function() {
             const currentDay = calendar.getDate();

@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     indexR();
     function indexR(page = 1) {
         const concernContainer = document.getElementById('concern-container');
-        concernContainer.innerHTML = '<p>Loading concerns...</p>';
+        concernContainer.innerHTML = '<p>Loading data...</p>';
+
+        handlePagination(null, null, false);
 
         fetch(`/concerns/all?page=${page}`, {
             method: 'GET',

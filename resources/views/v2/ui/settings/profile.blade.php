@@ -7,5 +7,5 @@
     @endsection
 
     @section('contents')
-
+        @include('v2.ui.settings.profile.edit')
     @endsection

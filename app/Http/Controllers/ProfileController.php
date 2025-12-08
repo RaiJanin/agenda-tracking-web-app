@@ -15,15 +15,15 @@ class ProfileController extends Controller
      * Display the user's profile form.
      */
     public function index()
-{
-    $users = User::all();
-    //return view('profile.index', compact('users'));
-    return response()->json($users);
-}
+    {
+        $users = User::paginate(16);
+        //return view('profile.index', compact('users'));
+        return response()->json($users);
+    }
 
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('v2.pages.settings.profile', [
             'user' => $request->user(),
         ]);
     }
@@ -41,7 +41,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('settings.profile')->with('status', 'profile-updated');
     }
 
     /**
