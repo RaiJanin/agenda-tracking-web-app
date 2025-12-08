@@ -22,12 +22,20 @@ class ConcernController extends Controller
     public function loadConcernAg($agenda_id)
     {
         $concerns = Concern::where('agenda_id', $agenda_id)
+                    ->withCount('commentList')
                     ->with('responsible')
                     ->paginate(8);
 
+        $admin = auth()->user()->role === 'admin' ? true : false;
+        $me = auth()->user()->id;
+
         return response()->json([
             'success' => true,
-            'concerns' => $concerns
+            'concerns' => $concerns,
+            'roles' => [
+                'admin' => $admin,
+                'me' => $me
+            ],
         ]);
     }
 
@@ -152,6 +160,7 @@ public function allConcerns()
     // }
 
     $concerns = Concern::with(['agenda', 'responsible'])
+        ->withCount('commentList')
         ->latest()
         ->paginate(8);
 
@@ -166,6 +175,7 @@ public function yourConcerns()
     $user = auth()->user();
 
     $concerns = Concern::with(['agenda', 'responsible'])
+        ->withCount('commentList')
         ->where('responsible_person_id', $user->id)
         ->latest()
         ->paginate(8);

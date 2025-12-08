@@ -26,31 +26,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 agendaContainer.innerHTML = data.agendas.data.map(agenda => {
                     let agendaStatus = '';
                     let actionBtns = '';
+                    let concernsCount = '';
 
                     switch(agenda.status) {
                         case 'resolved':
                             agendaStatus = `
-                                <p class="mt-2 mb-2"><span class="px-4 py-2 text-sm bg-green-500 text-white rounded-lg">${agenda.status}</span></p>
+                                <span class="px-2 py-1 text-sm bg-green-500 text-white rounded-lg">${agenda.status}</span>
                                 `;
                             break;
                         case 'ongoing':
                             agendaStatus = `
-                                <p class="mt-2 mb-2"><span class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg">${agenda.status}</span></p>
+                                <span class="px-2 py-1 text-sm bg-blue-500 text-white rounded-lg">${agenda.status}</span>
                                 `;
                             break;
                         case 'closed':
                             agendaStatus = `
-                                <p class="mt-2 mb-2"><span class="px-4 py-2 text-sm bg-slate-500 text-white rounded-lg">${agenda.status}</span></p>
+                                <span class="px-2 py-1 text-sm bg-slate-500 text-white rounded-lg">${agenda.status}</span>
                                 `;
                             break;
                         case 'completed':
                             agendaStatus = `
-                                <p class="mt-2 mb-2"><span class="px-4 py-2 text-sm bg-gray-500 text-white rounded-lg">${agenda.status}</span></p>
+                                <span class="px-2 py-1 text-sm bg-gray-500 text-white rounded-lg">${agenda.status}</span>
                                 `;
                             break;
                         default: //pending
                             agendaStatus = `
-                                <p class="mt-2 mb-2"><span class="px-4 py-2 text-sm bg-amber-500 text-white rounded-lg">${agenda.status}</span></p>
+                                <span class="px-2 py-1 text-sm bg-amber-500 text-white rounded-lg">${agenda.status}</span>
                                 `;
                             break;
                     }
@@ -70,29 +71,37 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         `;
                     }
+
+                    if(agenda.concerns_count >= 100) {
+                        concernsCount = `99+`;
+                    } else {
+                        concernsCount = agenda.concerns_count;
+                    }
                     
 
                     return `
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <div class="h-64 max-h-96 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center">
-                                <div class="p-6">
-                                    <div class="flex justify-between items-start">
-                                        <div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                            <div class="bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center">
+                                <div class="p-3 min-w-full">
+                                    <div class="flex flex-col w-full">
+                                        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2">
                                             <h2 class="text-xl font-bold text-gray-900">${agenda.title}</h2>
-                                            ${agendaStatus}
-                                            <p class="text-gray-600"><span class="font-medium">Date:</span> ${formatDate(agenda.date)}</p>
-                                            <!-- <p class="text-gray-600"><span class="font-medium">Attendees:</span> Jane Smith, Alice Brown, Charlie Wilson</p> -->
-                                            <p class="flex items-center text-gray-500 text-xs mt-8">
-                                                <span class="mr-2 border-b-[0.25px] border-gray-500 mt-1 w-10"></span>
-                                                    Notes
-                                                <span class="ml-2 border-b-[0.25px] border-gray-500 mt-1 w-full"></span>
-                                            </p>
-                                            <p class="text-sm text-gray-500 mt-2">${agenda.notes}</p>
+                                        </div>
+                                        <p class="text-gray-600"><span class="font-medium">Due Date:</span> ${formatDate(agenda.date)}</p>
+                                        <div class="flex flex-col bg-white text-gray-500 text-md p-2 rounded-lg border border-gray-200 shadow mt-4">
+                                            <p class="flex items-center text-gray-500 text-xs mt-1 mb-2">Notes:</p>
+                                            <span class="font-medium">${agenda.notes}</span>
+                                            <span class="p-2 border-b-[0.25px] border-gray-300 w-full"></span>
+                                            <div class="flex items-center gap-2 mt-2 mb-2">
+                                                ${agendaStatus}
+                                                <span class="px-2 py-1 text-sm text-gray-600 rounded-lg">Concerns: <span class="rounded-full bg-red-500 text-white px-2">${concernsCount}</span></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center p-3 mt-3 justify-start">
+                            <div class="flex items-center mt-3 justify-between">
+                                <div></div>
                                 ${actionBtns}
                             </div>
                         </div>

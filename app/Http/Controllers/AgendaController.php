@@ -17,13 +17,14 @@ class AgendaController extends Controller
     public function loadAgendas()
     {
         $agendas = Agenda::where('status', '!=', 'archived')
-           ->orderBy('date', 'desc')
-           ->paginate(8);
+            ->withCount('concerns')
+            ->orderBy('date', 'desc')
+            ->paginate(8);
 
         return response()->json([
             'success' => true,
-            'agendas' => $agendas]
-        );
+            'agendas' => $agendas
+        ]);
     }
 
     public function clickedAgenda(Request $request)

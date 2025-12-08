@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }).
         then(async response => {
             const data = await response.json();
-            console.log(data);
 
             if(!data.success) {
                 alert('Something went wrong. Please try again later');
@@ -38,6 +37,27 @@ document.addEventListener('DOMContentLoaded', function () {
             handlePagination(data.concerns, 'indexR', true);
 
             concernContainer.innerHTML = data.concerns.data.map(concern => {
+                let editArchAccess = '';
+
+                if(data.roles.admin || data.roles.me === concern.responsible_person_id) {
+                    editArchAccess = `
+                    <div class="text-base font-medium rounded-lg border border-gray-400">
+                        <button type="button" onclick='window.location.href="#"' class="text-sm border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">View</button>
+                        <button onclick='window.location.href="#"' class="text-sm px-3 text-teal-600 py-2 rounded-r-lg hover:text-teal-500">Edit</button>
+                        <button type="submit"
+                                class="bg-red-500 text-white px-3 py-2 rounded-r-md text-sm hover:bg-red-600"
+                                onclick="return confirm('Delete this concern?')">
+                            Delete
+                        </button>
+                    </div>
+                    `;
+                } else {
+                    editArchAccess = `
+                    <div class="text-base font-medium rounded-lg border border-gray-400">
+                        <button type="button" onclick='window.location.href="#"' class="text-sm text-slate-500 px-3 py-2 rounded-l-lg hover:text-slate-400">View</button>
+                    </div>
+                    `;
+                }
                 return `
                 <div class="concern-item bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm mb-2">
                     <div class="flex flex-col gap-5 p-2">
@@ -48,21 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-amber-500 text-white rounded">${concern.status}</span>   
                         </div>
                         <div class="flex items-center justify-start">
-                            <div class="text-base font-medium rounded-lg border border-gray-400">
-                                <button type="button" onclick='window.location.href="#"' class="text-sm border-r text-slate-500 border-gray-400 px-2 py-1 rounded-l-lg hover:text-slate-400">View</button>
-                                @if(in_array(auth()->user()->role, ['admin']) || $concern->responsible_person_id === auth()->user()->id)
-                                    <button onclick='window.location.href="#"' class="text-sm px-2 text-teal-600 py-1 rounded-r-lg hover:text-teal-500">Edit</button>
-                                @endif
-                                @if(auth()->user()->role === 'admin' || $concern->responsible_person_id === auth()->user()->id)
-                                    
-                                        <button type="submit"
-                                                class="bg-red-500 text-white px-2 py-1 rounded-r-md text-sm hover:bg-red-600"
-                                                onclick="return confirm('Delete this concern?')">
-                                            Delete
-                                        </button>
-                                    
-                                @endif
-                            </div>
+                            ${editArchAccess}
                         </div>
                     </div>
                 </div>
