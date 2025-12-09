@@ -1,3 +1,7 @@
+import { timeAgo } from "../components/timeAgo.js";
+import { dateToString } from "../components/dateString.js";
+import { archivedConcern } from "../rest-api/archiveConcern.js";
+
 document.addEventListener('DOMContentLoaded', function () {
 
     loadYourConcerns();
@@ -42,11 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
                 }
 
-                if(concern.comment_list_count >= 100) {
-                    commentCount = `99+`;
-                } else {
-                    commentCount = concern.comment_list_count;
-                }
+                commentCount = concern.comment_list_count >= 100 ? `99+` : concern.comment_list_count;
 
                 return `
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-4">
@@ -57,9 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2">
                                             <h2 class="text-lg font-bold text-gray-900">${concern.responsible?.name ?? 'Unknown'}</h2>
                                         </div>
-                                        <p class="text-sm text-gray-500">13 mins ago</p>
+                                        <p class="text-sm text-gray-500">${timeAgo(concern.created_at)}</p>
                                         <p class="text-gray-600"><span class="font-medium">Agenda: </span>${concern.agenda?.title ?? '(No agenda)'}</p>
-                                        <p class="text-gray-600"><span class="font-medium">Due Date:</span> ${formatDate(concern.due_date)}</p>
+                                        <p class="text-gray-600"><span class="font-medium">Due Date:</span> ${dateToString('longDate', concern.due_date)}</p>
                                         <div class="flex flex-col bg-white text-gray-500 text-md p-2 rounded-lg border border-gray-200 shadow mt-4">
                                             <span class="font-medium">${concern.description ?? '(No description)'}</span>
                                             <span class="p-2 border-b-[0.25px] border-gray-300 w-full"></span>
@@ -115,17 +115,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('#archive-concern-btn').forEach(button => {
             button.addEventListener('click', e => {
                 e.preventDefault();
-                const id = button.getAttribute('data-concern-id');
-                console.log('Archive concern', id);
-                // Call archive API
+                const concernid = button.getAttribute('data-concern-id');
+                if(!confirm('Are you sure you want to archive this concern?')) return;
+                archivedConcern(concernid);
+                loadYourConcerns();
             });
         });
-    }
-
-    function formatDate(dateStr) {
-        if (!dateStr) return 'N/A';
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
     window.loadYourConcerns = loadYourConcerns;

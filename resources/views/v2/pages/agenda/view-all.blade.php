@@ -13,10 +13,10 @@
 
 @section('scripts')
     @if(!request()->route('agenda_id'))
-        <script src="{{ asset('js/modules/agendaLoad.js') }}"></script>
-        <script src="{{ asset('js/rest-api/archiveAgenda.js') }}"></script>
+        <script src="{{ asset('js/modules/agendaLoad.js') }}" type="module"></script>
     @else
-        <script src="{{ asset('js/modules/concernEAgen.js') }}"></script>
+        <script src="{{ asset('js/modules/selectedAgendaMo.js') }}" type="module"></script>
+        <script src="{{ asset('js/modules/concernEAgen.js') }}" type="module"></script>
     @endif
     <script src="{{ asset('js/components/pagination.js') }}"></script>
 @endsection

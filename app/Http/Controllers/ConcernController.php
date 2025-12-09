@@ -57,16 +57,16 @@ class ConcernController extends Controller
         $request->validate([
             'agenda_id' => 'required',
             'description' => 'required|string',
+            'responsible_person_id' => 'required|exists:users,id',
             'status' => 'required|string',
             'due_date' => 'nullable|date',
-            'comments' => 'nullable|string',
             'file' => 'nullable|file|max:2048',
         ]);
 
         $newConcern = Concern::create([
             'agenda_id' => $request->agenda_id,
             'description' => $request->description,
-            'responsible_person_id' => auth()->id(), // ✅ link user via ID
+            'responsible_person_id' => $request->responsible_person_id, // ✅ link user via ID
             'status' => $request->status,
             'due_date' => $request->due_date
         ]);
@@ -76,15 +76,6 @@ class ConcernController extends Controller
             $filePath = $request->file('file')->store('uploads/concerns', 'public');
             $newConcern->attachments()->create([
                 'file_path' => $filePath
-            ]);
-        }
-
-        $comments = null;
-        if ($request->filled('comments')) {
-            $comments = $request->comments;
-            $newConcern->commentList()->create([
-                'user_id' => auth()->id(),
-                'content' => $comments
             ]);
         }
 
@@ -135,56 +126,50 @@ class ConcernController extends Controller
         $concern = Concern::findOrFail($id);
         $concern->delete();
 
-        return back()->with('success', 'Concern deleted successfully.');
+        return response()->json([
+            'success' => true,
+            'message'=> 'Concern Deleted Successfully'
+        ]);
     }
     public function show($id)
-{
-    $concern = Concern::findOrFail($id);
+    {
+        $concern = Concern::findOrFail($id);
 
-    // Optional: check role permissions (admins & members can view all, user/auditor only view)
-    if (auth()->user()->role === 'user' && $concern->agenda->restricted) {
-        abort(403, 'You are not authorized to view this concern.');
+        // Optional: check role permissions (admins & members can view all, user/auditor only view)
+        if (auth()->user()->role === 'user' && $concern->agenda->restricted) {
+            abort(403, 'You are not authorized to view this concern.');
+        }
+
+        return view('concerns.show', compact('concern'));
     }
 
-    return view('concerns.show', compact('concern'));
-}
-public function allConcerns()
-{
-    // $user = auth()->user();
+    public function allConcerns()
+    {
+        $concerns = Concern::with(['agenda', 'responsible'])
+            ->withCount('commentList')
+            ->latest()
+            ->paginate(8);
 
-    // if ($user->role !== 'admin') {
-    //     return response()->json([
-    //         'success' => false,
-    //         'message' => 'Unauthorized access.'
-    //     ], 403);
-    // }
+        return response()->json([
+            'success' => true,
+            'concerns' => $concerns
+        ]);
+    }
 
-    $concerns = Concern::with(['agenda', 'responsible'])
-        ->withCount('commentList')
-        ->latest()
-        ->paginate(8);
+    public function yourConcerns()
+    {
+        $user = auth()->user();
 
-    return response()->json([
-        'success' => true,
-        'concerns' => $concerns
-    ]);
-}
+        $concerns = Concern::with(['agenda', 'responsible'])
+            ->withCount('commentList')
+            ->where('responsible_person_id', $user->id)
+            ->latest()
+            ->paginate(8);
 
-public function yourConcerns()
-{
-    $user = auth()->user();
-
-    $concerns = Concern::with(['agenda', 'responsible'])
-        ->withCount('commentList')
-        ->where('responsible_person_id', $user->id)
-        ->latest()
-        ->paginate(8);
-
-    return response()->json([
-        'success' => true,
-        'concerns' => $concerns
-    ]);
-}
-
+        return response()->json([
+            'success' => true,
+            'concerns' => $concerns
+        ]);
+    }
 
 }

@@ -95,7 +95,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/', [ConcernController::class, 'store'])->name('concerns.store');
             Route::get('/edit/{id}', [ConcernController::class, 'edit'])->name('concerns.edit');
             Route::put('/{id}', [ConcernController::class, 'update'])->name('concerns.update');
-            Route::delete('/{id}', [ConcernController::class, 'destroy'])->name('concerns.destroy');
+            Route::delete('/delete/{id}', [ConcernController::class, 'destroy'])->name('concerns.destroy');
             Route::get('/show/{id}', [ConcernController::class, 'show'])->name('concerns.show');
         });
 

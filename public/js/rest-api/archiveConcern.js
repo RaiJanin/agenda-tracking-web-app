@@ -1,7 +1,7 @@
-export async function archivedAgenda (agendaId) {
+export async function archivedConcern (concernId) {
 
     try {
-        const response = await fetch(`/agendas/${agendaId}`, {
+        const response = await fetch(`${window.location.origin}/concerns/delete/${concernId}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -10,18 +10,17 @@ export async function archivedAgenda (agendaId) {
         });
 
         const result = await response.json();
-        console.log(result);
 
         if(!result.success) {
             alert(result.message);
             return;
         }
 
-        alert('Agenda archived successfully.');
+        alert(result.message);
 
-        console.log(result);
     } catch (err) {
         console.error(err);
         alert('Internal Server Error');
+        return;
     }
 }

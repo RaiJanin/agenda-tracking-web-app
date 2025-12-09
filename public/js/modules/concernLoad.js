@@ -1,3 +1,8 @@
+import { archivedConcern } from "../rest-api/archiveConcern.js";
+import { timeAgo } from "../components/timeAgo.js";
+import { dateToString } from "../components/dateString.js";
+
+
 document.addEventListener('DOMContentLoaded', function () {
 
     indexR();
@@ -45,19 +50,15 @@ document.addEventListener('DOMContentLoaded', function () {
                             concernStatus = `<span class="px-2 py-1 text-sm bg-amber-500 text-white rounded-lg">${concern.status}</span>`;
                             break;
                     }
-
-                    if(concern.comment_list_count >= 100) {
-                        commentCount = `99+`;
-                    } else {
-                        commentCount = concern.comment_list_count;
-                    }
+                   
+                    commentCount = concern.comment_list_count >= 100 ? `99+` : concern.comment_list_count;
 
                     if(admiNAccess) {
                         actionBTns = `
                         <div class="rounded-lg border border-gray-400">
                             <button id="view-concern-btn" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400" data-concern-id="${concern.concern_id}">View</button>
                             <button id="edit-concern-btn" class="border-r text-teal-600 border-gray-400 px-3 py-2 hover:text-teal-500" data-concern-id="${concern.concern_id}">Edit</button>
-                            <button id="archive-concern-btn" class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500" data-concern-id="${concern.concern_id}">Archive</button>
+                            <button class="archive-concern-btn px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500" data-concern-id="${concern.concern_id}">Archive</button>
                         </div>
                         `;
                     } else {
@@ -77,9 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                             <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2">
                                                 <h2 class="text-lg font-bold text-gray-900">${concern.responsible?.name ?? 'Unknown'}</h2>
                                             </div>
-                                            <p class="text-sm text-gray-500">13 mins ago</p>
+                                            <p class="text-sm text-gray-500">${timeAgo(concern.created_at)}</p>
                                             <p class="text-gray-600"><span class="font-medium">Agenda: </span>${concern.agenda?.title ?? '(No agenda)'}</p>
-                                            <p class="text-gray-600"><span class="font-medium">Due Date:</span> ${formatDate(concern.due_date)}</p>
+                                            <p class="text-gray-600"><span class="font-medium">Due Date:</span> ${dateToString('longDate', concern.due_date)}</p>
                                             <div class="flex flex-col bg-white text-gray-500 text-md p-2 rounded-lg border border-gray-200 shadow mt-4">
                                                 <span class="font-medium">${concern.description ?? '(No description)'}</span>
                                                 <span class="p-2 border-b-[0.25px] border-gray-300 w-full"></span>
@@ -126,20 +127,15 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        document.querySelectorAll('#archive-concern-btn').forEach(button => {
+        document.querySelectorAll('.archive-concern-btn').forEach(button => {
             button.addEventListener('click', e => {
                 e.preventDefault();
                 const concernId = button.getAttribute('data-concern-id');
-                console.log('Archive concern', concernId);
-                // You can implement your archive API later
+                if(!confirm('Are you sure you want to archive this concern?')) return;
+                archivedConcern(concernId);
+                indexR();
             });
         });
-    }
-
-    function formatDate(dateStr) {
-        if (!dateStr) return 'N/A';
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
     window.indexR = indexR;

@@ -1,3 +1,7 @@
+import { dateToString } from "../components/dateString.js";
+import { archivedConcern } from "../rest-api/archiveConcern.js";
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const concernContainer = document.getElementById('concerns-container');
     const agendaIdData = document.getElementById('agenda-id-data').dataset.agendaId;
@@ -42,13 +46,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(data.roles.admin || data.roles.me === concern.responsible_person_id) {
                     editArchAccess = `
                     <div class="text-base font-medium rounded-lg border border-gray-400">
-                        <button type="button" onclick='window.location.href="#"' class="text-sm border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">View</button>
-                        <button onclick='window.location.href="#"' class="text-sm px-3 text-teal-600 py-2 rounded-r-lg hover:text-teal-500">Edit</button>
-                        <button type="submit"
-                                class="bg-red-500 text-white px-3 py-2 rounded-r-md text-sm hover:bg-red-600"
-                                onclick="return confirm('Delete this concern?')">
-                            Delete
-                        </button>
+                        <button data-concern-id="${concern.concern_id}" class="view-concern-btn text-sm border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">View</button>
+                        <button data-concern-id="${concern.concern_id}" class="edit-concern-btn text-sm px-3 text-teal-600 py-2 rounded-r-lg hover:text-teal-500">Edit</button>
+                        <button data-concern-id="${concern.concern_id}" class="archive-concern-btn bg-red-500 text-white px-3 py-2 rounded-r-md text-sm hover:bg-red-600">Delete</button>
                     </div>
                     `;
                 } else {
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="flex flex-col gap-5 p-2">
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800">${concern.description}</h3>
-                            <p class="text-gray-600 mt-1">Due date: ${concern.due_date}</p>
+                            <p class="text-gray-600 mt-1">Due date: ${dateToString('shortDate', concern.due_date)}</p>
                             <p class="text-sm text-gray-500 mt-1">Responsible Person: ${concern.responsible.name}</p>
                             <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-amber-500 text-white rounded">${concern.status}</span>   
                         </div>
@@ -74,9 +74,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 `;
             }).join('');
+
+            addEventListeners();
         }).
         catch (error => {
             console.error(error);
+        });
+    }
+
+    function addEventListeners() {
+        document.querySelectorAll('.view-concern-btn').forEach(button => {
+            button.addEventListener('click', e => {
+                e.preventDefault();
+                const concernId = button.getAttribute('data-concern-id');
+                window.location.href = `/concerns/show/${concernId}`;
+            });
+        });
+
+        document.querySelectorAll('.edit-concern-btn').forEach(button => {
+            button.addEventListener('click', e => {
+                e.preventDefault();
+                const concernId = button.getAttribute('data-concern-id');
+                window.location.href = `/app/concerns/${concernId}/edit`;
+            });
+        });
+
+        document.querySelectorAll('.archive-concern-btn').forEach(button => {
+            button.addEventListener('click', e => {
+                e.preventDefault();
+                const concernId = button.getAttribute('data-concern-id');
+                if(!confirm('Are you sure you want to archive this concern?')) return;
+                console.log(concernId);
+                archivedConcern(concernId);
+                indexR();
+            });
         });
     }
 

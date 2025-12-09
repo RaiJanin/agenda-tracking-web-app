@@ -31,11 +31,9 @@
                                 class="w-full rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 text-gray-800">
                         </div>
 
-                        <!-- Date (auto set to today) -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
                             <input type="date" name="date" required
-                                value="{{ date('Y-m-d') }}"
                                 class="w-full rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 text-gray-800">
                         </div>
 

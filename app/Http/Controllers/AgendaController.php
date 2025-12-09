@@ -16,9 +16,8 @@ class AgendaController extends Controller
     }
     public function loadAgendas()
     {
-        $agendas = Agenda::where('status', '!=', 'archived')
+        $agendas = Agenda::orderBy('date', 'desc')
             ->withCount('concerns')
-            ->orderBy('date', 'desc')
             ->paginate(8);
 
         return response()->json([
@@ -91,33 +90,26 @@ class AgendaController extends Controller
         $agenda = Agenda::findOrFail($id);
         $user = auth()->user();
     
-        $isCreator = $agenda->created_by === $user->id;
         $isAdmin = $user->role === 'admin';
     
-        if (!$isAdmin && !$isCreator) {
+        if (!$isAdmin) {
             abort(403, 'Unauthorized action.');
         }
     
-        $rules = [
-            'notes' => 'nullable|string',
+        $rules = [ 
+            'notes' => 'required|string',
             'file_path' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,txt,jpg,png|max:5120',
+            'status' => 'required|in:pending,ongoing,resolved,closed'
         ];
-    
-        if ($isCreator) {
-            $rules['title'] = 'required|string|max:255';
-        }
-    
-        if ($isAdmin) {
-            $rules['status'] = 'required|in:pending,ongoing,resolved,closed';
-        }
-    
+
+        $validated['title'] = $request->title;
+        $validated['date'] = $request->date;
         $validated = $request->validate($rules);
-    
+        
         // Remove file_path from agenda update
         $validated = $request->except('file_path');
-    
-        // Handle attachments (creator only)
-        if ($isCreator && $request->hasFile('file_path')) {
+
+        if ($request->hasFile('file_path')) {
             // Delete old attachment if exists
             $oldAttachment = $agenda->attachments()->first();
             if ($oldAttachment) {
@@ -129,11 +121,6 @@ class AgendaController extends Controller
             $agenda->attachments()->create(['file_path' => $path]);
         }
     
-        // Admin-only update
-        if ($isAdmin && !$isCreator) {
-            $validated = ['status' => $validated['status']];
-        }
-    
         $agenda->update($validated);
     
         return redirect()->back()->with('success', 'Agenda updated successfully!');
@@ -143,18 +130,18 @@ class AgendaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-public function edit($id)
-{
-    $agenda = Agenda::findOrFail($id);
-    $user = auth()->user();
+    public function edit($id)
+    {
+        $agenda = Agenda::findOrFail($id);
+        $user = auth()->user();
 
-    // Only admins or the agenda creator can view the edit form
-    if ($user->role !== 'admin' && $user->id !== $agenda->created_by) {
-        abort(403, 'Unauthorized access.');
+        // Only admins or the agenda creator can view the edit form
+        if ($user->role !== 'admin' && $user->id !== $agenda->created_by) {
+            abort(403, 'Unauthorized access.');
+        }
+
+        return view('agendas.edit', compact('agenda', 'user'));
     }
-
-    return view('agendas.edit', compact('agenda', 'user'));
-}
 
     /**
      * Update the specified resource in storage.
@@ -178,9 +165,7 @@ public function edit($id)
         }
 
         $agenda = Agenda::findOrFail($id);
-
-        // Instead of deleting, mark as archived
-        $agenda->update(['status' => 'archived']);
+        $agenda->delete();
 
         return response()->json([
                 'success' => true,

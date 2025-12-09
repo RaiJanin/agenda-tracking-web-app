@@ -20,7 +20,7 @@
 
                 @if(session('success'))
                     <div class="flex items-center justify-between bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
-                        <p>{{ session('success') }}</p><span class="underline hover:text-green-500"><i class="fa-solid fa-arrow-left text-xs ml-5"></i><a href="{{ route('agenda.view-all') }}">Back to list</a></span>
+                        <p>{{ session('success') }}</p><span class="underline hover:text-green-500"><i class="fa-solid fa-arrow-left text-xs ml-5"></i><a href="{{ route('agenda.view', ['agenda_id' => $agenda->agenda_id]) }}">View Agenda</a></span>
                     </div>
                 @endif
                 @if ($errors->any())
@@ -109,7 +109,7 @@
 
                     {{-- Action Buttons --}}
                     <div class="flex justify-end gap-4 mt-6">
-                        <button type="button" onclick="window.location.href=`{{ route('agenda.view', $agenda->agenda_id) }}`"
+                        <button type="button" onclick="window.history.back()"
                             class="px-3 py-1.5 text-red-500 font-medium rounded-lg shadow-sm border border-gray-400 hover:text-red-400 hover:shadow-md hover:border-red-500 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 transition-all duration-300">
                             Cancel
                         </button>

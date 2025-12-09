@@ -36,14 +36,16 @@
                                 <label class="block text-gray-700">Responsible Person</label>
                                 <select name="responsible_person_id" class="w-full border rounded-md p-2" required @if(!$editable) disabled @endif>
                                     @if($editable)
-                                        <option value="">-- Select Responsible Person --</option>
                                         @foreach($res_pers as $id => $responsible)
-                                            <option value="{{ $id }}">{{ $responsible }}</option>
+                                            <option value="{{ $id }}"{{ $concern->responsible_person_id == $id ? 'selected' : ''}}>{{ $responsible }}</option>
                                         @endforeach
                                     @else
-                                        <option value=" ">{{ $res_pers[$concern->responsible_person_id] }} (Me)</option>
+                                        <option value="">{{ $res_pers[$concern->responsible_person_id] }} (Me)</option>
                                     @endif
                                 </select>
+                                @if(!$editable)
+                                    <input type="hidden" name="responsible_person_id" value="{{ $concern->responsible_person_id }}"/>
+                                @endif
                             </div>
 
                             <div>
@@ -60,14 +62,10 @@
                                 <input type="date" name="due_date" class="w-full border rounded-md p-2" value="{{ $concern->due_date }}" required>
                             </div>
 
-                            <div class="col-span-2">
-                                <label class="block text-gray-700">Comments</label>
-                                <textarea name="comments" class="w-full border rounded-md p-2" rows="2">{{ $concern->comments }}</textarea>
-                            </div>
                         </div>
 
                         <div class="mt-6 flex justify-end space-x-3">
-                            <button type="button" onclick="window.location.href=`{{ route('agenda.view', $concern->agenda_id) }}`" class="px-3 py-1.5 text-red-500 font-medium rounded-lg shadow-sm border border-gray-400 hover:text-red-600 hover:shadow-md hover:border-red-500 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 transition-all duration-300">
+                            <button type="button" onclick="window.history.back()" class="px-3 py-1.5 text-red-500 font-medium rounded-lg shadow-sm border border-gray-400 hover:text-red-600 hover:shadow-md hover:border-red-500 focus:ring-2 focus:ring-red-400 focus:ring-offset-1 transition-all duration-300">
                                 Cancel
                             </button>
                             <button type="submit" class="px-3 py-1.5 text-teal-800 font-medium rounded-lg shadow-sm border border-gray-400 hover:text-teal-600 hover:shadow-md hover:border-teal-500 focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 transition-all duration-300">

@@ -36,7 +36,7 @@ class Concern extends Model
     // ✅ Optional: if you have comments or attachments
     public function attachments()
     {
-        return $this->hasMany(Attachment::class, 'concern_id');
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 
     public function commentList()

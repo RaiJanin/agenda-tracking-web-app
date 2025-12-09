@@ -12,6 +12,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/modules/myconcernLoad.js') }}"></script>
+    <script src="{{ asset('js/modules/myconcernLoad.js') }}" type="module"></script>
     <script src="{{ asset('js/components/pagination.js') }}"></script>
 @endsection

@@ -15,12 +15,12 @@ class Agenda extends Model
 
     protected $fillable = [
         'title',
-    'date',
-    'created_by',
-    'notes',
-    'file_path',
-    'status',
-    'archived_at'
+        'date',
+        'created_by',
+        'notes',
+        'file_path',
+        'status',
+        'archived_at'
     ];
 
     // Relationships

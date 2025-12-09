@@ -1,3 +1,6 @@
+import { archivedAgenda } from "../rest-api/archiveAgenda.js";
+import { dateToString } from "../components/dateString.js";
+
 document.addEventListener('DOMContentLoaded', function () {
     indexR();
     function indexR(page = 1) {
@@ -27,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let agendaStatus = '';
                     let actionBtns = '';
                     let concernsCount = '';
+                    let notes = '';
 
                     switch(agenda.status) {
                         case 'resolved':
@@ -72,12 +76,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         `;
                     }
 
-                    if(agenda.concerns_count >= 100) {
-                        concernsCount = `99+`;
+                    concernsCount = agenda.concerns_count >= 100 ? `99+` : agenda.concerns_count;
+
+                    if (agenda.notes) {
+                        notes = `<span class="font-medium">${agenda.notes}</span>`;
                     } else {
-                        concernsCount = agenda.concerns_count;
+                        notes = `<span class="font-small text-gray-400">No notes yet</span>`;
                     }
-                    
 
                     return `
                         <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
@@ -87,10 +92,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2">
                                             <h2 class="text-xl font-bold text-gray-900">${agenda.title}</h2>
                                         </div>
-                                        <p class="text-gray-600"><span class="font-medium">Due Date:</span> ${formatDate(agenda.date)}</p>
+                                        <p class="text-gray-600"><span class="font-medium">Due Date:</span> ${dateToString('longDate', agenda.date)}</p>
                                         <div class="flex flex-col bg-white text-gray-500 text-md p-2 rounded-lg border border-gray-200 shadow mt-4">
                                             <p class="flex items-center text-gray-500 text-xs mt-1 mb-2">Notes:</p>
-                                            <span class="font-medium">${agenda.notes}</span>
+                                            ${notes}
                                             <span class="p-2 border-b-[0.25px] border-gray-300 w-full"></span>
                                             <div class="flex items-center gap-2 mt-2 mb-2">
                                                 ${agendaStatus}
@@ -144,14 +149,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 
              });
         });
-    }
-
-    function formatDate(dateStr) {
-        if (!dateStr) return null; 
-        let date = new Date(dateStr);
-        let options = {year: 'numeric', month: 'long', day: 'numeric'};
-        let formatted = date.toLocaleDateString('en-US', options);
-        return `${formatted}`;
     }
 
     window.indexR = indexR;

@@ -36,8 +36,9 @@
                                 <div>
                                     <label class="block text-gray-700">Responsible Person</label>
                                     @if(auth()->user()->role != 'admin')
-                                        <input type="text" name="responsible_person" value="{{ Auth::user()->name }}" 
-                                            class="w-full border rounded-md p-2 bg-gray-100 text-gray-700" readonly>
+                                    <input type="text" name="responsible_person" value="{{ Auth::user()->name }}" 
+                                            class="w-full border rounded-md p-2 bg-gray-100 text-gray-700" disabled>
+                                    <input type="hidden" name="responsible_person_id" value="{{ Auth::user()->id }}"/>
                                     @else
                                         <select name="responsible_person_id" class="w-full border rounded-md p-2" required>
                                             <option value="">-- Select Responsible Person --</option>
@@ -63,17 +64,7 @@
 
                                 <div>
                                     <label class="block text-gray-700">Due Date</label>
-                                    <input type="date" name="due_date" class="w-full border rounded-md p-2">
-                                </div>
-
-                                <div class="col-span-2">
-                                    <label class="block text-gray-700">Comments</label>
-                                    <textarea name="comments" class="w-full border rounded-md p-2" rows="2"
-                                                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'member') 
-                                                    placeholder="Add any comments or details here..." 
-                                                @else 
-                                                    readonly 
-                                                @endif></textarea>
+                                    <input type="date" name="due_date" class="w-full border rounded-md p-2" required>
                                 </div>
 
                                 <div class="col-span-2">
