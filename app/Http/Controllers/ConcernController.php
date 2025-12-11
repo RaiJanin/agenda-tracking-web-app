@@ -55,11 +55,11 @@ class ConcernController extends Controller
 
     public function store(Request $request)
     {
-        if(in_array(auth()->user()->role, ['admin', 'member']))
+        if(!in_array(auth()->user()->role, ['admin', 'member']))
         {
             return redirect()
                 ->back()
-                ->with('error', "You don't have permission to perform this action");
+                ->withErrors(["You don't have permission to perform this action"]);
         }
 
         $request->validate([
@@ -79,13 +79,13 @@ class ConcernController extends Controller
             'due_date' => $request->due_date
         ]);
 
-        $filePath = null;
-        if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('uploads/concerns', 'public');
-            $newConcern->attachments()->create([
-                'file_path' => $filePath
-            ]);
-        }
+        // $filePath = null;
+        // if ($request->hasFile('file')) {
+        //     $filePath = $request->file('file')->store('uploads/concerns', 'public');
+        //     $newConcern->attachments()->create([
+        //         'file_path' => $filePath
+        //     ]);
+        // }
 
         return redirect()
             ->back()
@@ -108,14 +108,14 @@ class ConcernController extends Controller
 
     public function update(Request $request, $id)
     {
-        if(in_array(auth()->user()->role, ['admin', 'member']))
+
+        $concern = Concern::findOrFail($id);
+        if($request->user()->role !== "admin" && $request->user()->id !== $concern->responsible_person_id)
         {
             return redirect()
                 ->back()
-                ->with('error', "You don't have permission to perform this action");
+                ->withErrors(["You don't have permission to perform this action"]);
         }
-
-        $concern = Concern::findOrFail($id);
 
         $request->validate([
             'description' => 'required|string',
@@ -136,11 +136,11 @@ class ConcernController extends Controller
 
     public function destroy($id)
     {
-        if(in_array(auth()->user()->role, ['admin', 'member']))
+        if(!in_array(auth()->user()->role, ['admin', 'member']))
         {
             return redirect()
                 ->back()
-                ->with('error', "You don't have permission to perform this action");
+                ->withErrors(["You don't have permission to perform this action"]);
         }
 
         $concern = Concern::findOrFail($id);
@@ -154,11 +154,11 @@ class ConcernController extends Controller
 
     public function deletedConcerns()
     {
-        if(in_array(auth()->user()->role, ['admin', 'member']))
+        if(!in_array(auth()->user()->role, ['admin', 'member']))
         {
             return redirect()
                 ->back()
-                ->with('error', "You don't have permission to perform this action");
+                ->withErrors(["You don't have permission to perform this action"]);
         }
         
         $concerns = Concern::onlyTrashed()
@@ -173,8 +173,8 @@ class ConcernController extends Controller
         $concern = Concern::findOrFail($id);
 
         // Optional: check role permissions (admins & members can view all, user/auditor only view)
-        if (auth()->user()->role === 'user' && $concern->agenda->restricted) {
-            abort(403, 'You are not authorized to view this concern.');
+        if (!in_array(auth()->user()->role, ['admin', 'member'])) {
+            abort(403, 'You are not authorized to view this page.');
         }
 
         return view('concerns.show', compact('concern'));
@@ -182,7 +182,7 @@ class ConcernController extends Controller
 
     public function allConcerns()
     {
-        $concerns = Concern::with(['agenda', 'responsible'])
+        $concerns = Concern::with(['agenda:agenda_id,title', 'responsible:id,name'])
             ->withCount('commentList')
             ->latest()
             ->paginate(8);
@@ -197,7 +197,7 @@ class ConcernController extends Controller
     {
         $user = auth()->user();
 
-        $concerns = Concern::with(['agenda', 'responsible'])
+        $concerns = Concern::with(['agenda:agenda_id,title', 'responsible:id,name'])
             ->withCount('commentList')
             ->where('responsible_person_id', $user->id)
             ->latest()

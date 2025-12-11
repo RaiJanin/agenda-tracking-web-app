@@ -1,7 +1,7 @@
 @extends('v2.layout.app')
 
 
-@section('title', 'Agenda WEB | My Concerns')
+@section('title', 'Agenda WEB | '.$concern->description.' | Comments')
 
 @section('styles')
     
@@ -9,13 +9,12 @@
 
 @section('main-content')
     @if(in_array(auth()->user()->role, ['admin', 'member']))
-        @include('v2.ui.concerns.my-concerns')
+        @include('v2.ui.comments.comment-ui')
     @else
         @include('v2.components.warnings.unauthorized')
     @endif
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/modules/myconcernLoad.js') }}" type="module"></script>
-    <script src="{{ asset('js/components/pagination.js') }}"></script>
+    
 @endsection

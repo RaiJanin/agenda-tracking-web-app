@@ -23,7 +23,7 @@ export async function deleteAgenda (agendaId) {
             return;
         }
 
-        alert('Agenda archived successfully.');
+        alert(result.message);
 
         console.log(result);
     } catch (err) {

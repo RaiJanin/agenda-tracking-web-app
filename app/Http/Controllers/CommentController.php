@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Concern;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -9,9 +10,17 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($concern_id)
     {
-        //
+        $concern = Concern::with([
+            'commentList' => function($cm) {
+                $cm->orderBy('created_at', 'desc');
+            },
+            'responsible:id,name'])
+                ->findOrFail($concern_id);
+        //dd($concern);
+        
+        return view('v2.pages.concerns.comments', compact('concern'));
     }
 
     /**

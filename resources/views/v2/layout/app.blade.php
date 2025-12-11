@@ -19,10 +19,14 @@
 
         <div class="flex-1 flex flex-col overflow-hidden">
             @include('v2.components.header')
-            <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
                 @yield('main-content')
             </main>
+            @if(Route::is('concerns.comments'))
+                @include('v2.partials.comment-write', ['concern' => $concern])
+            @endif
         </div>
+        
     </div>
     @include('v2.includes.script-assets')
     @yield('scripts')

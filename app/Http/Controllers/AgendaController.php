@@ -64,11 +64,11 @@ class AgendaController extends Controller
      */
     public function store(Request $request)
     {
-        if(auth()->user()->role == 'admin')
+        if(auth()->user()->role !== 'admin')
         {
             return redirect()
                 ->back()
-                ->with('error', "You don't have permission to perform this action");
+                ->withErrors(["You don't have permission to perform this action"]);
         }
 
         $request->validate([
@@ -104,7 +104,7 @@ class AgendaController extends Controller
         if (!$isAdmin) {
             return redirect()
                 ->back()
-                ->with('error', "You don't have permission to perform this action");
+                ->withErrors(["You don't have permission to perform this action"]);
         }
     
         $rules = [ 
@@ -184,7 +184,7 @@ class AgendaController extends Controller
 
     public function trashed()
     {
-        if(auth()->user()->role == 'admin')
+        if(auth()->user()->role !== 'admin')
         {
             return response()->json([
                 'success' => false,
@@ -203,7 +203,7 @@ class AgendaController extends Controller
 
     public function restore($id)
     {
-        if(auth()->user()->role == 'admin')
+        if(auth()->user()->role !== 'admin')
         {
             return response()->json([
                 'success' => false,
@@ -224,7 +224,7 @@ class AgendaController extends Controller
 
     public function forceDelete($id)
     {
-        if(auth()->user()->role == 'admin')
+        if(auth()->user()->role !== 'admin')
         {
             return response()->json([
                 'success' => false,

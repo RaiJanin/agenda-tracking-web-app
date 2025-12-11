@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
             button.addEventListener('click', e => {
                 e.preventDefault();
                 const concernId = button.getAttribute('data-concern-id');
-                window.location.href = `/concerns/show/${concernId}`;
+                window.location.href = `../../app/concerns/${concernId}/comments`;
             });
         });
 

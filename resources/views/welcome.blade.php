@@ -17,12 +17,15 @@
             <div class="flex items-center justify-between p-5 mt-2">
                 @if (Route::has('login'))
                     @auth
-                        <a
+                        <!-- <a
                             href="{{ route('home') }}"
                             class="px-6 rounded-lg font-semibold text-lg tracking-wider hover:border hover:border-blue-500 hover:py-1 hover:bg-blue-200 hover:text-blue-600 transition-all duration-600"
                         >
                             Dashboard
-                        </a>
+                        </a> -->
+                        <script>
+                            window.location.href=`{{ route('home') }}`;
+                        </script>
                     @else
                         <a
                             href="{{ route('login') }}"
