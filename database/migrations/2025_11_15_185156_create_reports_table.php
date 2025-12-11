@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-   $table->foreignId('agenda_id')
-          ->constrained('agendas', 'agenda_id')
-          ->onDelete('cascade');
-            $table->string('file_path'); // PDF/Excel
+            $table->foreignId('agenda_id')
+                    ->constrained('agendas', 'agenda_id')
+                    ->onDelete('cascade');
+            $table->string('file_path');
             $table->foreignId('generated_by')->constrained('users');
             $table->timestamps();
         });

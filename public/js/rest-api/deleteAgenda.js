@@ -1,4 +1,10 @@
-export async function archivedAgenda (agendaId) {
+/**
+ * 
+ * @param {number} agendaId - Data ID to delete 
+ * @returns 
+ */
+
+export async function deleteAgenda (agendaId) {
 
     try {
         const response = await fetch(`/agendas/${agendaId}`, {

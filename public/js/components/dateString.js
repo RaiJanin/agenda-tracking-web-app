@@ -1,3 +1,17 @@
+/**
+ * 
+ * @param {'longDate'|'shortDate'|'iso'|'timeOnly24'|'timeOnly12'} options 
+ *  Date type to use
+ * - longDate = "January 6, 2025"
+ * - shortDate = "Jan. 6, 2025"
+ * - iso = "2025-01-06"
+ * - timeOnly24 = "14:30"
+ * - timeOnly12 = "2:30pm"
+ * 
+ * @param {string} dateString - Raw date string
+ * @returns {string} - Formatted date string
+ */
+
 export function dateToString(options, dateString) {
     const dateStamp = new Date(dateString);
     switch (options) {

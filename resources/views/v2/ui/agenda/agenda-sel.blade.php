@@ -38,8 +38,8 @@
                                     <div></div>
                                     <div class="text-base font-medium rounded-lg border border-gray-400">
                                         <button type="button" onclick="window.location.href=`{{ route('agenda.edit-prev', $agenda->agenda_id) }}`" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400">Edit</button>
-                                        <button id="archive-agenda-btn" class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500">
-                                            Archive
+                                        <button id="delete-agenda-btn" class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500">
+                                            Delete
                                         </button>
                                     </div>
                                 </div>
@@ -50,10 +50,10 @@
                         <div class="bg-white rounded-2xl shadow p-6">
                             <h2 class="text-xl font-semibold mb-3 text-gray-800">File Attachment</h2>
                             <div class="flex flex-col gap-4 border-t border-gray-200 pt-3">
-                                <p class="text-gray-700 break-all w-64">{{ basename($attachment->file_path) }}</p>
+                                <p class="text-gray-700 break-all w-64">{{ basename($attachment) }}</p>
                                 @php
-                                    $fileUrl = asset('storage/' . $attachment->file_path);
-                                    $extension = pathinfo($attachment->file_path, PATHINFO_EXTENSION);
+                                    $fileUrl = asset('storage/' . $attachment);
+                                    $extension = pathinfo($attachment, PATHINFO_EXTENSION);
                                 @endphp
 
                                 @if (in_array(strtolower($extension), ['jpg','jpeg','png','gif']))
@@ -63,7 +63,7 @@
                                     <!-- PDF preview -->
                                     <!-- <iframe src="{{ $fileUrl }}" class="w-full h-64 border rounded-lg"></iframe> -->
                                 @endif
-                                <a href="{{ asset('storage/' . $attachment->file_path) }}"
+                                <a href="{{ asset('storage/' . $attachment) }}"
                                     target="_blank"
                                     class="text-blue-600 hover:text-blue-800 font-medium">
                                     View / Download

@@ -6,7 +6,8 @@ use App\Models\Concern;
 use App\Models\Agenda;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class ConcernController extends Controller
 {
@@ -23,11 +24,11 @@ class ConcernController extends Controller
     {
         $concerns = Concern::where('agenda_id', $agenda_id)
                     ->withCount('commentList')
-                    ->with('responsible')
-                    ->paginate(8);
+                    ->with('responsible:id,name')
+                    ->paginate(20);
 
-        $admin = auth()->user()->role === 'admin' ? true : false;
-        $me = auth()->user()->id;
+        $admin = Auth::user()->role === 'admin' ? true : false;
+        $me = Auth::user()->id;
 
         return response()->json([
             'success' => true,
@@ -54,6 +55,13 @@ class ConcernController extends Controller
 
     public function store(Request $request)
     {
+        if(in_array(auth()->user()->role, ['admin', 'member']))
+        {
+            return redirect()
+                ->back()
+                ->with('error', "You don't have permission to perform this action");
+        }
+
         $request->validate([
             'agenda_id' => 'required',
             'description' => 'required|string',
@@ -100,6 +108,13 @@ class ConcernController extends Controller
 
     public function update(Request $request, $id)
     {
+        if(in_array(auth()->user()->role, ['admin', 'member']))
+        {
+            return redirect()
+                ->back()
+                ->with('error', "You don't have permission to perform this action");
+        }
+
         $concern = Concern::findOrFail($id);
 
         $request->validate([
@@ -107,7 +122,6 @@ class ConcernController extends Controller
             'responsible_person_id' => 'required|exists:users,id',
             'status' => 'required|in:pending,ongoing,completed',
             'due_date' => 'nullable|date',
-            'comments' => 'nullable|string',
         ]);
 
         $concern->update($request->only([
@@ -115,7 +129,6 @@ class ConcernController extends Controller
             'responsible_person_id',
             'status',
             'due_date',
-            'comments'
         ]));
 
         return redirect()->back()->with('success', 'Concern updated successfully.');
@@ -123,6 +136,13 @@ class ConcernController extends Controller
 
     public function destroy($id)
     {
+        if(in_array(auth()->user()->role, ['admin', 'member']))
+        {
+            return redirect()
+                ->back()
+                ->with('error', "You don't have permission to perform this action");
+        }
+
         $concern = Concern::findOrFail($id);
         $concern->delete();
 
@@ -131,6 +151,23 @@ class ConcernController extends Controller
             'message'=> 'Concern Deleted Successfully'
         ]);
     }
+
+    public function deletedConcerns()
+    {
+        if(in_array(auth()->user()->role, ['admin', 'member']))
+        {
+            return redirect()
+                ->back()
+                ->with('error', "You don't have permission to perform this action");
+        }
+        
+        $concerns = Concern::onlyTrashed()
+                ->orderBy('deleted_at', 'desc')
+                ->paginate(20);
+
+        return response()->json($concerns);
+    }
+
     public function show($id)
     {
         $concern = Concern::findOrFail($id);

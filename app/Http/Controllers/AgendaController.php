@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agenda;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+
+
 class AgendaController extends Controller
 {
     public function index()
@@ -14,6 +14,7 @@ class AgendaController extends Controller
         $agendas = Agenda::orderBy('date', 'desc')->get();
         return view('agendas.index', compact('agendas'));
     }
+
     public function loadAgendas()
     {
         $agendas = Agenda::orderBy('date', 'desc')
@@ -30,7 +31,8 @@ class AgendaController extends Controller
     {
         $agenda_id = $request->route('agenda_id');
         $agenda = Agenda::find($agenda_id);
-        $attachment = $agenda->attachments->first();
+        $attachment = $agenda->attachments->first()->file_path ?? null;
+        
         return view('v2.pages.agenda.view-all', compact('agenda', 'attachment'));
     }
 
@@ -46,22 +48,29 @@ class AgendaController extends Controller
         return view('agendas.show', compact('agenda'));
     }
 
-
     /**
      * Show the form for creating a new resource.
-     */public function create()
-{
-    if (auth()->user()->role !== 'admin') {
-        abort(403, 'Unauthorized');
+     */
+    public function create()
+    {
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
+        return view('agendas.create');
     }
-    return view('agendas.create');
-}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        if(auth()->user()->role == 'admin')
+        {
+            return redirect()
+                ->back()
+                ->with('error', "You don't have permission to perform this action");
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'notes' => 'nullable|string',
@@ -93,7 +102,9 @@ class AgendaController extends Controller
         $isAdmin = $user->role === 'admin';
     
         if (!$isAdmin) {
-            abort(403, 'Unauthorized action.');
+            return redirect()
+                ->back()
+                ->with('error', "You don't have permission to perform this action");
         }
     
         $rules = [ 
@@ -151,8 +162,6 @@ class AgendaController extends Controller
         dd($request->user()->role);
     }
 
-
-// 🗑️ DESTROY (ARCHIVE) AGENDA
     public function destroy($id, Request $request)
     {
         $allowedRoles = $request->user()->role;
@@ -160,7 +169,7 @@ class AgendaController extends Controller
         if(!in_array($allowedRoles, ['admin', 'IT'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized action'
+                'message' => "You don't have permission to perform this action"
             ], 403);
         }
 
@@ -169,30 +178,67 @@ class AgendaController extends Controller
 
         return response()->json([
                 'success' => true,
-                'message' => 'Agenda archived successfully'
+                'message' => 'Agenda moved to trash bin'
                 ], 200);
     }
 
+    public function trashed()
+    {
+        if(auth()->user()->role == 'admin')
+        {
+            return response()->json([
+                'success' => false,
+                'message' => "You don't have permission to view this function"
+            ], 403);
+        }
 
-// 📦 SHOW ARCHIVED AGENDAS
-public function archived()
-{
-    $agendas = Agenda::where('status', 'archived')
-        ->orderBy('updated_at', 'desc')
-        ->get();
+        $agendas = Agenda::onlyTrashed()
+            ->orderBy('deleted_at', 'desc')
+            ->paginate(20);
 
-    return view('agendas.archived', compact('agendas'));
-}
+        return response()->json($agendas);
 
-// ♻️ RESTORE ARCHIVED AGENDA (optional)
-public function restore($id)
-{
-    $agenda = Agenda::findOrFail($id);
-    $agenda->update(['status' => 'active']);
+        //return view('agendas.archived', compact('agendas'));
+    }
 
-    return redirect()
-        ->route('agendas.archived')
-        ->with('success', 'Agenda restored successfully!');
-}
+    public function restore($id)
+    {
+        if(auth()->user()->role == 'admin')
+        {
+            return response()->json([
+                'success' => false,
+                'message' => "You don't have permission to view this function"
+            ], 403);
+        }
+
+        $agenda = Agenda::onlyTrashed()->find($id);
+        $agenda->restore();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Agenda restored succesfully'
+        ]);
+
+        //return redirect()->route('agendas.archived')->with('success', 'Agenda restored successfully!');
+    }
+
+    public function forceDelete($id)
+    {
+        if(auth()->user()->role == 'admin')
+        {
+            return response()->json([
+                'success' => false,
+                'message' => "You don't have permission to view this function"
+            ], 403);
+        }
+        
+        $agenda = Agenda::onlyTrashed()->find($id);
+        $agenda->forceDelete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Agenda deleted permanently'
+        ]);
+    }
 
 }

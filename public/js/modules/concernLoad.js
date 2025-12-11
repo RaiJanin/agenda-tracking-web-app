@@ -1,4 +1,4 @@
-import { archivedConcern } from "../rest-api/archiveConcern.js";
+import { deleteConcern } from "../rest-api/deleteConcern.js";
 import { timeAgo } from "../components/timeAgo.js";
 import { dateToString } from "../components/dateString.js";
 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="rounded-lg border border-gray-400">
                             <button id="view-concern-btn" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400" data-concern-id="${concern.concern_id}">View</button>
                             <button id="edit-concern-btn" class="border-r text-teal-600 border-gray-400 px-3 py-2 hover:text-teal-500" data-concern-id="${concern.concern_id}">Edit</button>
-                            <button class="archive-concern-btn px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500" data-concern-id="${concern.concern_id}">Archive</button>
+                            <button class="delete-concern-btn px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500" data-concern-id="${concern.concern_id}">Delete</button>
                         </div>
                         `;
                     } else {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                             <div class="flex flex-col sm:flex-row sm:items-center sm:gap-2">
                                                 <h2 class="text-lg font-bold text-gray-900">${concern.responsible?.name ?? 'Unknown'}</h2>
                                             </div>
-                                            <p class="text-sm text-gray-500">${timeAgo(concern.created_at)}</p>
+                                            <p class="text-sm text-gray-500">${timeAgo(concern.updated_at)}</p>
                                             <p class="text-gray-600"><span class="font-medium">Agenda: </span>${concern.agenda?.title ?? '(No agenda)'}</p>
                                             <p class="text-gray-600"><span class="font-medium">Due Date:</span> ${dateToString('longDate', concern.due_date)}</p>
                                             <div class="flex flex-col bg-white text-gray-500 text-md p-2 rounded-lg border border-gray-200 shadow mt-4">
@@ -127,12 +127,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        document.querySelectorAll('.archive-concern-btn').forEach(button => {
+        document.querySelectorAll('.delete-concern-btn').forEach(button => {
             button.addEventListener('click', e => {
                 e.preventDefault();
                 const concernId = button.getAttribute('data-concern-id');
-                if(!confirm('Are you sure you want to archive this concern?')) return;
-                archivedConcern(concernId);
+                if(!confirm('Are you sure you want to delete this concern?')) return;
+                deleteConcern(concernId);
                 indexR();
             });
         });

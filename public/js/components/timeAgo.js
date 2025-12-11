@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {string} dateString - Raw date string
+ * @returns 
+ */
+
 export function timeAgo(dateString) {
     const now = new Date();
     const past = new Date(dateString);
@@ -14,8 +20,8 @@ export function timeAgo(dateString) {
 
     const intervals = {
         day: 86400,
-        hour: 3600,
-        minute: 60
+        hr: 3600,
+        min: 60
     };
 
     for (const key in intervals) {

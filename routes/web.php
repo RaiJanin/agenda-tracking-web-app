@@ -2,15 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ConcernController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UserController;
-use App\Models\Agenda;
-use Symfony\Component\HttpFoundation\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -62,13 +57,13 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/history', function () { return view('v2.pages.archives.history'); })->name('archives.history');
         Route::get('/reports', function () { return view('v2.pages.archives.reports'); })->name('archives.reports');
-        Route::get('/archive-agenda', function () { return view('v2.pages.archives.agendas-arc'); })->name('archives.agendas');
+
+        Route::get('/trash-agenda', function () { return view('v2.pages.trash.agendas-arc'); })->name('trash.agendas');
+        Route::get('/trash-concern', function () { return view('v2.pages.trash.concerns-arc'); })->name('trash.concerns');
 
         Route::get('/users', function () { return view('v2.pages.people'); })->name('people');
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('settings.profile');
-
-        Route::get('/security', function () { return view('v2.pages.settings.security'); })->name('settings.security');
         
     });
     //----debugging
@@ -77,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
     //----------for api routes
     Route::get('/agendas/archived', [AgendaController::class, 'archived'])->name('agendas.archived');
     Route::put('/agendas/{id}/restore', [AgendaController::class, 'restore'])->name('agendas.restore');
+    Route::delete('/agendas/{id}/fDelete', [AgendaController::class, 'forceDelete'])->name('agenda.forceDelete');
     Route::resource('agendas', AgendaController::class);
 
     //----Json api
@@ -88,6 +84,7 @@ Route::middleware(['auth'])->group(function () {
             // Json concern api
             Route::get('/your', [ConcernController::class, 'yourConcerns'])->name('concerns.your');
             Route::get('/all', [ConcernController::class, 'allConcerns'])->name('concerns.all');
+            Route::get('/all-deleted', [ConcernController::class, 'deletedConcerns'])->name('concerns.view-deleted');
 
             // dynamic routes
             Route::get('/{agenda_id}', [ConcernController::class, 'index'])->name('concerns.index');

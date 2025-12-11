@@ -18,8 +18,7 @@ return new class extends Migration
             $table->date('date');
             $table->uuid('created_by');
             $table->text('notes')->nullable();
-            $table->enum('status', ['pending', 'ongoing', 'resolved', 'closed', 'completed', 'archived'])->default('pending');
-            $table->timestamp('archived_at')->nullable(); // NEW: mark archived
+            $table->enum('status', ['pending', 'ongoing', 'resolved', 'closed', 'completed'])->default('pending');
             $table->softDeletes(); // NEW: enable soft deletes
             $table->timestamps();
 

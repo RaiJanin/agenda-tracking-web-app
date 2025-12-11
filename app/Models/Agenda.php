@@ -20,7 +20,6 @@ class Agenda extends Model
         'notes',
         'file_path',
         'status',
-        'archived_at'
     ];
 
     // Relationships
@@ -42,6 +41,36 @@ class Agenda extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($agenda) {
+            if($agenda->isForceDeleting())
+            {
+                $agenda->concerns()->withTrashed()->forceDelete();
+
+                foreach($agenda->attachments()->file_path as $attachment)
+                {
+                    if(file_exists(storage_path('app/public'.$attachment)))
+                    {
+                        unlink(storage_path('app/public'.$attachment));
+                    }
+                }
+                
+                $agenda->attachments()->withTrashed()->forceDelete();
+            }
+            else
+            {
+                $agenda->concerns()->delete();
+                $agenda->attachments()->delete();
+            }
+        });
+
+        static::restoring(function ($agenda) {
+            $agenda->concerns->withTrashed()->restore();
+            $agenda->attachments->withTrashed()->restore();
+        });
     }
 
 }

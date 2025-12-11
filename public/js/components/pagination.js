@@ -1,6 +1,12 @@
 const pagination = document.getElementById('pagination');
 const paginationMeta = document.getElementById('pagination-meta');
-
+/**
+ * 
+ * @param {Object} meta - Pagination meta data
+ * @param {string} fname - Function name to callback
+ * @param {boolean} enable - Flag to enable/disable
+ * @returns 
+ */
 function handlePagination(meta, fname, enable) {
 
     pagination.innerHTML = '';

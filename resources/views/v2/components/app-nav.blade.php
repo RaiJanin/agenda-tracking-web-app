@@ -108,11 +108,6 @@
                                 <span class="sidebar-text">History</span>
                                 <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archives/History</span>
                             </a>
-                            <a href="{{ route('archives.agendas') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('archives.agendas') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
-                                <i data-feather="book-open"></i>
-                                <span class="sidebar-text">Agendas</span>
-                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archives/Agendas</span>
-                            </a>
                         </div>
                     </div>
                     @endif
@@ -127,6 +122,38 @@
                             <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Users</span>
                         </a>
                     </div>
+                    @endif
+
+                    @if($adminAccess)
+                    <div class="accordion-group">
+                        <button class="w-full flex items-center justify-between p-2 rounded-lg {{ request()->routeIs('trash.*') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative transition-all duration:300 ease-in-out">
+                            <div class="flex items-center space-x-3">
+                                <i data-feather="trash"></i>
+                                <span class="sidebar-text">Trash Bin</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Trash Bin</span>
+                            </div>
+                            <i data-feather="chevron-down" class="accordion-arrow transform transition-transform duration-200"></i>
+                        </button>
+                        <div class="accordion-content hidden pl-2 mt-1 space-y-1 transition-all duration:300 ease-in-out">
+                            <a href="{{ route('trash.agendas') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('trash.agendas') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
+                                <i data-feather="book-open"></i>
+                                <span class="sidebar-text">Agendas</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Trash/Agendas</span>
+                            </a>
+                            <a href="{{ route('trash.concerns') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('trash.concerns') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
+                                <i data-feather="trello"></i>
+                                <span class="sidebar-text">Concerns</span>
+                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Trash/Concerns</span>
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+                    @if(auth()->user()->role == 'member')
+                    <a href="{{ route('trash.concerns') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('trash.concerns') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative transition-all duration:300 ease-in-out">
+                        <i data-feather="trash"></i>
+                        <span class="sidebar-text">Trash Bin</span>
+                        <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Trash/Concerns</span>
+                    </a>
                     @endif
 
                     <!-- Settings Accordion -->
@@ -144,11 +171,6 @@
                                 <i data-feather="user"></i>
                                 <span class="sidebar-text">Profile</span>
                                 <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Settings/Profile</span>
-                            </a>
-                            <a href="{{ route('settings.security') }}" class="flex items-center space-x-3 p-2 rounded-lg {{ request()->routeIs('settings.security') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative ml-8 transition-all duration:300 ease-in-out">
-                                <i data-feather="lock"></i>
-                                <span class="sidebar-text">Security</span>
-                                <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Settings/Security</span>
                             </a>
                         </div>
                     </div>

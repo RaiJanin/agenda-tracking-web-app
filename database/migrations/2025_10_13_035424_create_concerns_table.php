@@ -29,7 +29,6 @@ return new class extends Migration
             $table->text('description');
             $table->enum('status', ['pending', 'ongoing', 'resolved', 'closed', 'completed'])->default('pending');
             $table->date('due_date')->nullable();
-            $table->timestamp('archived_at')->nullable(); // NEW: mark archived
             $table->softDeletes(); // NEW: enable soft deletes
             $table->timestamps();
         });

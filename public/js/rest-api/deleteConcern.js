@@ -1,4 +1,9 @@
-export async function archivedConcern (concernId) {
+/**
+ * 
+ * @param {number} concernId - Data ID to delete
+ * @returns 
+ */
+export async function deleteConcern (concernId) {
 
     try {
         const response = await fetch(`${window.location.origin}/concerns/delete/${concernId}`, {
