@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
     //-----Display concerns by agenda
     Route::get('/{agenda_id}/concernBAg', [ConcernController::class, 'loadConcernAg']);
 
+
     //----- Concerns routes
     Route::prefix('concerns')->group(function () {
         // Json concern api
@@ -90,6 +91,11 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/delete/{id}', [ConcernController::class, 'destroy'])->name('concerns.destroy');
         Route::get('/show/{id}', [ConcernController::class, 'show'])->name('concerns.show');
     });
+
+
+        //------- Comment routes
+        Route::get('/comments/{concern_id}/load', [CommentController::class, 'isCommentsLoad'])->name('comments.load');
+        Route::post('/comments/write', [CommentController::class, 'store'])->name('comments.write');
 
 
 

@@ -23,7 +23,7 @@
                 @yield('main-content')
             </main>
             @if(Route::is('concerns.comments'))
-                @include('v2.partials.comment-write', ['concern' => $concern])
+                @include('v2.ui.comments.partials.comment-write', ['concern_id' => $concern->concern_id])
             @endif
         </div>
         

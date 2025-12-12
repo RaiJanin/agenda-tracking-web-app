@@ -12,15 +12,20 @@ class CommentController extends Controller
      */
     public function index($concern_id)
     {
-        $concern = Concern::with([
-            'commentList' => function($cm) {
-                $cm->orderBy('created_at', 'desc');
-            },
-            'responsible:id,name'])
-                ->findOrFail($concern_id);
-        //dd($concern);
+        $concern = Concern::with('responsible:id,name')->findOrFail($concern_id);
         
         return view('v2.pages.concerns.comments', compact('concern'));
+    }
+
+    public function isCommentsLoad($concern_id)
+    {
+        $concern = Concern::findOrFail($concern_id);
+        $comments = $concern->commentList;
+
+        return response()->json([
+            'success' => true,
+            'data' => $comments
+        ]);
     }
 
     /**
@@ -36,7 +41,22 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $request->validate([
+            'write_comm' => 'required|string|max:255'
+        ]);
+
+        $concern = Concern::findOrFail($request->concern_id);
+        $concern->commentList()->create([
+            'user_id' => auth()->user()->id,
+            'content' => $request->write_comm
+        ]);
+
+        // testing
+        return response()->json([
+            'success' => true,
+            'message' => 'New comment added'
+        ]);
     }
 
     /**
