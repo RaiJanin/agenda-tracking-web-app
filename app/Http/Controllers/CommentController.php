@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Concern;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -23,9 +24,16 @@ class CommentController extends Controller
         $concern = Concern::findOrFail($concern_id);
         $comments = $concern->commentList()->with('user:id,name')->get();
 
+        $admin = Auth::user()->role === 'admin' ? true : false;
+        $me = Auth::user()->id;
+
         return response()->json([
             'success' => true,
-            'data' => $comments
+            'data' => $comments,
+            'roles' => [
+                'admin' => $admin,
+                'me' => $me
+            ]
         ]);
     }
 

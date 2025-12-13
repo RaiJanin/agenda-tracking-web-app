@@ -48,7 +48,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/history', function () { return view('v2.pages.archives.history'); })->name('archives.history');
         Route::get('/reports', function () { return view('v2.pages.archives.reports'); })->name('archives.reports');
 
-        Route::get('/trash-agenda', function () { return view('v2.pages.trash.agendas-arc'); })->name('trash.agendas');
+        //------ reserved route for trash pages with json api loading of data
+        // Route::get('/trash-agenda', function () { return view('v2.pages.trash.agendas-arc'); })->name('trash.agendas');
+        // Route::get('/trash-concern', function () { return view('v2.pages.trash.concerns-arc'); })->name('trash.concerns');
+
+        Route::get('/trash-agenda', [AgendaController::class, 'trashed'])->name('trash.agendas');
         Route::get('/trash-concern', function () { return view('v2.pages.trash.concerns-arc'); })->name('trash.concerns');
 
         Route::get('/users', function () { return view('v2.pages.people'); })->name('people');
@@ -65,14 +69,17 @@ Route::middleware(['auth'])->group(function () {
     //----------for api routes----------
 
     //----- Agenda routes
-    Route::get('/agendas/archived', [AgendaController::class, 'archived'])->name('agendas.archived');
-    Route::put('/agendas/{id}/restore', [AgendaController::class, 'restore'])->name('agendas.restore');
-    Route::delete('/agendas/{id}/fDelete', [AgendaController::class, 'forceDelete'])->name('agenda.forceDelete');
     Route::resource('agendas', AgendaController::class);
+    
     //----Json api
     Route::get('/agenda-load', [AgendaController::class, 'loadAgendas'])->name('agendas.load');
+
     //-----Display concerns by agenda
     Route::get('/{agenda_id}/concernBAg', [ConcernController::class, 'loadConcernAg']);
+
+    //-------Trashed agendas api
+    Route::put('/agendas/{id}/restore', [AgendaController::class, 'restore'])->name('agendas.restore');
+    Route::delete('/agendas/{id}/fDelete', [AgendaController::class, 'forceDelete'])->name('agenda.forceDelete');
 
 
     //----- Concerns routes
@@ -80,6 +87,8 @@ Route::middleware(['auth'])->group(function () {
         // Json concern api
         Route::get('/your', [ConcernController::class, 'yourConcerns'])->name('concerns.your');
         Route::get('/all', [ConcernController::class, 'allConcerns'])->name('concerns.all');
+
+        //Trashed concerns api
         Route::get('/all-deleted', [ConcernController::class, 'deletedConcerns'])->name('concerns.view-deleted');
 
         // dynamic routes

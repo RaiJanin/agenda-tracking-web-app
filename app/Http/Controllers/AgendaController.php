@@ -116,7 +116,7 @@ class AgendaController extends Controller
         $validated['title'] = $request->title;
         $validated['date'] = $request->date;
         $validated = $request->validate($rules);
-        
+
         // Remove file_path from agenda update
         $validated = $request->except('file_path');
 
@@ -154,14 +154,6 @@ class AgendaController extends Controller
         return view('agendas.edit', compact('agenda', 'user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-
-    public function checkRole(Request $request) {
-        dd($request->user()->role);
-    }
-
     public function destroy($id, Request $request)
     {
         $allowedRoles = $request->user()->role;
@@ -196,9 +188,9 @@ class AgendaController extends Controller
             ->orderBy('deleted_at', 'desc')
             ->paginate(20);
 
-        return response()->json($agendas);
+        //return response()->json($agendas);
 
-        //return view('agendas.archived', compact('agendas'));
+        return view('v2.pages.trash.agendas-arc', compact('agendas'));
     }
 
     public function restore($id)
@@ -233,6 +225,7 @@ class AgendaController extends Controller
         }
         
         $agenda = Agenda::onlyTrashed()->find($id);
+        dd($agenda);
         $agenda->forceDelete();
 
         return response()->json([
