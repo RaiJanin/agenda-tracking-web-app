@@ -11,17 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        if(!Schema::hasTable('tags'))
+        {
+            Schema::create('tags', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->timestamps();
+            });
+        }
         
-        Schema::create('taggables', function (Blueprint $table) {
-            $table->foreignId('tag_id')->constrained();
-            $table->morphs('taggable'); // agenda, concern
-            $table->primary(['tag_id', 'taggable_id', 'taggable_type']);
-        });
+        if(!Schema::hasTable('taggables'))
+        {
+            Schema::create('taggables', function (Blueprint $table) {
+                $table->foreignId('tag_id')->constrained();
+                $table->morphs('taggable'); // agenda, concern
+                $table->primary(['tag_id', 'taggable_id', 'taggable_type']);
+            });
+        }
         
     }
 

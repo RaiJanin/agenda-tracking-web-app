@@ -22,6 +22,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('Something went wrong while loading concerns.');
             }
 
+            if(json.concerns.data.length == 0) {
+                container.innerHTML = `
+                <div class="flex items-center justify-center p-6">
+                    <h3 class="text-lg text-gray-600">No concerns yet</h3>
+                </div>
+                `;
+                return;
+            }
+
             handlePagination(json.concerns, 'loadYourConcerns', true);
 
             container.innerHTML = json.concerns.data.map(concern => {

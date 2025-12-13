@@ -24,6 +24,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
+                if(data.agendas.data.length == 0) {
+                    agendaContainer.innerHTML = `
+                        <div class="flex items-center justify-center p-6">
+                            <h3 class="text-lg text-gray-600">No agendas yet</h3>
+                        </div>
+                    `;
+                    return;
+                }
+
                 handlePagination(data.agendas, 'indexR', true);
 
                 agendaContainer.innerHTML = data.agendas.data.map(agenda => {

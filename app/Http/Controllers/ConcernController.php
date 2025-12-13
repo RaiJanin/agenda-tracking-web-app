@@ -7,7 +7,7 @@ use App\Models\Agenda;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
 
 class ConcernController extends Controller
 {
@@ -79,13 +79,13 @@ class ConcernController extends Controller
             'due_date' => $request->due_date
         ]);
 
-        // $filePath = null;
-        // if ($request->hasFile('file')) {
-        //     $filePath = $request->file('file')->store('uploads/concerns', 'public');
-        //     $newConcern->attachments()->create([
-        //         'file_path' => $filePath
-        //     ]);
-        // }
+        $filePath = null;
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('uploads/concerns', 'public');
+            $newConcern->attachments()->create([
+                'file_path' => $filePath
+            ]);
+        }
 
         return redirect()
             ->back()
@@ -121,8 +121,21 @@ class ConcernController extends Controller
             'description' => 'required|string',
             'responsible_person_id' => 'required|exists:users,id',
             'status' => 'required|in:pending,ongoing,completed',
-            'due_date' => 'nullable|date',
+            'due_date' => 'required|date',
+            'file_path' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,txt,jpg,png|max:5120',
         ]);
+
+        if ($request->hasFile('file_path')) {
+            $oldAttachment = $concern->attachments()->first();
+        
+            if ($oldAttachment) {
+                Storage::disk('public')->delete($oldAttachment->file_path);
+                $oldAttachment->delete();
+            }
+    
+            $path = $request->file('file_path')->store('uploads/concerns', 'public');
+            $concern->attachments()->create(['file_path' => $path]);
+        }
 
         $concern->update($request->only([
             'description',

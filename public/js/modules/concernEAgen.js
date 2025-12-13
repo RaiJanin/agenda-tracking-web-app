@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     editArchAccess = `
                     <div class="text-base font-medium rounded-lg border border-gray-400">
-                        <button type="button" onclick='window.location.href="#"' class="text-sm text-slate-500 px-3 py-2 rounded-l-lg hover:text-slate-400">View</button>
+                        <button data-concern-id="${concern.concern_id}" class="view-concern-btn text-sm text-slate-500 px-3 py-2 rounded-l-lg hover:text-slate-400">View</button>
                     </div>
                     `;
                 }

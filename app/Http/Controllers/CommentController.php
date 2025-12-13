@@ -13,14 +13,15 @@ class CommentController extends Controller
     public function index($concern_id)
     {
         $concern = Concern::with('responsible:id,name')->findOrFail($concern_id);
+        $attachment = $concern->attachments()->first()->file_path ?? null;
         
-        return view('v2.pages.concerns.comments', compact('concern'));
+        return view('v2.pages.concerns.comments', compact('concern', 'attachment'));
     }
 
     public function isCommentsLoad($concern_id)
     {
         $concern = Concern::findOrFail($concern_id);
-        $comments = $concern->commentList;
+        $comments = $concern->commentList()->with('user:id,name')->get();
 
         return response()->json([
             'success' => true,
@@ -43,7 +44,7 @@ class CommentController extends Controller
     {
         
         $request->validate([
-            'write_comm' => 'required|string|max:255'
+            'write_comm' => 'required|string|max:1255'
         ]);
 
         $concern = Concern::findOrFail($request->concern_id);

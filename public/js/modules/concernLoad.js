@@ -26,6 +26,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
+                if(json.concerns.data.length == 0) {
+                    concernContainer.innerHTML = `
+                    <div class="flex items-center justify-center p-6">
+                        <h3 class="text-lg text-gray-600">No concerns yet</h3>
+                    </div>
+                    `;
+                    return;
+                }
+
                 handlePagination(json.concerns, 'indexR', true);
 
                 concernContainer.innerHTML = json.concerns.data.map(concern => {

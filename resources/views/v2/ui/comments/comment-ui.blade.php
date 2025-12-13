@@ -1,6 +1,6 @@
 @extends('v2.layout.content-layout')
 
-    @section('content-head-text', 'Comments')
+    @section('content-head-text', 'View Concern')
 
     @section('content-head-buttons')
         <button onclick="window.history.back()" class="flex items-center justify-between gap-3 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
@@ -30,20 +30,42 @@
                             </div>
                         </div>
                     </div>
+                    @if($attachment)
                     <div class="sm:col-span-2 bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-3 text-gray-800">File Attachment</h2>
-                            <div class="flex flex-col gap-4 border-t border-gray-200 pt-3">
-                            </div>
+                        <div class="flex flex-col gap-4 border-t border-gray-200 pt-3">
+                            <p class="text-gray-700 break-all w-64">{{ basename($attachment) }}</p>
+                            @php
+                                $fileUrl = asset('storage/' . $attachment);
+                                $extension = pathinfo($attachment, PATHINFO_EXTENSION);
+                            @endphp
+
+                            @if (in_array(strtolower($extension), ['jpg','jpeg','png','gif']))
+                                <!-- Image preview -->
+                                <img src="{{ $fileUrl }}" alt="Preview" class="w-full h-64 rounded-lg shadow">
+                            @elseif (strtolower($extension) === 'pdf')
+                                <!-- PDF preview -->
+                                <iframe src="{{ $fileUrl }}" class="w-full h-64 border rounded-lg"></iframe>
+                            @endif
+                            <a href="{{ asset('storage/' . $attachment) }}"
+                                target="_blank"
+                                class="text-blue-600 hover:text-blue-800 font-medium">
+                                View / Download
+                            </a>
+                        </div>
                     </div>
+                    @else
+                    <div class="sm:col-span-2"></div>
+                    @endif
                     <div class="sm:col-span-3 bg-white rounded-2xl p-3 border border-gray-200 shadow-md">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                            <div></div>
-                            <button id="write-comment-btn" type="button" class="flex items-center gap-2 text-sm bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-400 transition ml-3">
-                                <i class="fa-solid fa-plus text-xs"></i><span>Write a comment</span>
-                            </button>
+                            <div class="px-4">
+                                <h2 class="text-xl font-semibold">Comments</h3>
+                            </div>
                         </div>
                         <div class="px-5 border-b border-gray-300 mb-3 mt-3 w-full"></div>
-                        <div id="comments-container">
+                        <div id="comments-container" class="p-2">
+                            
                             <div class="hidden" id="concern-id-data" data-concern-id="{{ $concern->concern_id }}"></div>
                         </div>
                         <div class="mt-5 text-xxs sm:text-sm px-4">

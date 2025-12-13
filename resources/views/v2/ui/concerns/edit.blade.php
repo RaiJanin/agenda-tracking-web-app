@@ -20,7 +20,7 @@
                 <div class="max-w-3xl mx-auto bg-white shadow rounded-lg p-6">
                     <h4 class="text-xl font-bold mb-4">{{ $agenda['title'] }}</h4>
 
-                    <form action="{{ route('concerns.update', $concern->concern_id) }}" method="POST">
+                    <form action="{{ route('concerns.update', $concern->concern_id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -60,6 +60,21 @@
                             <div>
                                 <label class="block text-gray-700">Due Date</label>
                                 <input type="date" name="due_date" class="w-full border rounded-md p-2" value="{{ $concern->due_date }}" required>
+                            </div>
+
+                            <div class="col-span-2">
+                                <label class="block text-gray-700 font-medium mb-2">Replace File (Optional)</label>
+                                <input type="file" name="file_path" class="w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-400 file:text-slate-700 hover:file:bg-gray-300 transition-all duration-400">
+                                    @if($concern->attachments()->exists())
+                                    @php $attachment = $concern->attachments()->first(); @endphp
+                                    <p class="text-sm text-gray-600 mt-2">
+                                        Current file:
+                                        <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank"
+                                            class="text-blue-600 hover:text-blue-800 underline">
+                                            {{ basename($attachment->file_path) }}
+                                        </a>
+                                    </p>
+                                @endif
                             </div>
 
                         </div>

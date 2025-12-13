@@ -58,10 +58,10 @@
 
                                 @if (in_array(strtolower($extension), ['jpg','jpeg','png','gif']))
                                     <!-- Image preview -->
-                                    <!-- <img src="{{ $fileUrl }}" alt="Preview" class="w-64 h-64 rounded-lg shadow"> -->
+                                    <img src="{{ $fileUrl }}" alt="Preview" class="w-64 h-64 rounded-lg shadow">
                                 @elseif (strtolower($extension) === 'pdf')
                                     <!-- PDF preview -->
-                                    <!-- <iframe src="{{ $fileUrl }}" class="w-full h-64 border rounded-lg"></iframe> -->
+                                    <iframe src="{{ $fileUrl }}" class="w-full h-64 border rounded-lg"></iframe>
                                 @endif
                                 <a href="{{ asset('storage/' . $attachment) }}"
                                     target="_blank"

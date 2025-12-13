@@ -1,14 +1,33 @@
 document.addEventListener('DOMContentLoaded', function() {
     const commentField = document.getElementById('comment-write-section');
     const writeCommentBtn = document.getElementById('write-comment-btn');
+    const writeCommentContainer = document.getElementById('write-comment-container');
     const closeComment = document.querySelector('.close-comment');
 
     writeCommentBtn.addEventListener('click', () => {
-        commentField.classList.remove('hidden');
+        commentField.classList.remove(
+            'translate-y-full',
+            'pointer-events-none'
+        );
+        commentField.classList.add(
+            'translate-y-0',
+            'pointer-events-auto'
+        );
+        setTimeout(() => {
+            writeCommentContainer.classList.add('hidden');
+        },300);
     });
 
     closeComment.addEventListener('click', () => {
-        commentField.classList.add('hidden');
+        writeCommentContainer.classList.remove('hidden');
+        commentField.classList.remove(
+            'translate-y-0',
+            'pointer-events-none'
+        );
+        commentField.classList.add(
+            'translate-y-full',
+            'pointer-events-none'
+        );
     });
 
     const submitComment = document.getElementById('submit-comment');
@@ -47,6 +66,17 @@ document.addEventListener('DOMContentLoaded', function() {
             alert(reply.message);
             VcommentContent.value = '';
             loadComments(concernId);
+
+            writeCommentContainer.classList.remove('hidden');
+            commentField.classList.remove(
+                'translate-y-0',
+                'pointer-events-none'
+            );
+            commentField.classList.add(
+                'translate-y-full',
+                'pointer-events-none'
+            );
+
         }).
         catch(err => {
             console.error(err);

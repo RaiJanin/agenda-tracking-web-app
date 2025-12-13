@@ -9,7 +9,9 @@
 
 @section('main-content')
     @if(in_array(auth()->user()->role, ['admin', 'member']))
+    <div class="mb-12">
         @include('v2.ui.comments.comment-ui')
+    </div>
     @else
         @include('v2.components.warnings.unauthorized')
     @endif
