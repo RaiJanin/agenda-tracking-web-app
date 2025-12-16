@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Concern;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -97,6 +98,20 @@ class CommentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        $isDeleted = $comment->delete();
+
+        if(!$isDeleted)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete'
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment deleted'
+        ]);
     }
 }

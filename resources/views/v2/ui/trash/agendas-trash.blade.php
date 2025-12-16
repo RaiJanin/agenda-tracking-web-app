@@ -8,7 +8,7 @@
 
     @section('contents')
     <div class="flex-1 overflow-y-auto bg-gray-50 min-h-screen">
-        <div class="max-w-6xl mx-auto p-6">
+        <div class="mx-auto p-3">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-100 text-gray-700 text-sm font-semibold">

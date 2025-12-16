@@ -18,5 +18,5 @@
         <script src="{{ asset('js/modules/selectedAgendaMo.js') }}" type="module"></script>
         <script src="{{ asset('js/modules/concernEAgen.js') }}" type="module"></script>
     @endif
-    <script src="{{ asset('js/components/pagination.js') }}"></script>
+    <script src="{{ asset('js/utilities/pagination.js') }}"></script>
 @endsection

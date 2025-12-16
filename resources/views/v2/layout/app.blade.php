@@ -26,6 +26,9 @@
                 @include('v2.ui.comments.partials.comment-write', ['concern_id' => $concern->concern_id])
             @endif
         </div>
+
+
+        @include('v2.components.confirm-modal')
         
     </div>
     @include('v2.includes.script-assets')

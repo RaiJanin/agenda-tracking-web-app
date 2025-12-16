@@ -19,7 +19,7 @@ class AgendaController extends Controller
     {
         $agendas = Agenda::orderBy('date', 'desc')
             ->withCount('concerns')
-            ->paginate(8);
+            ->paginate(20);
 
         return response()->json([
             'success' => true,

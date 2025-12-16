@@ -28,7 +28,6 @@ class ConcernFactory extends Factory
             'description' => $this->faker->sentence(12),
             'status' => $this->faker->randomElement([ 'pending', 'ongoing', 'resolved', 'closed', 'completed' ]),
             'due_date' => $this->faker->optional()->dateTimeBetween('now', '+30 days'),
-            'archived_at' => null, // faker will not fill this unless you add a state
         ];
     }
 

@@ -14,6 +14,6 @@
 @section('scripts')
     @if(!request()->route('agenda_id'))
         <script src="{{ asset('js/modules/concernLoad.js') }}" type="module"></script>
-        <script src="{{ asset('js/components/pagination.js') }}"></script>
+        <script src="{{ asset('js/utilities/pagination.js') }}"></script>
     @endif
 @endsection

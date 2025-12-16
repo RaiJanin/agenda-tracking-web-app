@@ -1,6 +1,7 @@
-import { dateToString } from "../components/dateString.js";
+import { dateToString } from "../utilities/dateString.js";
 import { deleteConcern } from "../rest-api/deleteConcern.js";
-import { timeAgo } from "../components/timeAgo.js";
+import { timeAgo } from "../utilities/timeAgo.js";
+import { showConfirmationModal } from "../components/cfFire.js";
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -133,10 +134,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         document.querySelectorAll('.delete-concern-btn').forEach(button => {
-            button.addEventListener('click', e => {
+            button.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const concernId = button.getAttribute('data-concern-id');
-                if(!confirm('Are you sure you want to delete this concern?')) return;
+
+                const isConfirmed = await showConfirmationModal('Confirm Delete?', 'Are you sure you want to delete this agenda?');
+                if (!isConfirmed) return;
+
                 console.log(concernId);
                 deleteConcern(concernId);
                 indexR();

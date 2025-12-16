@@ -1,5 +1,6 @@
 import { deleteAgenda } from "../rest-api/deleteAgenda.js";
-import { dateToString } from "../components/dateString.js";
+import { dateToString } from "../utilities/dateString.js";
+import { showConfirmationModal } from "../components/cfFire.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     indexR();
@@ -74,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <div class="rounded-lg border border-gray-400">
                                 <button id="view-ag-btn" class="border-r text-slate-500 border-gray-400 px-3 py-2 rounded-l-lg hover:text-slate-400" data-agenda-id="${agenda.agenda_id}">View</button>
                                 <button id="edit-ag-btn" class="border-r text-teal-600 border-gray-400 px-3 py-2 hover:text-teal-500" data-agenda-id="${agenda.agenda_id}">Edit</button>
-                                <button id="delete-ag-btn" class="px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500" data-agenda-id="${agenda.agenda_id}">Delete</button>
+                                <button class="delete-ag-btn px-3 text-red-600 py-2 rounded-r-lg hover:text-red-500" data-agenda-id="${agenda.agenda_id}">Delete</button>
                             </div>
                         `;
                     } else {
@@ -147,15 +148,20 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        document.querySelectorAll('#delete-ag-btn').forEach(button => {
-            button.addEventListener('click', function (e) {
+        document.querySelectorAll('.delete-ag-btn').forEach(button => {
+            button.addEventListener('click', async function (e) {
+                const btn = e.target.closest('.delete-ag-btn');
+                if(!btn) return;
+
                 e.preventDefault();
                 const agendaId = this.getAttribute('data-agenda-id');
                 
-                if(!confirm('Are you sure you want to delete this agenda?')) return;
+                const isConfirmed = await showConfirmationModal('Confirm Delete?', 'Are you sure you want to delete this agenda?');
+                if (!isConfirmed) return;
+
+                console.log(agendaId);
                 deleteAgenda(agendaId);
-                indexR(); 
-                
+                indexR();
              });
         });
     }

@@ -198,7 +198,7 @@ class ConcernController extends Controller
         $concerns = Concern::with(['agenda:agenda_id,title', 'responsible:id,name'])
             ->withCount('commentList')
             ->latest()
-            ->paginate(8);
+            ->paginate(20);
 
         return response()->json([
             'success' => true,
@@ -214,7 +214,7 @@ class ConcernController extends Controller
             ->withCount('commentList')
             ->where('responsible_person_id', $user->id)
             ->latest()
-            ->paginate(8);
+            ->paginate(20);
 
         return response()->json([
             'success' => true,

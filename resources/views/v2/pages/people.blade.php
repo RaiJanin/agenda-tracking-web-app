@@ -17,5 +17,5 @@
 
 @section('scripts')
     <script src="{{ asset('js/modules/usersLoad.js') }}"></script>
-    <script src="{{ asset('js/components/pagination.js') }}"></script>
+    <script src="{{ asset('js/utilities/pagination.js') }}"></script>
 @endsection
