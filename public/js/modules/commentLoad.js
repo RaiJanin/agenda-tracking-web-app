@@ -1,6 +1,7 @@
 import { timeAgo } from "../utilities/timeAgo.js";
 import { showConfirmationModal } from "../components/cfFire.js";
 import { deleteComment } from "../rest-api/deleteComment.js";
+import { loadCommToEdit } from "../rest-api/fetchCommEdit.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     const commemtContainer = document.getElementById('comments-container');

@@ -1,4 +1,4 @@
-<div id="comment-edit-section" class="fixed grid grid-cols-3 bottom-0 w-full border-t-2 border-gray-300 bg-white shadow z-20 translate-y-full transition-all duration-300 ease-in-out">
+<div id="comment-edit-section" class="fixed grid grid-cols-3 bottom-0 w-full border-t-2 border-gray-300 bg-white shadow z-30 translate-y-full transition-all duration-300 ease-in-out">
     <div class="p-4 col-span-3 sm:col-span-2 gap-3">
         <form class="flex flex-col gap-3"> 
             <div class="flex items-center justify-between">
