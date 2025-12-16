@@ -65,7 +65,7 @@
                         </div>
                         <div class="px-5 border-b border-gray-300 mb-3 mt-3 w-full"></div>
                         <div id="comments-container" class="p-2">
-                            
+                            <!-- Comments here -->
                             <div class="hidden" id="concern-id-data" data-concern-id="{{ $concern->concern_id }}"></div>
                         </div>
                         <div class="mt-5 text-xxs sm:text-sm px-4">

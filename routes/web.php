@@ -70,10 +70,8 @@ Route::middleware(['auth'])->group(function () {
 
     //----- Agenda routes
     Route::resource('agendas', AgendaController::class);
-    
     //----Json api
     Route::get('/agenda-load', [AgendaController::class, 'loadAgendas'])->name('agendas.load');
-
     //-----Display concerns by agenda
     Route::get('/{agenda_id}/concernBAg', [ConcernController::class, 'loadConcernAg']);
 
@@ -88,9 +86,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/your', [ConcernController::class, 'yourConcerns'])->name('concerns.your');
         Route::get('/all', [ConcernController::class, 'allConcerns'])->name('concerns.all');
 
-        //Trashed concerns api
-        Route::get('/all-deleted', [ConcernController::class, 'deletedConcerns'])->name('concerns.view-deleted');
-
         // dynamic routes
         Route::get('/{agenda_id}', [ConcernController::class, 'index'])->name('concerns.index');
         Route::get('/{agenda_id}/create', [ConcernController::class, 'create'])->name('concerns.create');
@@ -99,13 +94,18 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}', [ConcernController::class, 'update'])->name('concerns.update');
         Route::delete('/delete/{id}', [ConcernController::class, 'destroy'])->name('concerns.destroy');
         Route::get('/show/{id}', [ConcernController::class, 'show'])->name('concerns.show');
+
+        //Trashed concerns api
+        Route::get('/all-deleted', [ConcernController::class, 'deletedConcerns'])->name('concerns.view-deleted');
     });
 
 
-        //------- Comment routes
+        //------- Comment api routes
         Route::get('/comments/{concern_id}/load', [CommentController::class, 'isCommentsLoad'])->name('comments.load');
         Route::post('/comments/write', [CommentController::class, 'store'])->name('comments.write');
-
+        Route::get('/comments/{comment_id}/edit', [CommentController::class, 'edit'])->name('comment.edit');
+        Route::patch('/comments/{comment_id}/update', [CommentController::class, 'update'])->name('comment.update');
+        Route::delete('/comments/{comment_id}/delete', [CommentController::class, 'destroy'])->name('comment.delete');
 
 
     //--------- reserved routes

@@ -19,5 +19,6 @@
 
 @section('scripts')
     <script src="{{ asset('js/modules/commentWrite.js') }}" type="module"></script>
+    <script src="{{ asset('js/modules/commentEdit.js') }}" type="module"></script>
     <script src="{{ asset('js/modules/commentLoad.js') }}" type="module"></script>
 @endsection

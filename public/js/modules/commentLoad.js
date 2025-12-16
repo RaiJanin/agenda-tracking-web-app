@@ -1,14 +1,12 @@
 import { timeAgo } from "../utilities/timeAgo.js";
 import { showConfirmationModal } from "../components/cfFire.js";
+import { deleteComment } from "../rest-api/deleteComment.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     const commemtContainer = document.getElementById('comments-container');
     const concernId = document.getElementById('concern-id-data').getAttribute('data-concern-id');
-    let commntId = null;
 
     function loadComments(idComments) {
-
-        commntId = idComments;
 
         commemtContainer.innerHTML = '<p class="text-md p-4 ml-7 text-gray-400">Loading comments...</p>';
 
@@ -72,16 +70,24 @@ document.addEventListener('DOMContentLoaded', function() {
     window.loadComments = loadComments;
 
     function addEventListener() {
+
+        document.querySelectorAll('.edit-comment-btn').forEach(button => {
+            button.addEventListener('click', e => {
+                e.preventDefault();
+                const commentId = button.getAttribute('data-comment-id');
+                console.log('Comment ID to edit: '+commentId);
+                loadCommToEdit(commentId);
+            });
+        });
+
         document.querySelectorAll('.delete-comment-btn').forEach(button => {
             button.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const commentId = button.getAttribute('data-comment-id');
-
                 const isConfirmed = await showConfirmationModal('Confirm Delete?', 'Are you sure you want to delete this agenda?');
                 if (!isConfirmed) return;
-
-                console.log(commentId);
-                loadComments(commntId);
+                deleteComment(commentId);
+                loadComments(concernId);
             });
         });
     }

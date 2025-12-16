@@ -23,10 +23,11 @@
                 @yield('main-content')
             </main>
             @if(Route::is('concerns.comments'))
+                @include('v2.ui.comments.partials.comment-edit')
                 @include('v2.ui.comments.partials.comment-write', ['concern_id' => $concern->concern_id])
+                @include('v2.ui.comments.partials.comment-init')
             @endif
         </div>
-
 
         @include('v2.components.confirm-modal')
         

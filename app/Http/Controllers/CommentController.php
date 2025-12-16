@@ -62,7 +62,6 @@ class CommentController extends Controller
             'content' => $request->write_comm
         ]);
 
-        // testing
         return response()->json([
             'success' => true,
             'message' => 'New comment added'
@@ -82,7 +81,20 @@ class CommentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+
+        if(!$comment)
+        {
+            return response()->json([
+                'success' => true,
+                'message' => 'This comment is not available. Failed to find comment'
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'content' => $comment
+        ]);
     }
 
     /**
