@@ -48,12 +48,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/history', function () { return view('v2.pages.archives.history'); })->name('archives.history');
         Route::get('/reports', function () { return view('v2.pages.archives.reports'); })->name('archives.reports');
 
-        //------ reserved route for trash pages with json api loading of data
-        // Route::get('/trash-agenda', function () { return view('v2.pages.trash.agendas-arc'); })->name('trash.agendas');
-        // Route::get('/trash-concern', function () { return view('v2.pages.trash.concerns-arc'); })->name('trash.concerns');
-
-        Route::get('/trash-agenda', [AgendaController::class, 'trashed'])->name('trash.agendas');
+        // -- reserved route for trashed data pages with dynamic data loading
+        Route::get('/trash-agenda', function () { return view('v2.pages.trash.agendas-arc'); })->name('trash.agendas');
         Route::get('/trash-concern', function () { return view('v2.pages.trash.concerns-arc'); })->name('trash.concerns');
+
+        //Route::get('/trash-concern', [ConcernController::class, 'deletedConcerns'])->name('trash.concerns');
 
         Route::get('/users', function () { return view('v2.pages.people'); })->name('people');
 
@@ -76,8 +75,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/{agenda_id}/concernBAg', [ConcernController::class, 'loadConcernAg']);
 
     //-------Trashed agendas api
-    Route::put('/agendas/{id}/restore', [AgendaController::class, 'restore'])->name('agendas.restore');
-    Route::delete('/agendas/{id}/fDelete', [AgendaController::class, 'forceDelete'])->name('agenda.forceDelete');
+    Route::prefix('agendas')->group(function () {
+        Route::put('/{id}/restore', [AgendaController::class, 'restore'])->name('agendas.restore');
+        Route::delete('/{id}/fDelete', [AgendaController::class, 'forceDelete'])->name('agenda.forceDelete');
+    });
+    Route::get('/@gend4/trash-agenda', [AgendaController::class, 'trashed'])->name('agendas.getTrashed');
+
+    
 
 
     //----- Concerns routes
@@ -96,8 +100,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/show/{id}', [ConcernController::class, 'show'])->name('concerns.show');
 
         //Trashed concerns api
-        Route::get('/all-deleted', [ConcernController::class, 'deletedConcerns'])->name('concerns.view-deleted');
+        Route::put('{id}/restore', [ConcernController::class, 'restore'])->name('concern.restore');
+        Route::delete('{id}/fDelete', [ConcernController::class, 'forceDelete'])->name('concern.forceDelete');
     });
+        Route::get('/c0nC3rn/trash-concerns', [ConcernController::class, 'deletedConcerns']);
+        
 
 
         //------- Comment api routes

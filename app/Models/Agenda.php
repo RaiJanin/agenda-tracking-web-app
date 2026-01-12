@@ -50,13 +50,12 @@ class Agenda extends Model
             {
                 $agenda->concerns()->withTrashed()->forceDelete();
 
-                foreach($agenda->attachments()->file_path as $attachment)
-                {
+                $agenda->attachments()->withTrashed()->get()->each(function ($attachment) {
                     if(file_exists(storage_path('app/public'.$attachment)))
                     {
                         unlink(storage_path('app/public'.$attachment));
                     }
-                }
+                });
                 
                 $agenda->attachments()->withTrashed()->forceDelete();
             }
@@ -68,8 +67,8 @@ class Agenda extends Model
         });
 
         static::restoring(function ($agenda) {
-            $agenda->concerns->withTrashed()->restore();
-            $agenda->attachments->withTrashed()->restore();
+            $agenda->concerns()->withTrashed()->restore();
+            $agenda->attachments()->withTrashed()->restore();
         });
     }
 

@@ -147,40 +147,6 @@ class ConcernController extends Controller
         return redirect()->back()->with('success', 'Concern updated successfully.');
     }
 
-    public function destroy($id)
-    {
-        if(!in_array(auth()->user()->role, ['admin', 'member']))
-        {
-            return redirect()
-                ->back()
-                ->withErrors(["You don't have permission to perform this action"]);
-        }
-
-        $concern = Concern::findOrFail($id);
-        $concern->delete();
-
-        return response()->json([
-            'success' => true,
-            'message'=> 'Concern Deleted Successfully'
-        ]);
-    }
-
-    public function deletedConcerns()
-    {
-        if(!in_array(auth()->user()->role, ['admin', 'member']))
-        {
-            return redirect()
-                ->back()
-                ->withErrors(["You don't have permission to perform this action"]);
-        }
-        
-        $concerns = Concern::onlyTrashed()
-                ->orderBy('deleted_at', 'desc')
-                ->paginate(20);
-
-        return response()->json($concerns);
-    }
-
     public function show($id)
     {
         $concern = Concern::findOrFail($id);
@@ -220,6 +186,111 @@ class ConcernController extends Controller
             'success' => true,
             'concerns' => $concerns
         ]);
+    }
+
+    public function destroy($id)
+    {
+        if(!in_array(auth()->user()->role, ['admin', 'member']))
+        {
+            return redirect()
+                ->back()
+                ->withErrors(["You don't have permission to perform this action"]);
+        }
+
+        $concern = Concern::findOrFail($id);
+        $concern->delete();
+
+        return response()->json([
+            'success' => true,
+            'message'=> 'Concern Deleted Successfully'
+        ]);
+    }
+
+    public function deletedConcerns()
+    {
+        if(!in_array(auth()->user()->role, ['admin', 'member']))
+        {
+            // return redirect()
+            //     ->back()
+            //     ->withErrors(["You don't have permission to perform this action"]);
+
+            return response()->json([
+                'success' => false,
+                'message' => "You don't have permission to perform this action"
+            ]);
+        }
+        
+        $concerns = '';
+        $concernsCount = '';
+
+        if(auth()->user()->role === 'admin')
+        {
+            $concerns = Concern::onlyTrashed()
+                    ->with('responsible:id,name')
+                    ->orderBy('deleted_at', 'desc')
+                    ->get();
+            $concernsCount = Concern::onlyTrashed()->count();
+        }
+        if(auth()->user()->role === 'member')
+        {
+            $concerns = Concern::onlyTrashed()
+                    ->where('responsible_person_id', auth()->user()->id)
+                    ->with('responsible:id,name')
+                    ->orderBy('deleted_at', 'desc')
+                    ->get();
+            $concernsCount = Concern::onlyTrashed()->where('responsible_person_id', auth()->user()->id)->count();
+        }
+
+        $myRole = auth()->user()->role === 'member';
+        $adminAccess = auth()->user()->role === 'admin';
+        
+        return response()->json([
+            'success' => true,
+            'contents' => $concerns,
+            'member_role' => $myRole,
+            'admin_access' => $adminAccess,
+            'concerns_count' => $concernsCount
+        ]);
+
+        //return view('v2.pages.trash.concerns-arc', compact('concerns'));
+    }
+
+    public function restore($concern_id)
+    {
+        if(!in_array(auth()->user()->role, ['admin', 'member']))
+        {
+            return response()->json([
+                'success' => false,
+                'message' => "You don't have permission to proceed this action"
+            ]);        
+        }
+
+        $concern = Concern::onlyTrashed()->find($concern_id);
+        $concern->restore();
+
+        return response()->json([
+                'success' => true,
+                'message' => 'Concern restored'
+        ], 200);    
+    }
+
+    public function forceDelete($concern_id)
+    {
+        if(!in_array(auth()->user()->role, ['admin', 'member']))
+        {
+            return response()->json([
+                'success' => false,
+                'message' => "You don't have permission to proceed this action"
+            ]);        
+        }
+
+        $concern = Concern::onlyTrashed()->find($concern_id);
+        $concern->forceDelete();
+
+        return response()->json([
+                'success' => true,
+                'message' => 'Concern deleted permanently'
+        ], 200);    
     }
 
 }

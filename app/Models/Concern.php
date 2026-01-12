@@ -43,4 +43,29 @@ class Concern extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($concern) {
+            if($concern->isForceDeleting())
+            {
+                $concern->attachments()->withTrashed()->get()->each(function ($attachment) {
+                    if(file_exists(storage_path('app/public'.$attachment)))
+                    {
+                        unlink(storage_path('app/public'.$attachment));
+                    }
+                });
+                
+                $concern->attachments()->withTrashed()->forceDelete();
+            }
+            else
+            {
+                $concern->attachments()->delete();
+            }
+        });
+
+        static::restoring(function ($concern) {
+            $concern->attachments()->withTrashed()->restore();
+        });
+    }
 }

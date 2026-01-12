@@ -59,7 +59,7 @@ class CommentController extends Controller
         $concern = Concern::findOrFail($request->concern_id);
         $concern->commentList()->create([
             'user_id' => auth()->user()->id,
-            'comment' => $request->write_comm
+            'content' => $request->write_comm
         ]);
 
         return response()->json([
@@ -93,7 +93,7 @@ class CommentController extends Controller
 
         return response()->json([
             'success' => true,
-            'comment' => $comment
+            'content' => $comment
         ]);
     }
 

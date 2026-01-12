@@ -1,4 +1,4 @@
-import { deleteConcern } from "../rest-api/deleteConcern.js";
+import { deleteConcern } from "../services/deleteConcern.js";
 import { timeAgo } from "../utilities/timeAgo.js";
 import { dateToString } from "../utilities/dateString.js";
 import { showConfirmationModal } from "../components/cfFire.js";

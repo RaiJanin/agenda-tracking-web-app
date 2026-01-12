@@ -6,10 +6,7 @@ const uploadEditedCommBtn = document.getElementById('update-comment');
 const closeEComment = document.querySelector('.close-edit-comment');
 
 export function renderEdit() {
-    console.log('Comment ID received from state: '+commentState.commentId);
-    console.log('Content: '+commentState.commentContent);
-    console.log('Hello');
-
+    
     comEdContainer.classList.remove(
         'translate-y-full',
         'pointer-events-none'
@@ -18,11 +15,24 @@ export function renderEdit() {
         'translate-y-0',
         'pointer-events-auto'
     );
-    commentField.classList.add('hidden');
-    setTimeout(() => {
-        writeCommentContainer.classList.add('hidden');
-    },300);
+
+    document.getElementById('edit-comment').value = commentState.commentContent;
+
 }
+
+closeEComment.addEventListener('click', () => {
+    comEdContainer.classList.remove(
+        'translate-y-0',
+        'pointer-events-auto'
+    );
+    comEdContainer.classList.add(
+        'translate-y-full',
+        'pointer-events-none'
+    );
+
+    commentState.commentContent = null;
+    commentState.commentId = null;
+});
 
 
     

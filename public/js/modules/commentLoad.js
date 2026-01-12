@@ -1,7 +1,7 @@
 import { timeAgo } from "../utilities/timeAgo.js";
 import { showConfirmationModal } from "../components/cfFire.js";
-import { deleteComment } from "../rest-api/deleteComment.js";
-import { loadCommToEdit } from "../rest-api/fetchCommEdit.js";
+import { deleteComment } from "../services/deleteComment.js";
+import { loadCommToEdit } from "../services/fetchCommEdit.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     const commemtContainer = document.getElementById('comments-container');
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             button.addEventListener('click', e => {
                 e.preventDefault();
                 const commentId = button.getAttribute('data-comment-id');
-                console.log('Comment ID to edit: '+commentId);
+                
                 loadCommToEdit(commentId);
             });
         });

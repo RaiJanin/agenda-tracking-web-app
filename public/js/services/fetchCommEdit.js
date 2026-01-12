@@ -2,7 +2,6 @@ import { commentState } from "../state/comment.js";
 import { renderEdit } from "../modules/commentEdit.js";
 
 export function loadCommToEdit(commentId) {
-    console.log('Received ID: '+commentId);
 
     fetch(`/comments/${commentId}/edit`, {
         method: 'GET',

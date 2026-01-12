@@ -18,8 +18,7 @@
                     </button>
                 </div>
             </div>
-            <input type="hidden" id="concern-id" name="concern_id">
-            <textarea name="write_comm" id="comment" rows="3" class="w-full border rounded-md p-2 resize-none" required></textarea>
+            <textarea name="updated_comm" id="edit-comment" rows="3" class="w-full border rounded-md p-2 resize-none" required></textarea>
         </form>
     </div>
     <div></div>

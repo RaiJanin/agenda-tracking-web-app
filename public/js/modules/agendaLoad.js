@@ -1,4 +1,4 @@
-import { deleteAgenda } from "../rest-api/deleteAgenda.js";
+import { deleteAgenda } from "../services/deleteAgenda.js";
 import { dateToString } from "../utilities/dateString.js";
 import { showConfirmationModal } from "../components/cfFire.js";
 

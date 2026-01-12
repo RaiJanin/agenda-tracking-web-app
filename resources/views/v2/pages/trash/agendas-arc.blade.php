@@ -16,5 +16,6 @@
 @endsection
 
 @section('scripts')
-
+    <script src="{{ asset('js/components/cFireBlade.js') }}"></script>
+    <script src="{{ asset('js/modules/trashAgendas.js') }}" type="module"></script>
 @endsection

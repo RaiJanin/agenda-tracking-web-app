@@ -1,6 +1,6 @@
 import { timeAgo } from "../utilities/timeAgo.js";
 import { dateToString } from "../utilities/dateString.js";
-import { deleteConcern } from "../rest-api/deleteConcern.js";
+import { deleteConcern } from "../services/deleteConcern.js";
 import { showConfirmationModal } from "../components/cfFire.js";
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -51,8 +51,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'completed':
                         statusBadge = `<span class="px-2 py-1 text-sm bg-gray-500 text-white rounded-lg">${concern.status}</span>`;
                         break;
-                    default: // pending
+                    case 'pending':
                         statusBadge = `<span class="px-2 py-1 text-sm bg-amber-500 text-white rounded-lg">${concern.status}</span>`;
+                        break;
+                    default:
+                        statusBadge = `<span class="px-2 py-1 text-sm bg-gray-100 text-gray-500 rounded-lg">${concern.status}</span>`;
                         break;
                 }
 

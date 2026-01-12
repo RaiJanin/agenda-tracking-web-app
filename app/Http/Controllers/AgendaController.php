@@ -171,7 +171,7 @@ class AgendaController extends Controller
         return response()->json([
                 'success' => true,
                 'message' => 'Agenda moved to trash bin'
-                ], 200);
+        ], 200);
     }
 
     public function trashed()
@@ -181,57 +181,65 @@ class AgendaController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "You don't have permission to view this function"
-            ], 403);
+            ]);
         }
 
         $agendas = Agenda::onlyTrashed()
             ->orderBy('deleted_at', 'desc')
-            ->paginate(20);
+            ->with('creator:id,name')
+            ->get();
 
-        //return response()->json($agendas);
+        $adminAccess = auth()->user()->role;
 
-        return view('v2.pages.trash.agendas-arc', compact('agendas'));
+        return response()->json([
+            'success' => true,
+            'contents' => $agendas,
+            'admin_access' => $adminAccess === 'admin'
+        ]);
     }
 
     public function restore($id)
     {
         if(auth()->user()->role !== 'admin')
         {
+            // abort(403, "You don't have permission to proceed this action");
             return response()->json([
                 'success' => false,
-                'message' => "You don't have permission to view this function"
-            ], 403);
+                'message' => "You don't have permission to proceed this action"
+            ]);
         }
 
         $agenda = Agenda::onlyTrashed()->find($id);
         $agenda->restore();
 
         return response()->json([
-            'success' => true,
-            'message' => 'Agenda restored succesfully'
-        ]);
+                'success' => true,
+                'message' => 'Agenda restored'
+        ], 200);
 
-        //return redirect()->route('agendas.archived')->with('success', 'Agenda restored successfully!');
+        // return redirect()->back()->with('success', 'Agenda restored successfully!');
     }
 
     public function forceDelete($id)
     {
         if(auth()->user()->role !== 'admin')
         {
+            // abort(403, "You don't have permission to proceed this action");
             return response()->json([
                 'success' => false,
-                'message' => "You don't have permission to view this function"
-            ], 403);
+                'message' => "You don't have permission to proceed this action"
+            ]);
         }
         
         $agenda = Agenda::onlyTrashed()->find($id);
-        dd($agenda);
         $agenda->forceDelete();
 
         return response()->json([
-            'success' => true,
-            'message' => 'Agenda deleted permanently'
-        ]);
+                'success' => true,
+                'message' => 'Agenda deleted permanently'
+        ], 200);
+
+        //return redirect()->back()->with('success', 'Agenda deleted permanently');
     }
 
 }

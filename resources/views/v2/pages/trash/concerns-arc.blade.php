@@ -16,5 +16,5 @@
 @endsection
 
 @section('scripts')
-
+    <script src="{{ asset('js/modules/trashedConcerns.js') }}" type="module"></script>
 @endsection
