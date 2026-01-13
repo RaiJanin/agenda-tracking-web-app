@@ -51,8 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     return `
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-3 font-medium min-w-40 max-w-64">${concern.description}</td>
-                            <td class="px-6 py-3 min-w-40">${concern.responsible.name}</td>
+                            <td class="px-6 py-3 font-medium min-w-40 max-w-64">${concern.description ?? 'Unidentified'}</td>
+                            <td class="px-6 py-3 min-w-40">${concern.responsible?.name ?? 'Unknown'}</td>
+                            <td class="px-6 py-3 min-w-40">${concern.agenda?.title ?? '(No agenda)'}</td>
                             <td class="px-6 py-3 text-center space-x-3">
                                 ${actionBtns}
                             </td>

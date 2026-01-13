@@ -18,15 +18,15 @@ export async function deleteAgenda (agendaId) {
         const result = await response.json();
 
         if(!result.success) {
-            alert(result.message);
+            showNotification(result.message, 'error');
             return;
         }
 
-        alert(result.message);
+        showNotification(result.message, 'success');
 
     } catch (err) {
         console.error(err);
-        alert('Internal Server Error');
+        showNotification('Internal Server Error', 'error');
     }
 }
 
@@ -49,14 +49,14 @@ export async function forceDeleteAgenda (agendaIdDel) {
         const result = await response.json();
 
         if(!result.success) {
-            alert(result.message);
+            showNotification(result.message, 'error');
             return;
         }
 
-        alert(result.message);
+        showNotification(result.message, 'success');
 
     } catch (err) {
         console.error(err);
-        alert('Internal Server Error');
+        showNotification('Internal server error', 'error');
     }
 }

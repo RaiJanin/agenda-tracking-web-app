@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = JSON.parse(text);
 
                 if(!data.success) {
-                    alert('Something went wrong. Please try again later');
+                    showNotification('Something went wrong. Please try again later', 'error');
                     return;
                 }
 
@@ -159,7 +159,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isConfirmed = await showConfirmationModal('Confirm Delete?', 'Are you sure you want to delete this agenda?');
                 if (!isConfirmed) return;
 
-                console.log(agendaId);
                 deleteAgenda(agendaId);
                 indexR();
              });

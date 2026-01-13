@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     `
                 }).join('');
             } catch (error) {
-                alert('Internal Server Error');
+                showNotification('Internal serve error', 'error');
                 console.error(error);
             }
         });

@@ -226,7 +226,7 @@ class ConcernController extends Controller
         if(auth()->user()->role === 'admin')
         {
             $concerns = Concern::onlyTrashed()
-                    ->with('responsible:id,name')
+                    ->with(['responsible:id,name','agenda:agenda_id,title'])
                     ->orderBy('deleted_at', 'desc')
                     ->get();
             $concernsCount = Concern::onlyTrashed()->count();
@@ -235,7 +235,7 @@ class ConcernController extends Controller
         {
             $concerns = Concern::onlyTrashed()
                     ->where('responsible_person_id', auth()->user()->id)
-                    ->with('responsible:id,name')
+                    ->with(['responsible:id,name','agenda:agenda_id,title'])
                     ->orderBy('deleted_at', 'desc')
                     ->get();
             $concernsCount = Concern::onlyTrashed()->where('responsible_person_id', auth()->user()->id)->count();

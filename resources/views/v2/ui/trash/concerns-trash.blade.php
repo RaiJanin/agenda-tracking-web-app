@@ -24,6 +24,7 @@
                         <tr>
                             <th class="px-6 py-3 text-left">Concern</th>
                             <th class="px-6 py-3 text-left">Raised By</th>
+                            <th class="px-6 py-3 text-left">Agenda</th>
                             <th class="px-6 py-3 text-center"></th>
                         </tr>
                     </thead>

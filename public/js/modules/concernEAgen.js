@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if(!data.success) {
-                alert('Something went wrong. Please try again later');
+                showNotification('Something went wrong. Please try again later', 'error');
                 return;
             }
 
@@ -113,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }).
         catch (error => {
             console.error(error);
+            showNotification('Internal server error', 'error');
         });
     }
 
@@ -141,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const isConfirmed = await showConfirmationModal('Confirm Delete?', 'Are you sure you want to delete this agenda?');
                 if (!isConfirmed) return;
 
-                console.log(concernId);
                 deleteConcern(concernId);
                 indexR();
             });

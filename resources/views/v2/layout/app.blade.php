@@ -30,7 +30,7 @@
         </div>
 
         @include('v2.components.confirm-modal')
-        @include('v2.components.confirm-modal-blade-component')
+        @include('v2.components.notification')
         
     </div>
     @include('v2.includes.script-assets')

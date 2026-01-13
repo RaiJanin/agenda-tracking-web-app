@@ -1,0 +1,1 @@
+<div id="notification-container" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 space-y-3 max-w-sm w-full px-4"></div>

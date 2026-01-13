@@ -93,7 +93,7 @@ class CommentController extends Controller
 
         return response()->json([
             'success' => true,
-            'content' => $comment
+            'comment' => $comment
         ]);
     }
 
@@ -102,7 +102,36 @@ class CommentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'edited_comment' => 'required|string'
+        ]);
+
+        $comment = Comment::findOrFail($id);
+
+        if(!$comment)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot find comment. Data match failed'
+            ]);
+        }
+
+        $verify = $comment->update([
+            'content' => $request->edited_comment
+        ]);
+
+        if(!$verify)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update comment'
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment successfully updated'
+        ]);
     }
 
     /**

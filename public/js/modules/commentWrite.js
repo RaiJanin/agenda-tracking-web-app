@@ -39,12 +39,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const commentContent = VcommentContent.value;
 
         if(!concernId) {
-            alert('Error submitting comment. Some data is missing');
+            showNotification('Error submitting comment. Some data is missing', 'error');
             return;
         }
 
         if(!commentContent) {
-            alert('Please write any comment');
+            showNotification('Please write any comment', 'caution');
             return;
         }
 
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         then(async response => {
             const reply = await response.json();
 
-            alert(reply.message);
+            showNotification(reply.message, 'success');
             VcommentContent.value = '';
             loadComments(concernId);
 
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }).
         catch(err => {
             console.error(err);
+            showNotification('Internal server error', 'error');
         });
     });
 });

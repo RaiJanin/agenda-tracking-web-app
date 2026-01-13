@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(comments);
 
             if(!comments.success) {
-                alert('Something went wrong. Please try again later');
+                showNotification('Something went wrong. Please try again later', 'error');
                 return;
             }
 
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <h2 class=" text-lg text-gray-700 font-semibold">${comment.user.name}</h2>
                         <p class="text-base p-3">${comment.content}</p>
                         <div class="flex items-center gap-4">
-                            <p class="text-sm text-gray-600">${timeAgo(comment.updated_at)}</p>
+                            <p class="text-sm text-gray-600 mt-2">${timeAgo(comment.updated_at)}</p>
                             ${editArchAccess}
                         </div>
                     </div>
@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }).
         catch (err => {
             console.error(err);
+            showNotification('Internal server error', 'error');
         });
     }
     window.loadComments = loadComments;

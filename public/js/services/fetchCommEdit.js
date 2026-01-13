@@ -12,9 +12,10 @@ export function loadCommToEdit(commentId) {
     }).
     then(async response => {
         const data = await response.json();
+        console.log(data);
 
         if(!data.success) {
-            alert('Something went wrong. Please try again later');
+            showNotification('Something went wrong. Please try again later', 'error');
             return;
         }
 
@@ -25,6 +26,7 @@ export function loadCommToEdit(commentId) {
         }
     })
     .catch (err => {
+        showNotification(err, 'error');
         console.error(err);
     });
 }

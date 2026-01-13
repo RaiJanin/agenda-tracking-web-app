@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const json = JSON.parse(text);
 
                 if (!json.success) {
-                    alert('Something went wrong. Please try again later');
+                    showNotification('Something went wrong. Please try again later', 'error');
                     return;
                 }
 
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 addEventListeners();
             } catch (error) {
-                alert('Internal Server Error');
+                showNotification('Internal server error', 'error');
                 console.error(error);
             }
         });
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
             button.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const concernId = button.getAttribute('data-concern-id');
-                const isConfirmed = await showConfirmationModal('Confirm Delete?', 'Are you sure you want to delete this agenda?');
+                const isConfirmed = await showConfirmationModal('Confirm Delete?', 'Are you sure you want to delete this concern?');
                 if (!isConfirmed) return;
                 deleteConcern(concernId);
                 indexR();

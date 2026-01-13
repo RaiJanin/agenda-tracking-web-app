@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 trashAgendaCont.innerHTML = '';
 
                 if(!data.success) {
-                    alert('Something went wrong');
+                    showNotification('Something went wrong', 'error');
                     console.log('Failed to load data.PHP error');
                     return;
                 }
@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 addEventListeners();
             } catch (error) {
                 console.error(error);
+                showNotification('Internal server error', 'error');
             }
         });
    }
