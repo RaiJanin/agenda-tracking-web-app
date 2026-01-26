@@ -56,7 +56,11 @@
                     </div>
 
                     <!-- Button -->
-                    <div class="mt-6 flex justify-end">
+                    <div class="mt-6 flex justify-end gap-2">
+                        <button type="button" onclick="window.location.href=`{{ route('agenda.view-all') }}`"
+                            class="px-3 py-1.5 text-red-500 font-medium rounded-lg shadow-sm border border-gray-400 hover:text-red-400 hover:shadow-md hover:border-red-500 focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-all duration-300">
+                            Cancel
+                        </button>
                         <button type="submit"
                             class="px-3 py-1.5 text-teal-800 font-medium rounded-lg shadow-sm border border-gray-400 hover:text-teal-600 hover:shadow-md hover:border-teal-500 focus:ring-2 focus:ring-teal-400 focus:ring-offset-1 transition-all duration-300">
                             Save Agenda

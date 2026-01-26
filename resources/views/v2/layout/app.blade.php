@@ -22,7 +22,7 @@
             <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
                 @yield('main-content')
             </main>
-            @if(Route::is('concerns.comments'))
+            @if(Route::is('concerns.comments') && in_array(auth()->user()->role, ['admin', 'member']))
                 @include('v2.ui.comments.partials.comment-edit')
                 @include('v2.ui.comments.partials.comment-write', ['concern_id' => $concern->concern_id])
                 @include('v2.ui.comments.partials.comment-init')

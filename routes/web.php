@@ -48,11 +48,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/history', function () { return view('v2.pages.archives.history'); })->name('archives.history');
         Route::get('/reports', function () { return view('v2.pages.archives.reports'); })->name('archives.reports');
 
-        // -- reserved route for trashed data pages with dynamic data loading
         Route::get('/trash-agenda', function () { return view('v2.pages.trash.agendas-arc'); })->name('trash.agendas');
         Route::get('/trash-concern', function () { return view('v2.pages.trash.concerns-arc'); })->name('trash.concerns');
-
-        //Route::get('/trash-concern', [ConcernController::class, 'deletedConcerns'])->name('trash.concerns');
 
         Route::get('/users', function () { return view('v2.pages.people'); })->name('people');
 
@@ -121,6 +118,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profiles', [ProfileController::class, 'index'])->name('profiles.index');
     Route::get('/profiles/{id}', [ProfileController::class, 'show'])->name('profiles.show');
 
+});
+
+//----- referencing
+
+Route::get('/sample', function () {
+    return view('reference.sample');
 });
 
 

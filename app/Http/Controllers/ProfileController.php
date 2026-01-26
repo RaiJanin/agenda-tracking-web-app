@@ -17,14 +17,16 @@ class ProfileController extends Controller
     public function index()
     {
         $users = User::paginate(16);
-        //return view('profile.index', compact('users'));
         return response()->json($users);
     }
 
     public function edit(Request $request): View
     {
+        $spcMember = in_array($request->user()->role, ['admin', 'role']);
+        
         return view('v2.pages.settings.profile', [
             'user' => $request->user(),
+            'adminMember' => $spcMember
         ]);
     }
 
@@ -55,15 +57,20 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        if(!in_array($user, ['admin', 'member']))
+        {
+            Auth::logout();
+
+            $user->delete();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return Redirect::to('/');
+        }
+
         dd($user);
 
-        // Auth::logout();
-
-        // $user->delete();
-
-        // $request->session()->invalidate();
-        // $request->session()->regenerateToken();
-
-        // return Redirect::to('/');
+        
     }
 }

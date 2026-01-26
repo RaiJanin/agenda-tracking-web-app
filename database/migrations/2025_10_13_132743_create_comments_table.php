@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->morphs('commentable'); // supports polymorphic relation: agendas, concerns, etc.
-            $table->text('content');
-            $table->timestamps();
-        });
-        
+        if(!Schema::hasTable('comments'))
+        {
+            Schema::create('comments', function (Blueprint $table) {
+                $table->id();
+                $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+                $table->morphs('commentable'); // supports polymorphic relation: agendas, concerns, etc.
+                $table->text('content');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

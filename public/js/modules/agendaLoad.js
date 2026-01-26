@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 eventListeners();
             } catch (error) {
-                alert('Internal Server Error');
+                showNotification('Internal server error', 'error');
                 console.error(error);
             }
         });
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 deleteAgenda(agendaId);
                 indexR();
-             });
+            });
         });
     }
 

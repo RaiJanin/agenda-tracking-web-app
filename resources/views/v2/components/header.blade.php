@@ -25,14 +25,14 @@
                                 <div class="pt-1 pb-1">
                                     <a href="#" class="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:text-gray-500">Notifications <span class="ml-1 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full">3 new</span></a>
                                 </div>
-                                <div class="pt-1 border-t border-gray-100">
+                                <!-- <div class="pt-1 border-t border-gray-100">
                                     <button class="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:text-gray-500" id="logout-button">Sign out</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="hidden md:inline-block">
                             <p class="text-sm font-medium">{{ auth()->user()->name }}</p>
-                            <p class="text-xs text-gray-500">{{ auth()->user()->role }}</p>
+                            <p class="text-xs font-medium text-gray-500">{{ auth()->user()->specific_role }}</p>
                         </div>
                     </div>
                 </div>

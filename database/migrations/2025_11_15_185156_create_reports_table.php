@@ -17,7 +17,7 @@ return new class extends Migration
                     ->constrained('agendas', 'agenda_id')
                     ->onDelete('cascade');
             $table->string('file_path');
-            $table->foreignId('generated_by')->constrained('users');
+            $table->foreignUuid('generated_by')->constrained('users');
             $table->timestamps();
         });
         

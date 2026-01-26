@@ -88,7 +88,7 @@
             </a>
             @endif
             @if($adminAccess)
-            <!-- <div class="accordion-group">
+            <div class="accordion-group">
                 <button class="w-full flex items-center justify-between p-2 rounded-lg {{ request()->routeIs('archives.*') ? 'bg-blue-100 font-medium text-blue-500' :'text-gray-700 hover:bg-gray-100' }} group relative transition-all duration:300 ease-in-out">
                     <div class="flex items-center space-x-3">
                         <i data-feather="archive"></i>
@@ -109,7 +109,7 @@
                         <span class="sidebar-tooltip hidden absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">Archives/History</span>
                     </a>
                 </div>
-            </div> -->
+            </div>
             @endif
 
             <!-- Management Section -->

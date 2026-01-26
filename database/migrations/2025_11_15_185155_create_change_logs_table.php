@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('change_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignUuid('user_id')->constrained('users');
             $table->morphs('loggable'); // Polymorphic: agenda, concern, comment
             $table->json('old_data');
             $table->json('new_data');
