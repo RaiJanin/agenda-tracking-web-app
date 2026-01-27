@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MemberRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 class UserController extends Controller
@@ -9,6 +10,14 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function showAllRequests()
+    {
+        $member_requests = MemberRequest::all();
+
+        //return response()->json($member_requests);
+
+        return view('v2.pages.people.memberships', compact('member_requests'));
+    }
 
 
     /**
@@ -22,9 +31,29 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeRequest(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            's_role' => 'required|string|max:255'
+        ]);
+
+        $existed = MemberRequest::where('user_id', $request->user_id)->exists();
+        if($existed)
+        {
+            return back()->withErrors('Membership request already submitted');
+        }
+
+        $statusIsOkay = MemberRequest::create([
+            'name' => $request->name,
+            'user_id' => $request->user_id,
+            'member_role' => $request->s_role
+        ]);
+
+        if($statusIsOkay)
+        {
+            return back()->with('success', 'Membership request submitted successfully');
+        }
     }
 
     /**

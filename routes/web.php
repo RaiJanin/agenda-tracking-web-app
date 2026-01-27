@@ -6,7 +6,7 @@ use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ConcernController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +51,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/trash-agenda', function () { return view('v2.pages.trash.agendas-arc'); })->name('trash.agendas');
         Route::get('/trash-concern', function () { return view('v2.pages.trash.concerns-arc'); })->name('trash.concerns');
 
-        Route::get('/users', function () { return view('v2.pages.people'); })->name('people');
+        Route::get('/users', function () { return view('v2.pages.people.users'); })->name('people');
+        Route::get('/memberships', function () { return view('v2.pages.people.memberships'); })->name('memberships');
+        Route::get('/member/requests', [UserController::class, 'showAllRequests']);
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('settings.profile');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -117,6 +119,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/profiles', [ProfileController::class, 'index'])->name('profiles.index');
     Route::get('/profiles/{id}', [ProfileController::class, 'show'])->name('profiles.show');
+
+    //-------- membership requests routes
+    Route::post('/request/memberships', [UserController::class, 'storeRequest'])->name('store.memberRequest');
 
 });
 

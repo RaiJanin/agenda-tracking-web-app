@@ -12,5 +12,7 @@
 @endsection
 
 @section('scripts')
-
+    @if(auth()->user()->role === 'user')
+        <script src="{{ asset('js/modules/guestProfile.js') }}" type="module"></script>
+    @endif
 @endsection

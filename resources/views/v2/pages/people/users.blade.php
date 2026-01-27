@@ -9,13 +9,13 @@
 
 @section('main-content')
     @if(auth()->user()->role === 'admin')
-        @include('v2.ui.people-ui')
+        @include('v2.ui.people.users-ui')
     @else
         @include('v2.components.warnings.unauthorized')
     @endif
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/modules/usersLoad.js') }}"></script>
+    <script src="{{ asset('js/modules/usersLoad.js') }}" type="module"></script>
     <script src="{{ asset('js/utilities/pagination.js') }}"></script>
 @endsection

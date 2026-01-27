@@ -31,6 +31,10 @@
 
         @include('v2.components.confirm-modal')
         @include('v2.components.notification')
+
+        @if(auth()->user()->role === 'user' && Route::is('settings.profile'))
+            @include('v2.components.memberRequest-form')
+        @endif
         
     </div>
     @include('v2.includes.script-assets')

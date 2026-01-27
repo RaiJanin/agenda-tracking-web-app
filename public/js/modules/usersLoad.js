@@ -1,6 +1,9 @@
+import { timeAgo } from "../utilities/timeAgo.js";
+
 document.addEventListener('DOMContentLoaded', function () {
 
     indexR();
+    memberRqstsPrev();
     function indexR(page = 1) {
         const usersContainer = document.getElementById('user-container');
 
@@ -80,7 +83,51 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
     window.indexR = indexR;
     
+    function memberRqstsPrev () {
+        const memberRequestPrevContainer = document.getElementById('member-request-container');
+
+        const memberRequests = [
+            {
+                id: 1,
+                name: "Carlos Sainz",
+                dateCreated: "2026-01-25"
+            },
+            {
+                id: 2,
+                name: "Lewis Hamilton",
+                dateCreated: "2026-01-25"
+            },
+            {
+                id: 3,
+                name: "George Rusells",
+                dateCreated: "2026-01-26"
+            },
+            {
+                id: 4,
+                name: "Sergo Perez",
+                dateCreated: "2026-01-23"
+            },
+            {
+                id: 5,
+                name: "Lando Norris",
+                dateCreated: "2026-01-24"
+            },
+        ];
+
+        memberRequestPrevContainer.innerHTML = '';
+        memberRequestPrevContainer.innerHTML = memberRequests.map(member => {
+            return `
+                <div class="flex flex-col rounded-xl bg-gray-100 px-4 py-3">
+                    <p class="text-lg text-gray-800 font-medium">${member.name}</p>
+                    <p class="ml-4 text-base text-gray-600">${timeAgo(member.dateCreated)}</p>
+                    <div class="flex flex-row gap-2 mt-3">
+                        <button class="rounded-lg bg-blue-500 text-white font-medium text-sm py-2 px-8 hover:bg-blue-400 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">View</button>
+                        <button class="rounded-lg bg-gray-400 text-white font-medium text-sm py-2 px-8 hover:bg-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-all duration-300">Delete</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
 });

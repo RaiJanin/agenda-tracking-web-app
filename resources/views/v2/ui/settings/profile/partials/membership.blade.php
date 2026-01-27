@@ -20,9 +20,22 @@
             </ul>
         </div>
 
-        <button type="button" onclick="window.location.href=`#`" class="request-member-btn inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white mb-2 ml-2 uppercase tracking-widest hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150'">
+        <button type="button" class="request-member-btn inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white mb-2 ml-2 uppercase tracking-widest hover:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150'">
             Request Membership
         </button>
+        @if(session('success'))
+            <div class="success-container flex flex-col bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mt-5 mb-4">
+                {{ session('success') }}<span class="underline hover:text-green-500"><button class="close-success text-green-500 border border-green-500 rounded-md px-2 py-1">Close</button></span>
+            </div>
+            <script>
+                document.querySelector('.close-success').addEventListener('click', () => {
+                    document.querySelector('.success-container').classList.add('hidden');
+                });
+            </script>
+        @endif
+        @if ($errors->any())
+            @include('v2.components.warnings.error-all')
+        @endif
         @endif
 
         @if(in_array(auth()->user()->role, ['admin', 'member']))

@@ -22,13 +22,13 @@
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
-
+        @if(in_array(auth()->user()->role, ['admin', 'member']))
         <div>
             <x-input-label for="specific_role" :value="__('Specific Role')" />
             <x-text-input id="specific_role" name="specific_role" type="text" class="mt-1 block w-full" :value="old('specific_role', $user->specific_role)" required autofocus autocomplete="specific_role" />
             <x-input-error class="mt-2" :messages="$errors->get('specific_role')" />
         </div>
-
+        @endif
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
