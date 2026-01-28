@@ -10,13 +10,32 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function showAllRequests()
+    public function showAllMemberRequests()
     {
-        $member_requests = MemberRequest::all();
+        if(!auth()->user()->role === 'admin')
+        {
+            return response()->json([
+                'message' => 'Unauthorized access'
+            ]);
+        }
+        $member_requests = MemberRequest::latest()->get();
 
-        //return response()->json($member_requests);
+        return response()->json($member_requests);
+    }
 
-        return view('v2.pages.people.memberships', compact('member_requests'));
+    public function showPartialMemberRequests()
+    {
+        if(!auth()->user()->role === 'admin')
+        {
+            return response()->json([
+                'message' => 'Unauthorized access'
+            ]);
+        }
+        $member_requests = MemberRequest::latest()
+                ->take(7)
+                ->get();
+
+        return response()->json($member_requests);
     }
 
 

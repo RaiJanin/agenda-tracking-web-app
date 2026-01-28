@@ -72,7 +72,5 @@ class ProfileController extends Controller
         // If user is admin, continue mass destroy
         // If user is member, needs a confirmation from admin
         dd($user);
-
-        
     }
 }

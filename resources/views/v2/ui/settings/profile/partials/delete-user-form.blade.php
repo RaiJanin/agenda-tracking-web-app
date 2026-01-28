@@ -13,6 +13,8 @@
         Delete Account
     </button>
 
+    <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+
     <div class="confirm-terminate hidden fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50">
         <div class="fixed inset-0 transform transition-all">
             <div class="absolute inset-0 bg-gray-500 opacity-75">

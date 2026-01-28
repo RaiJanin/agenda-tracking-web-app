@@ -56,8 +56,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/member/requests', [UserController::class, 'showAllRequests']);
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('settings.profile');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         
     });
     
@@ -106,22 +104,31 @@ Route::middleware(['auth'])->group(function () {
         
 
 
-        //------- Comment api routes
-        Route::get('/comments/{concern_id}/load', [CommentController::class, 'isCommentsLoad'])->name('comments.load');
-        Route::post('/comments/write', [CommentController::class, 'store'])->name('comments.write');
-        Route::get('/comments/{comment_id}/edit', [CommentController::class, 'edit'])->name('comment.edit');
-        Route::patch('/comments/{comment_id}/update', [CommentController::class, 'update'])->name('comment.update');
-        Route::delete('/comments/{comment_id}/delete', [CommentController::class, 'destroy'])->name('comment.delete');
-
+    //------- Comment api routes
+    Route::prefix('/comments')->group(function () {
+        Route::get('/{concern_id}/load', [CommentController::class, 'isCommentsLoad'])->name('comments.load');
+        Route::post('/write', [CommentController::class, 'store'])->name('comments.write');
+        Route::get('/{comment_id}/edit', [CommentController::class, 'edit'])->name('comment.edit');
+        Route::patch('/{comment_id}/update', [CommentController::class, 'update'])->name('comment.update');
+        Route::delete('/{comment_id}/delete', [CommentController::class, 'destroy'])->name('comment.delete');
+    });
+        
 
     //--------- reserved routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::get('/profiles', [ProfileController::class, 'index'])->name('profiles.index');
     Route::get('/profiles/{id}', [ProfileController::class, 'show'])->name('profiles.show');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //-------- membership requests routes
-    Route::post('/request/memberships', [UserController::class, 'storeRequest'])->name('store.memberRequest');
+    Route::prefix('/membership-requests')->group(function () {
+        Route::post('/submit', [UserController::class, 'storeRequest'])->name('store.memberRequest');
+        Route::get('/get-partial', [UserController::class, 'showPartialMemberRequests']);
+        Route::get('/get-all', [UserController::class, 'showAllMemberRequests']);
+    });
+    
 
 });
 
