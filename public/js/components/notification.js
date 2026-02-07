@@ -46,8 +46,8 @@ function showNotification(message, type, duration = 4000) {
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
-        <div class="absolute bottom-0 left-0 h-1 bg-black bg-opacity-30">
-            <div class="progress-bar-fill h-1 bg-gray" style="width: 100%; animation: shrink ${duration}ms linear forwards;"></div>
+        <div class="absolute bottom-0 left-0 h-1 bg-gray-300">
+            <div class="progress-bar-fill h-1 w-full bg-gray-800"></div>
         </div>
     `;
 

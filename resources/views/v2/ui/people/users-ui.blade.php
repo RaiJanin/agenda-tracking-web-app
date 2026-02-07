@@ -13,7 +13,7 @@
             <div class="sm:col-span-2 col-span-3">
                 <div class="flex flex-col border border-gray-400 rounded-lg shadow-md bg-white mb-2">
                     <div class="p-3 flex justify-between">
-                        <h2 class="text-xl font-semibold">Membership requests <span class="text-blue-500">12</span></h2>
+                        <h2 class="text-xl font-semibold">Membership requests <span id="request-count" class="text-blue-500">12</span></h2>
                         <button onclick="window.location.href=`{{ route('memberships') }}`" class="px-4 border-none text-lg text-blue-500 font-semibold hover:text-blue-400">See all</button>
                     </div>
                     <div class="px-8 py-2 mb-2 max-h-80 overflow-auto">
