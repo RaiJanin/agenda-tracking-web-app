@@ -35,6 +35,10 @@
         @if(auth()->user()->role === 'user' && Route::is('settings.profile'))
             @include('v2.components.memberRequest-form')
         @endif
+
+        @if(auth()->user()->role === 'admin' && Route::is('memberships'))
+            @include('v2.components.view-member-request')
+        @endif
         
     </div>
     @include('v2.includes.script-assets')

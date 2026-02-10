@@ -48,12 +48,16 @@ class Agenda extends Model
         static::deleting(function ($agenda) {
             if($agenda->isForceDeleting())
             {
+                $agenda->concerns()->withTrashed()->get()->each(function ($c) {
+                    $c->commentList()->forceDelete();
+                });
+
                 $agenda->concerns()->withTrashed()->forceDelete();
 
                 $agenda->attachments()->withTrashed()->get()->each(function ($attachment) {
-                    if(file_exists(storage_path('app/public'.$attachment)))
+                    if(file_exists(storage_path('app/public/'.$attachment->file_path)))
                     {
-                        unlink(storage_path('app/public'.$attachment));
+                        unlink(storage_path('app/public/'.$attachment->file_path));
                     }
                 });
                 

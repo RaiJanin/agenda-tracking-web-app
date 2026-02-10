@@ -53,7 +53,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/users', function () { return view('v2.pages.people.users'); })->name('people');
         Route::get('/memberships', function () { return view('v2.pages.people.memberships'); })->name('memberships');
-        Route::get('/member/requests', [UserController::class, 'showAllRequests']);
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('settings.profile');
         

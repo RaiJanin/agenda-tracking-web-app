@@ -50,13 +50,14 @@ class Concern extends Model
             if($concern->isForceDeleting())
             {
                 $concern->attachments()->withTrashed()->get()->each(function ($attachment) {
-                    if(file_exists(storage_path('app/public'.$attachment)))
+                    if(file_exists(storage_path('app/public/'.$attachment->file_path)))
                     {
-                        unlink(storage_path('app/public'.$attachment));
+                        unlink(storage_path('app/public/'.$attachment->file_path));
                     }
                 });
                 
                 $concern->attachments()->withTrashed()->forceDelete();
+                $concern->commentList()->forceDelete();
             }
             else
             {
